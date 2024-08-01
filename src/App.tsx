@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
-import Signup from "./components/Signup/Signup";
+import Enquiry from "./components/Trainee/Enquiry/Enquiry"
+import Course from "./components/Trainee/Course/Course"
 import AOS from 'aos';
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/Login" element={<Login />} />
-            <Route path="/Signup" element={<Signup />} />
+            <Route path="/course" element={<Course/>}/>
+            <Route path="/enquiry" element={<Enquiry/>}/>
           </Routes>
         </main>
       </div>
