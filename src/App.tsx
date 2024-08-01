@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import "./App.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import Auth from "./pages/Admin/Auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
+import AOS from 'aos';
 
 function App() {
   useEffect(() => {
@@ -10,9 +10,16 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <Auth />
-    </div>
+    <Router>
+      <div className="App">
+        <main className="main-content">
+          <Routes>
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Signup" element={<Signup />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 

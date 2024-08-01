@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import Exp from "../../assets/exp.png";
-import "./Login.css";
+import "./Login.module.css";
 import "aos/dist/aos.css";
 
 const Login: React.FC = () => {
@@ -28,7 +27,7 @@ const Login: React.FC = () => {
       <Typography
         variant="h3"
         component="h1"
-        sx={{ color: "#8518FF", mb: "20px" }}
+        sx={{ color: "#8518FF", mb: "30px", mt: "50px" }}
       >
         LearnXpert
       </Typography>
@@ -38,12 +37,11 @@ const Login: React.FC = () => {
           borderTop: "2px solid #8518FF",
           borderBottom: "2px solid #8518FF",
           borderRadius: "50px",
-          py: 1,
-          padding: "16px",
+          py: "20px",
           boxSizing: "border-box",
           width: {
             sm: "100%",
-            md: "70%",
+            md: "25%",
           },
         }}
         data-aos="flip-left"
@@ -64,9 +62,9 @@ const Login: React.FC = () => {
           <img
             src={Exp}
             alt="Exp"
-            style={{ width: "50px", height: "50px", marginBottom: "16px" }}
+            style={{ width: "50px", height: "60px", marginBottom: "16px" }}
           />
-          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+          <form onSubmit={handleLogin} style={{ width: "85%" }}>
             <TextField
               label="Username"
               value={username}
@@ -97,7 +95,7 @@ const Login: React.FC = () => {
                     transform: "translateY(-70%) translateX(20%) scale(0.75)",
                   },
                 },
-                width: "90%",
+                width: "100%",
                 pb: "10px",
               }}
             />
@@ -132,7 +130,7 @@ const Login: React.FC = () => {
                     transform: "translateY(-70%) translateX(20%) scale(0.75)",
                   },
                 },
-                width: "90%",
+                width: "100%",
               }}
             />
             <Button
@@ -142,7 +140,7 @@ const Login: React.FC = () => {
                 backgroundColor: "#8518FF",
                 borderRadius: "20px",
                 mt: 2,
-                width: "90%",
+                width: "100%",
                 mb: 1,
                 "&:hover": {
                   backgroundColor: "#6611CC",
@@ -151,25 +149,15 @@ const Login: React.FC = () => {
             >
               Login
             </Button>
-            <Typography
-              variant="subtitle1"
-              component="h1"
-              sx={{ color: "#8518FF", opacity: "69%", mb: 1 }}
-            >
-              Forgot Password?
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              component="h1"
-              sx={{ color: "#8518FF", opacity: "69%" }}
-            >
-              <Link
-                to="/Signup"
-                style={{ textDecoration: "none", color: "#8518FF" }}
+            <Box display="flex" justifyContent="center">
+              <Typography
+                variant="subtitle1"
+                component="p"
+                sx={{ color: "#8518FF", opacity: "69%", textAlign: "center" }}
               >
-                SignUp
-              </Link>
-            </Typography>
+                Forgot Password?
+              </Typography>
+            </Box>
           </form>
         </Box>
       </Container>
