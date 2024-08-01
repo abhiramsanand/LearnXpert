@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Layout from "./Layout";
 import AOS from 'aos';
+import TraineeDashboard from "./components/Trainee/TraineeDashboard";
 
 function App() {
   useEffect(() => {
@@ -14,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login />} />
         <Route path="/" element={<Layout />}>
-
+        <Route path="TraineeDashboard" element={<TraineeDashboard />} />
         </Route>
       </Routes>
     </Router>
