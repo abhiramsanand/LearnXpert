@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Exp from "../../assets/exp.png";
-import "./Signup.css";
+import "./Signup.module.css";
 import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
 
@@ -158,7 +158,7 @@ const Signup: React.FC = () => {
               Signup
             </Button>
             <Typography variant="subtitle1" component="h1" sx={{ color: '#8518FF', opacity: '69%' }}>
-              <Link to="/" style={{ textDecoration: 'none', color: '#8518FF' }}>
+              <Link to="/Login" style={{ textDecoration: 'none', color: '#8518FF' }}>
                 Login
               </Link>
             </Typography>

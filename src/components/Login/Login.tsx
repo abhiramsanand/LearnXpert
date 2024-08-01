@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Exp from "../../assets/exp.png";
-import "./Login.css";
+import "./Login.module.css";
 import "aos/dist/aos.css";
 
 const Login: React.FC = () => {
@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           <img
             src={Exp}
             alt="Exp"
-            style={{ width: "50px", height: "50px", marginBottom: "16px" }}
+            style={{ width: "50px", height: "60px", marginBottom: "16px" }}
           />
           <form onSubmit={handleLogin} style={{ width: "100%" }}>
             <TextField
