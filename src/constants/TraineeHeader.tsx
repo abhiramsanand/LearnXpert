@@ -20,7 +20,7 @@ const Title = styled(Typography)({
   fontWeight: 'bold',
 });
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const TraineeHeader: React.FC<HeaderProps> = ({ title }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             onClose={handleMenuClose}
             keepMounted
           >
-            <MenuItem component={Link} to="/courses" onClick={handleMenuClose}>Courses</MenuItem>
+            <MenuItem component={Link} to="/course" onClick={handleMenuClose}>Courses</MenuItem>
             <MenuItem component={Link} to="/assessments" onClick={handleMenuClose}>Assessments</MenuItem>
             <MenuItem component={Link} to="/daily-report" onClick={handleMenuClose}>Daily Report</MenuItem>
             <MenuItem component={Link} to="/enquiries" onClick={handleMenuClose}>Enquiries</MenuItem>
@@ -59,4 +59,4 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   );
 };
 
-export default Header;
+export default TraineeHeader;
