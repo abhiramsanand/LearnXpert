@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Exp from "../../assets/exp.png";
-import "./Login.module.css";
+import styles from "./Login.module.css";
 import "aos/dist/aos.css";
 
 const Login: React.FC = () => {
@@ -23,6 +23,7 @@ const Login: React.FC = () => {
         justifyContent: "center",
         fontFamily: "Numans, sans-serif",
       }}
+      className={styles.login}
     >
       <Typography
         variant="h3"
