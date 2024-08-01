@@ -1,0 +1,243 @@
+{
+  "Days": {
+    "Day 1": {
+      "time": "5 hr 30 min",
+      "courses": [
+        {
+          "title": "How Developer Thinks",
+          "completed": 100
+        },
+        {
+          "title": "The Mindset of the Software Developer",
+          "completed": 100
+        }
+      ]
+    },
+    "Day 2": {
+      "time": "3 hr 30 min",
+      "courses": [
+        {
+          "title": "Be Liked and Respected in the Workplace",
+          "completed": 100
+        },
+        {
+          "title": "Building a Win-win Relationship with Your Manager",
+          "completed": 100
+        }
+      ]
+    },
+    "Day 3": {
+      "time": "1 hr 30 min",
+      "courses": [
+        {
+          "title": "Software Development Life Cycle and Its Phases",
+          "completed": 100
+        },
+        {
+          "title": "Software Development Processes",
+          "completed": 100
+        }
+      ]
+    },
+    "Day 4": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Using Business Etiquette to Increase Your Professionalism",
+          "completed": 0
+        },
+        {
+          "title": "Keeping Business Calls Professional",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 5": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Software Development Lifecycles & Coding Styles",
+          "completed": 0
+        },
+        {
+          "title": "Software Development Lifecycles: Requirements",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 6": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Software Development Lifecycles - High Level Design",
+          "completed": 0
+        },
+        {
+          "title": "Getting Started in Teams 2023",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 7": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Sending and Receiving Emails in Outlook Microsoft 365",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 8": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Testing Overview",
+          "completed": 0
+        },
+        {
+          "title": "Unit Testing",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 9": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Integration Testing",
+          "completed": 0
+        },
+        {
+          "title": "Testing Reading Resources",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 10": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Writing Effective Email and Instant Messages",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 11": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "What is Agile?",
+          "completed": 0
+        },
+        {
+          "title": "Agile Articles - Agile 101",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 12": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Agile Articles - Agile Manifesto",
+          "completed": 0
+        },
+        {
+          "title": "Agile Article - 12 Principles",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 13": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Choosing and Implementing the Right Solution",
+          "completed": 0
+        },
+        {
+          "title": "Use OneDrive in Microsoft 365",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 14": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Introduction to Agile Video",
+          "completed": 0
+        },
+        {
+          "title": "Problem Solving - Defining and Stating the Problem",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 15": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Agile Practices Explained",
+          "completed": 0
+        },
+        {
+          "title": "Critical Thinking",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 16": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Fostering a Growth Mindset in the Age of AI",
+          "completed": 0
+        },
+        {
+          "title": "SCRUM Methodology",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 17": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Getting Agile with SCRUM",
+          "completed": 0
+        },
+        {
+          "title": "Understanding SCRUM Meetings: Sprint Planning Meeting",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 18": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Understanding SCRUM Meetings: Sprint Retrospective",
+          "completed": 0
+        },
+        {
+          "title": "Communicating with Confidence",
+          "completed": 0
+        }
+      ]
+    },
+    "Day 19": {
+      "time": "2 hr 30 min",
+      "courses": [
+        {
+          "title": "Establishing Self-confidence for Life",
+          "completed": 0
+        },
+        {
+          "title": "Developing a Mindset of Growth and Learning",
+          "completed": 0
+        }
+      ]
+    }
+  }
+}
