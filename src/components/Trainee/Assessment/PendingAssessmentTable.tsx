@@ -1,6 +1,6 @@
-// src/components/PendingAssessmentsTable.tsx
-import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 interface Assessment {
   id: number;
@@ -8,38 +8,88 @@ interface Assessment {
   dateToBeTaken: string;
 }
 
-const pendingAssessments: Assessment[] = [
-  { id: 1, name: 'Assessment 3', dateToBeTaken: '2024-08-01' },
-  { id: 2, name: 'Assessment 4', dateToBeTaken: '2024-08-10' },
-  // Add more pending assessments
-];
+const CustomTableContainer = styled(Box)({
+  flex: '1',
+  overflowY: 'auto', // Allow scrolling if content overflows
+  paddingRight: '5px',
+  marginRight: '10px',
+  borderRight: '1px solid #ddd',
+  border: '1px solid #D1B2FF',
+  borderRadius: '8px',
+  '&::-webkit-scrollbar': {
+    width: '6px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#A54BFF',
+    borderRadius: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#F0F0F0',
+    borderRadius: '8px',
+  },
+  '@media (max-width: 900px)': {
+    marginRight: '0',
+    borderRight: 'none',
+    borderBottom: '1px solid #D1B2FF',
+  },
+});
+
+const StyledTableHead = styled(TableHead)({
+  '& th': {
+    fontSize: '0.9rem',
+    padding: '8px',
+    borderBottom: '2px solid #D1B2FF', // Underline for table headings
+  },
+});
+
+const StyledTableRow = styled(TableRow)({
+  '& td': {
+    border: 'none', // Remove borders from table cells
+    fontSize: '0.8rem',
+    padding: '8px',
+  },
+});
 
 const PendingAssessmentTable: React.FC = () => {
+  const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
+
+  useEffect(() => {
+    fetch('/PendingAssessment.json') // Adjust the path as needed
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => setPendingAssessments(data.pendingAssessments))
+      .catch((error) => console.error('Error loading JSON data:', error));
+  }, []);
+
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
+    <CustomTableContainer component={Paper} style={{ maxHeight: 130 }}>
+      <Table stickyHeader>
+        <StyledTableHead>
           <TableRow>
             <TableCell>Assessment Name</TableCell>
             <TableCell>Date to be Taken</TableCell>
             <TableCell>Take</TableCell>
           </TableRow>
-        </TableHead>
+        </StyledTableHead>
         <TableBody>
           {pendingAssessments.map((assessment) => (
-            <TableRow key={assessment.id}>
+            <StyledTableRow key={assessment.id}>
               <TableCell>{assessment.name}</TableCell>
               <TableCell>{assessment.dateToBeTaken}</TableCell>
               <TableCell>
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" size="small">
                   Take
                 </Button>
               </TableCell>
-            </TableRow>
+            </StyledTableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </CustomTableContainer>
   );
 };
 

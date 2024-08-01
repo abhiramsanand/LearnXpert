@@ -1,12 +1,25 @@
+// src/components/Trainee/Assessment/Footer.tsx
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 const Footer: React.FC = () => {
   return (
-    <Box sx={{ bgcolor: 'primary.main', color: 'white', p: 2, textAlign: 'center' }}>
-      <Typography variant="body2">
-        &copy; 2024 Your Company
-      </Typography>
+    <Box
+      component="footer"
+      sx={{
+        height: '60px',
+        backgroundColor: '#f1f1f1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        zIndex: 1200, // Ensure it is above other content
+      }}
+    >
+      <Typography variant="body2">© 2024 Your Company Name</Typography>
     </Box>
   );
 };
