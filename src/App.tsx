@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
-import Signup from "./components/Signup/Signup";
+import Layout from "./Layout";
 import AOS from 'aos';
 
 function App() {
@@ -11,14 +11,12 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <main className="main-content">
-          <Routes>
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Signup" element={<Signup />} />
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Layout />}>
+
+        </Route>
+      </Routes>
     </Router>
   );
 }
