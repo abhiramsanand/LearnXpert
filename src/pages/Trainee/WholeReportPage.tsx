@@ -2,7 +2,7 @@
 import ReportTable from '../../components/Trainee/WholeReport/ReportTable';
 import TraineeHeader from '../../constants/TraineeHeader';
 
-
+import Footer from '../../constants/Footer';
 const WholeReportPage: React.FC = () => {
   
 
@@ -11,6 +11,7 @@ const WholeReportPage: React.FC = () => {
             <TraineeHeader title={'Whole Report'} />
            
             <ReportTable/>
+            <Footer/>
         </div>
     );
 };
