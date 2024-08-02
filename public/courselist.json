@@ -70,11 +70,11 @@
       "courses": [
         {
           "title": "Software Development Lifecycles - High Level Design",
-          "completed": 0
+          "completed": 100
         },
         {
           "title": "Getting Started in Teams 2023",
-          "completed": 0
+          "completed": 70
         }
       ]
     },
