@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import TraineeHeader from '../../../constants/TraineeHeader';
 
 interface Enquiry {
   enquiry: string;
@@ -174,7 +175,7 @@ const EnquiryPage: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
-      <Header>Enquiry Page</Header>
+      <TraineeHeader title={'Enquiry'} />
       <Content>
         <Container>
           <FormContainer>
