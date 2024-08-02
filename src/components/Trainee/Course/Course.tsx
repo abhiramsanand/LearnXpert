@@ -93,8 +93,8 @@ const CourseGridContainer = styled(Box)({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  height: '100%',
-  overflowY: 'auto', // Allow scrolling if content overflows
+  height: '100%', // Ensure it takes full height of its parent
+  overflow: 'hidden', // Prevent scrolling
   '@media (max-width: 900px)': {
     paddingLeft: '0',
   },
@@ -110,9 +110,10 @@ const CourseBox = styled(Box)({
   alignItems: 'center',
   justifyContent: 'space-between',
   margin: '8px',
-  width: '100%',
+  width: 'calc(100% - 16px)', // Adjust width to fit within container
   boxSizing: 'border-box',
   backgroundColor: 'white',
+  overflow: 'hidden' // Ensure no overflow
 });
 
 // ProgressBar container with fixed width
