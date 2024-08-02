@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 interface Assessment {
@@ -8,13 +8,14 @@ interface Assessment {
   dateToBeTaken: string;
 }
 
-const CustomTableContainer = styled(Box)({
-  flex: '1',
-  overflowY: 'auto', // Allow scrolling if content overflows
-  paddingRight: '5px',
-  marginRight: '10px',
-  borderRight: '1px solid #ddd',
+const CustomTableContainer = styled(Box)(({ theme }) => ({
+  maxHeight: 200,
+  overflowY: 'auto',
+  width: '100%',
+  marginBottom: '20px',
   border: '1px solid #D1B2FF',
+  backgroundColor:'#F3E8FF',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
   borderRadius: '8px',
   '&::-webkit-scrollbar': {
     width: '6px',
@@ -27,28 +28,43 @@ const CustomTableContainer = styled(Box)({
     backgroundColor: '#F0F0F0',
     borderRadius: '8px',
   },
-  '@media (max-width: 900px)': {
-    marginRight: '0',
-    borderRight: 'none',
-    borderBottom: '1px solid #D1B2FF',
+  [theme.breakpoints.down('sm')]: {
+    maxHeight: 150,
+    fontSize: '0.75rem', // Smaller font size for small screens
   },
-});
+}));
 
-const StyledTableHead = styled(TableHead)({
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
   '& th': {
+    fontSize: '1rem',
+    padding: '8px',
+    backgroundColor:'#F3E8FF',
+    borderBottom: '2px solid #D1B2FF',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.75rem',
+      padding: '6px',
+    },
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '& td': {
+    border: 'none',
     fontSize: '0.9rem',
     padding: '8px',
-    borderBottom: '2px solid #D1B2FF', // Underline for table headings
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.7rem',
+      padding: '6px',
+    },
   },
-});
-
-const StyledTableRow = styled(TableRow)({
-  '& td': {
-    border: 'none', // Remove borders from table cells
-    fontSize: '0.8rem',
-    padding: '8px',
+  '& a': {
+    color: 'black',
+    textDecoration: 'underline',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.7rem',
+    },
   },
-});
+}));
 
 const PendingAssessmentTable: React.FC = () => {
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
@@ -66,7 +82,7 @@ const PendingAssessmentTable: React.FC = () => {
   }, []);
 
   return (
-    <CustomTableContainer component={Paper} style={{ maxHeight: 130 }}>
+    <CustomTableContainer component={Paper} style={{ maxHeight: 127 }}>
       <Table stickyHeader>
         <StyledTableHead>
           <TableRow>
@@ -81,9 +97,7 @@ const PendingAssessmentTable: React.FC = () => {
               <TableCell>{assessment.name}</TableCell>
               <TableCell>{assessment.dateToBeTaken}</TableCell>
               <TableCell>
-                <Button variant="contained" color="primary" size="small">
-                  Take
-                </Button>
+                <a href={`/take-assessment/${assessment.id}`}>Yes</a>
               </TableCell>
             </StyledTableRow>
           ))}

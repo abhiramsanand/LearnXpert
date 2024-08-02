@@ -10,12 +10,13 @@ const Navbar: React.FC = () => {
         height: '60px',
         top: 0,
         left: 0,
+        backgroundColor: '#8518FF',
         width: '100%',
         zIndex: 1200, // Ensure it is above other content
       }}
     >
       <Toolbar>
-        <Typography variant="h6">My Application</Typography>
+        <Typography variant="h6">Assessments</Typography>
       </Toolbar>
     </AppBar>
   );

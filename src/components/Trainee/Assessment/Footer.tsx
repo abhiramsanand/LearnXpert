@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       component="footer"
       sx={{
         height: '60px',
-        backgroundColor: '#f1f1f1',
+        backgroundColor: '#8518FF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

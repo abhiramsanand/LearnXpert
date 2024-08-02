@@ -9,11 +9,13 @@ interface Assessment {
   score: number;
 }
 
-const CustomTableContainer = styled(Box)({
-  maxHeight: 200, // Reduced height
+const CustomTableContainer = styled(Box)(({ theme }) => ({
+  maxHeight: 200,
   overflowY: 'auto',
-  width: '100%', // Ensure it takes full width of container
-  marginBottom: '20px', // Add spacing below the table
+  width: '100%',
+  marginBottom: '20px',
+  backgroundColor:'#F3E8FF',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
   border: '1px solid #D1B2FF',
   borderRadius: '8px',
   '&::-webkit-scrollbar': {
@@ -27,36 +29,49 @@ const CustomTableContainer = styled(Box)({
     backgroundColor: '#F0F0F0',
     borderRadius: '8px',
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    maxHeight: 150,
+    fontSize: '0.75rem',
+  },
+}));
 
-const StyledTableHead = styled(TableHead)({
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
   '& th': {
+    fontSize: '1rem',
+    padding: '8px',
+    backgroundColor:'#F3E8FF',
+    borderBottom: '2px solid #D1B2FF',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.75rem',
+      padding: '6px',
+    },
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '& td': {
+    border: 'none',
     fontSize: '0.9rem',
     padding: '8px',
-    borderBottom: '2px solid #D1B2FF', // Underline for table headings
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.7rem',
+      padding: '6px',
+    },
   },
-});
-
-const StyledTableRow = styled(TableRow)({
-  '& td': {
-    border: 'none', // Remove borders from table cells
-    fontSize: '0.8rem',
-    padding: '8px',
-  },
-});
+}));
 
 const CompletedAssessmentTable: React.FC = () => {
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
 
   useEffect(() => {
-    fetch('/CompletedAssessment.json') // Adjust path if necessary
+    fetch('/CompletedAssessment.json')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();
       })
-      .then((data) => setCompletedAssessments(data.completedAssessments)) // Access nested array
+      .then((data) => setCompletedAssessments(data.completedAssessments))
       .catch((error) => console.error('Error loading JSON data:', error));
   }, []);
 
@@ -78,7 +93,13 @@ const CompletedAssessmentTable: React.FC = () => {
               <TableCell>{assessment.dateTaken}</TableCell>
               <TableCell>{assessment.score}</TableCell>
               <TableCell>
-                {assessment.score < 50 ? 'Yes' : 'No'} {/* Display Yes or No based on score */}
+                {assessment.score < 50 ? (
+                  <a href={`/retake-assessment/${assessment.id}`} style={{ color: 'black', textDecoration: 'underline' }}>
+                    Yes
+                  </a>
+                ) : (
+                  <span style={{ color: 'grey', cursor: 'not-allowed' }}>No</span>
+                )}
               </TableCell>
             </StyledTableRow>
           ))}
