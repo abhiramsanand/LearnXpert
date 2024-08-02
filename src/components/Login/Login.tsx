@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             component="h1"
             sx={{ color: "#8518FF", opacity: "69%", mb: 2 }}
           >
-            Admin Login
+            Login
           </Typography>
           <img
             src={Exp}
