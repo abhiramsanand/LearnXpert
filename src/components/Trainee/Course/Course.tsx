@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import DayBox from './DayBox';
+import TraineeHeader from '../../../constants/TraineeHeader';
 
 // Define a basic theme with custom colors
 const theme = createTheme({
@@ -192,7 +193,7 @@ const CourseContainer: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header>Course Management</Header>
+      <TraineeHeader title={'Courses'} />
       <OuterContainer>
         <DayListContainer>
           {days.map((day, index) => (

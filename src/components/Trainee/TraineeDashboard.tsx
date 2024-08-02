@@ -2,7 +2,7 @@
 const TraineeDashboard = () => {
   return (
     <div>
-      
+      Trainee
     </div>
   )
 }

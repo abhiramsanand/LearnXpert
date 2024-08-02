@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
-import Enquiry from "./pages/Trainee/EnquiryPage"
-import Course from "./pages/Trainee/CoursePage"
+import Layout from "./Layout";
 import AOS from 'aos';
+import Course from './pages/Trainee/CoursePage';
+import EnquiryPage from "./pages/Trainee/EnquiryPage";
+import CoursePage from "./pages/Trainee/CoursePage";
 
 function App() {
   useEffect(() => {
@@ -12,16 +14,13 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <main className="main-content">
-          <Routes>
-            <Route path="/Login" element={<Login />} />
-            <Route path="/course" element={<Course/>}/>
-            <Route path="/enquiry" element={<Enquiry/>}/>
-          
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Layout />}>
+        <Route path="Course" element={<CoursePage />} />
+        <Route path="Enquiry" element={<EnquiryPage />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }
