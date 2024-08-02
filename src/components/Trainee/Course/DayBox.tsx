@@ -1,5 +1,3 @@
-// src/Component/Course/DayBox.tsx
-
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/system';
@@ -11,20 +9,19 @@ const StyledBox = styled(Box)({
   borderRadius: '8px',
   padding: '16px',
   textAlign: 'center',
-  width: '250px',
+  width: 'calc(100% - 40px)', // Responsive width with margins
+  maxWidth: '250px', // Maximum width
   height: '60px',
-  margin: '10px',
+  margin: '10px auto', // Centered alignment with margin
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
   cursor: 'pointer',
-  
 });
 
 const TimeText = styled(Typography)({
   marginLeft: '8px',
-  
 });
 
 const LockIconWrapper = styled(Box)({
@@ -44,10 +41,10 @@ interface DayBoxProps {
 const DayBox: React.FC<DayBoxProps> = ({ dayName, time, onClick, lock }) => {
   return (
     <StyledBox onClick={onClick}>
-      <Typography variant="h6"  style={{fontSize:'12px',fontWeight:'bold'}}>{dayName}</Typography>
+      <Typography variant="h6" style={{ fontSize: '12px', fontWeight: 'bold' }}>{dayName}</Typography>
       <Box display="flex" alignItems="center">
         {lock && dayName !== 'Day 1' && <LockIconWrapper><LockIcon /></LockIconWrapper>}
-        <TimeText variant="body2"  style={{fontSize:'12px'}}>{time}</TimeText>
+        <TimeText variant="body2" style={{ fontSize: '12px' }}>{time}</TimeText>
       </Box>
     </StyledBox>
   );

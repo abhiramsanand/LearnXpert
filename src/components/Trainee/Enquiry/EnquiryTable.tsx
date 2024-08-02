@@ -18,7 +18,7 @@ const TableWrapper = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   overflowX: 'auto',
-  maxHeight: '300px',
+  maxHeight: '270px',
   width: '100%',
 });
 

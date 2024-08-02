@@ -12,7 +12,7 @@ import TraineeHeader from '../../constants/TraineeHeader';
 const Content = styled(Box)({
   flexGrow: 1,
   padding: '20px',
-  marginTop: '3%',
+ 
   marginBottom: '60px',
   display: 'flex',
   flexDirection: 'column',

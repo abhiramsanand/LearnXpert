@@ -18,29 +18,8 @@ const theme = createTheme({
   },
 });
 
-// Header and Footer components
-const Header = styled(Box)({
-  backgroundColor: '#8518FF',
-  color: '#fff',
-  padding: '10px 15px',
-  textAlign: 'center',
-  fontSize: '20px',
-  fontWeight: 'bold',
-  '@media (max-width: 600px)': {
-    fontSize: '16px',
-  },
-});
 
-const Footer = styled(Box)({
-  backgroundColor: '#8518FF',
-  color: '#fff',
-  padding: '10px 15px',
-  textAlign: 'center',
-  fontSize: '14px',
-  '@media (max-width: 600px)': {
-    fontSize: '12px',
-  },
-});
+
 
 // Centered and full-width container
 const OuterContainer = styled(Box)({
@@ -50,7 +29,7 @@ const OuterContainer = styled(Box)({
   margin: '15px auto',
   display: 'flex',
   flexDirection: 'row',
-  height: 'calc(100vh - 100px)', // Adjust height based on header/footer height
+  height: 'calc(90vh - 100px)', // Adjust height based on header/footer height
   width: '100%',
   maxWidth: '1000px', // Reduced maximum width
   overflow: 'hidden', // Prevent scrolling
@@ -228,7 +207,7 @@ const CourseContainer: React.FC = () => {
           )}
         </CourseGridContainer>
       </OuterContainer>
-      <Footer>© 2024 Your Company Name</Footer>
+
     </ThemeProvider>
   );
 };
