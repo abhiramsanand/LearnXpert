@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/Login/Login";
-import Layout from "./Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Login from "./pages/Login/Login";
+import Layout from "./Layout";
 import Course from "./components/Trainee/Course/Course";
 import DailyReport from "./pages/Trainee/DailyReport";
 import WholeReportPage from "./pages/Trainee/WholeReportPage";
