@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -18,7 +19,7 @@ const Buttons: React.FC<ButtonsProps> = ({ onPendingSubmissionsClick }) => {
   return (
     <ThemeProvider theme={theme}>
       <Box display="flex" justifyContent="space-around" mb={2}>
-        <Button variant="outlined" color="primary">View Whole Report</Button>
+        <Button variant="outlined" color="primary" component={Link} to="/Wholereport">View Whole Report</Button>
         <Button variant="outlined" color="primary" onClick={onPendingSubmissionsClick}>Pending Submissions</Button>
       </Box>
     </ThemeProvider>
