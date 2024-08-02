@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Login from "./pages/Login/Login";
+import Login from "./pages/Login/LoginPage";
 import Layout from "./Layout";
-import Course from "./components/Trainee/Course/Course";
-import DailyReport from "./pages/Trainee/DailyReport";
-import WholeReportPage from "./pages/Trainee/WholeReportPage";
+import CoursePage from "./pages/Trainee/CoursePage";
 import AssessmentPage from "./pages/Trainee/AssessmentPage";
+import DailyReport from "./pages/Trainee/DailyReportPage";
+import WholeReportPage from "./pages/Trainee/WholeReportPage";
+import EnquiryPage from "./pages/Trainee/EnquiryPage";
 
 function App() {
   useEffect(() => {
@@ -17,12 +18,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/" element={<Layout />}>
-          <Route path="Course" element={<Course />} />
+          <Route path="Courses" element={<CoursePage />} />
+          <Route path="Assessments" element={<AssessmentPage />} />
           <Route path="Dailyreport" element={<DailyReport />} />
           <Route path="Wholereport" element={<WholeReportPage />} />
-          <Route path="Assessment" element={<AssessmentPage />} />
+          <Route path="Enquiry" element={<EnquiryPage />} />
         </Route>
       </Routes>
     </Router>

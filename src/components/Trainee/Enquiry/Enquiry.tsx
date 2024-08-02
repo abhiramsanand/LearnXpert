@@ -14,11 +14,11 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import TraineeHeader from '../../../constants/TraineeHeader';
 
 interface Enquiry {
   enquiry: string;
   date: string;
-  response: string;
 }
 
 // Header and Footer components
@@ -41,7 +41,6 @@ const Footer = styled(Box)({
   padding: '10px 20px',
   textAlign: 'center',
   fontSize: '16px',
-  position: 'fixed', // Changed to fixed
   bottom: 0,
   width: '100%',
   zIndex: 1100, // Ensures the footer is above other content
@@ -50,12 +49,12 @@ const Footer = styled(Box)({
 const Content = styled(Box)({
   flexGrow: 1,
   padding: '20px',
-  marginTop: '80px', // Adjust based on the height of the header
+  marginTop: '3%', // Adjust based on the height of the header
   marginBottom: '60px', // Adjust based on the height of the footer
   display: 'flex',
   flexDirection: 'column',
-  overflowY: 'auto', // Enable vertical scrolling
-  height: 'calc(100vh - 140px)', // Adjust height to ensure it fits in viewport with space for header and footer
+  minHeight: 'calc(100vh - 140px)', // Adjust height to fit in viewport with space for header and footer
+  overflow: 'auto', // Ensure the content area scrolls if necessary
 });
 
 const FormContainer = styled(Box)({
@@ -94,12 +93,13 @@ const StyledButton = styled(Button)({
 });
 
 const TableWrapper = styled(Box)({
-  flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  overflowY: 'auto', // Enable vertical scrolling
-  maxHeight: '500px', // Set a fixed height for the table wrapper
+  overflowX: 'auto', // Enable horizontal scrolling
+  maxHeight: '300px', // Set a fixed height for the table wrapper
+  width: '100%', // Ensure it takes full width
 });
+
 const TableHeading = styled(Typography)({
   fontSize: '16px', // Reduce font size for the table heading
   fontWeight: 'bold',
@@ -107,28 +107,28 @@ const TableHeading = styled(Typography)({
   borderBottom: '2px solid #8518FF', // Horizontal line below heading
   paddingBottom: '5px',
   color: '#8518FF',
+    marginLeft:'8%'
 });
 
 const TableContainerStyled = styled(TableContainer)({
-  backgroundColor: '#EDE9FF', // Light shade of #8518FF
+  backgroundColor: '#CBC3E3', // Light shade of #8518FF
   borderRadius: '8px',
   padding: '10px',
-  marginBottom: '10px', // Reduced margin-bottom
-  marginRight: '40%', // Reduced margin-right
-  maxHeight: '100%', // Allow it to take the full height of its parent
-  overflowY: 'auto', // Enable vertical scrolling within the table container
-  boxShadow: '0 4px 8px rgba(0,0,0,0.1)', // Add a subtle shadow
-  height: '100%', // Set the height to 100% to enable scrolling
-  
+  maxHeight: '300px', // Ensure it does not exceed the wrapper height
+  overflowY: 'auto', // Enable vertical scrolling
+  width: '85%', // Ensure it takes full width
+  marginLeft: '8%',
 });
 
 const TableHeadStyled = styled(TableHead)({
   position: 'sticky',
   top: 0,
-  backgroundColor: '#CBC3E3', // Background color to make the header visible
+  backgroundColor: '#8518FF', // Match the header background color
   color: '#fff', // Text color for the header
-  fontSize: '12px', // Reduce font size for the header
+  fontSize: '14px', // Adjust font size for better readability
   zIndex: 1100, // Ensure the header is above the table content
+  borderBottom: '2px solid #A54BFF', // Border for better separation
+
 });
 
 const TableRowStyled = styled(TableRow)(({ isEven }: { isEven: boolean }) => ({
@@ -167,7 +167,6 @@ const EnquiryPage: React.FC = () => {
     const newEnquiry: Enquiry = {
       enquiry: enquiryText,
       date: new Date().toISOString().split('T')[0],
-      response: 'Response pending...',
     };
 
     setEnquiries([...enquiries, newEnquiry]);
@@ -176,7 +175,7 @@ const EnquiryPage: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
-      <Header>Enquiry Page</Header>
+      <TraineeHeader title={'Enquiry'} />
       <Content>
         <Container>
           <FormContainer>
@@ -214,11 +213,6 @@ const EnquiryPage: React.FC = () => {
                         Date
                       </Typography>
                     </TableCellStyled>
-                    <TableCellStyled>
-                      <Typography variant="h6" style={{ fontWeight: 'bold', color: '#fff', fontSize: '14px' }}>
-                        Response
-                      </Typography>
-                    </TableCellStyled>
                   </TableRow>
                 </TableHeadStyled>
                 <TableBody>
@@ -229,9 +223,6 @@ const EnquiryPage: React.FC = () => {
                       </TableCellStyled>
                       <TableCellStyled>
                         {enquiry.date}
-                      </TableCellStyled>
-                      <TableCellStyled>
-                        {enquiry.response}
                       </TableCellStyled>
                     </TableRowStyled>
                   ))}
