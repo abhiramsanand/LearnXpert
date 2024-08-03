@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import DayBox from './DayBox';
-import TraineeHeader from '../../../constants/TraineeHeader';
+
 
 // Define a basic theme with custom colors
 const theme = createTheme({
@@ -21,23 +21,23 @@ const theme = createTheme({
 
 
 
-// Centered and full-width container
 const OuterContainer = styled(Box)({
-  border: '2px solid #8518FF',
+  border: '2px solid  #A54BFF',
   borderRadius: '8px',
   padding: '15px',
-  margin: '15px auto',
+  margin: '19px auto 19px auto', // Add margin top to create space
   display: 'flex',
   flexDirection: 'row',
   height: 'calc(90vh - 100px)', // Adjust height based on header/footer height
   width: '100%',
-  maxWidth: '1000px', // Reduced maximum width
-  overflow: 'hidden', // Prevent scrolling
+  maxWidth: '1000px',
+  overflow: 'hidden',
   '@media (max-width: 900px)': {
     flexDirection: 'column',
-    height: 'auto', // Allow height to adjust automatically
+    height: 'auto',
   },
 });
+
 
 // Container for the day list with custom scrollbar
 const DayListContainer = styled(Box)({
@@ -172,7 +172,7 @@ const CourseContainer: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <TraineeHeader title={'Courses'} />
+      
       <OuterContainer>
         <DayListContainer>
           {days.map((day, index) => (
