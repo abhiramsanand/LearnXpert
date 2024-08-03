@@ -23,23 +23,23 @@ interface Report {
 
 // Define styled components
 const CustomTableContainer = styled(Box)(({ theme }) => ({
-    maxHeight: 400,
+    maxHeight: 300,
     overflowY: 'auto',
     width: '100%',
     marginBottom: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[3],
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: theme.shape.borderRadius,
+    backgroundColor: '#E6E6FA', 
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
+    border: `1px solid #E6E6FA`,
+    borderRadius: '10px',
     '&::-webkit-scrollbar': {
         width: '6px',
     },
     '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: '#8518FF',
         borderRadius: '8px',
     },
     '&::-webkit-scrollbar-track': {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: 'white',
         borderRadius: '8px',
     },
     [theme.breakpoints.down('sm')]: {
@@ -52,9 +52,10 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
     '& th': {
         fontSize: '1rem',
         padding: theme.spacing(1),
-        backgroundColor: theme.palette.primary.light,
-        color: theme.palette.primary.contrastText,
-        borderBottom: `2px solid ${theme.palette.primary.dark}`,
+        backgroundColor: '#E6E6FA', 
+        color: 'black',
+        borderBottom: `2px solid #E6E6FA`,
+        textAlign: 'left', // Center-align the text in header cells
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.75rem',
             padding: theme.spacing(0.5),
@@ -67,14 +68,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 'none',
         fontSize: '0.9rem',
         padding: theme.spacing(1),
+        backgroundColor: '#E6E6FA', // Set the background color to #E6E6FA
+        textAlign: 'left', // Center-align the text in body cells
+        transition: 'background-color 0.3s ease', // Add transition for hover effect
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.7rem',
             padding: theme.spacing(0.5),
         },
     },
+    '&:nth-of-type(odd)': {
+        backgroundColor: '#f0f0f0', // Add alternating row colors
+    },
+    '&:nth-of-type(even)': {
+        backgroundColor: '#f9f9f9', // Add alternating row colors
+    },
+    '&:hover': {
+        backgroundColor: 'red', // Add hover effect
+        cursor: 'pointer', // Change cursor to pointer on hover
+    },
 }));
 
-// Define the ReportTable component
+
 const ReportTable: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
     const [filteredReports, setFilteredReports] = useState<Report[]>([]);
