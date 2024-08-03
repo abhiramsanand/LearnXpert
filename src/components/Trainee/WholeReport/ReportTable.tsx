@@ -6,6 +6,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Link,
     Box
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -28,7 +29,7 @@ const CustomTableContainer = styled(Box)(({ theme }) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
     backgroundColor: '#E6E6FA', 
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', 
     border: `1px solid #E6E6FA`,
     borderRadius: '10px',
     '&::-webkit-scrollbar': {
@@ -55,7 +56,7 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
         backgroundColor: '#E6E6FA', 
         color: 'black',
         borderBottom: `2px solid #E6E6FA`,
-        textAlign: 'left', // Center-align the text in header cells
+        textAlign: 'left',
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.75rem',
             padding: theme.spacing(0.5),
@@ -68,26 +69,37 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 'none',
         fontSize: '0.9rem',
         padding: theme.spacing(1),
-        backgroundColor: '#E6E6FA', // Set the background color to #E6E6FA
-        textAlign: 'left', // Center-align the text in body cells
-        transition: 'background-color 0.3s ease', // Add transition for hover effect
+        backgroundColor: '#E6E6FA',
+        textAlign: 'left',
+        transition: 'background-color 0.3s ease',
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.7rem',
             padding: theme.spacing(0.5),
         },
     },
     '&:nth-of-type(odd)': {
-        backgroundColor: '#f0f0f0', // Add alternating row colors
+        backgroundColor: '#f0f0f0',
     },
     '&:nth-of-type(even)': {
-        backgroundColor: '#f9f9f9', // Add alternating row colors
+        backgroundColor: '#f9f9f9',
     },
     '&:hover': {
-        backgroundColor: 'red', // Add hover effect
-        cursor: 'pointer', // Change cursor to pointer on hover
+        backgroundColor: '#f9f9f9',
+        cursor: 'pointer',
     },
 }));
 
+// Define a styled Link component for pending status
+const PendingLink = styled(Link)(({ theme }) => ({
+    color: 'red',
+    textDecoration: 'none',
+    '&:hover': {
+        textDecoration: 'underline',
+    },
+    [theme.breakpoints.down('sm')]: {
+        fontSize: '0.75rem',
+    },
+}));
 
 const ReportTable: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
@@ -141,7 +153,13 @@ const ReportTable: React.FC = () => {
                                 <TableCell>{report.timeTaken}</TableCell>
                                 <TableCell>{report.keyLearnings}</TableCell>
                                 <TableCell>{report.planForTomorrow}</TableCell>
-                                <TableCell>{report.status}</TableCell>
+                                <TableCell>
+                                    {report.status === 'pending' ? (
+                                        <PendingLink href="/pending-reports">{report.status}</PendingLink>
+                                    ) : (
+                                        report.status
+                                    )}
+                                </TableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
