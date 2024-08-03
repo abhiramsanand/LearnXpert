@@ -7,7 +7,7 @@ const WholeReportPage: React.FC = () => {
   
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '10px' }}>
             <TraineeHeader title={'Whole Report'} />
            
             <ReportTable/>
