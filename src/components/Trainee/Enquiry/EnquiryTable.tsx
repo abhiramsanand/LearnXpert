@@ -35,7 +35,6 @@ const TableHeading = styled(Typography)({
 const TableContainerStyled = styled(TableContainer)({
   backgroundColor: '#CBC3E3',
   borderRadius: '8px',
-  
   maxHeight: '300px',
   overflowY: 'auto',
   width: '85%',
