@@ -14,7 +14,7 @@ const CustomTableContainer = styled(Box)(({ theme }) => ({
   overflowY: 'auto',
   width: '100%',
   marginBottom: '20px',
-  backgroundColor:'#F3E8FF',
+  backgroundColor:'#E6E6FA',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
   border: '1px solid #D1B2FF',
   borderRadius: '8px',
@@ -39,7 +39,7 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   '& th': {
     fontSize: '1rem',
     padding: '8px',
-    backgroundColor:'#F3E8FF',
+    backgroundColor:'#E6E6FA',
     borderBottom: '2px solid #D1B2FF',
     [theme.breakpoints.down('sm')]: {
       fontSize: '0.75rem',

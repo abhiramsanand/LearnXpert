@@ -23,7 +23,7 @@ interface Report {
 
 // Define styled components
 const CustomTableContainer = styled(Box)(({ theme }) => ({
-    maxHeight: 400,
+    maxHeight: 300,
     overflowY: 'auto',
     width: '100%',
     marginBottom: theme.spacing(2),
