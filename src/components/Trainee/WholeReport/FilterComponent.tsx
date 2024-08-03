@@ -32,20 +32,20 @@ const CustomFormControl = styled(FormControl)(({ theme }) => ({
     minWidth: 150,
     margin: theme.spacing(1),
     '& .MuiInputLabel-root': {
-        color: theme.palette.text.primary,
+        color:'#8518FF',
     },
     '& .MuiSelect-root': {
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: '#8518FF',
     },
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-            borderColor: theme.palette.primary.main,
+            borderColor:  '#8518FF',
         },
         '&:hover fieldset': {
-            borderColor: theme.palette.primary.dark,
+            borderColor:  '#8518FF',
         },
         '&.Mui-focused fieldset': {
-            borderColor: theme.palette.primary.main,
+            borderColor:  '#8518FF',
         },
     },
 }));
