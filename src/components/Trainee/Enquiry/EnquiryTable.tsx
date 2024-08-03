@@ -1,4 +1,4 @@
-// src/components/EnquiryTable.tsx
+
 
 import React from 'react';
 import {
@@ -18,7 +18,7 @@ const TableWrapper = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   overflowX: 'auto',
-  maxHeight: '270px',
+  maxHeight: '250px',
   width: '100%',
 });
 
@@ -35,11 +35,12 @@ const TableHeading = styled(Typography)({
 const TableContainerStyled = styled(TableContainer)({
   backgroundColor: '#CBC3E3',
   borderRadius: '8px',
-  padding: '10px',
+  
   maxHeight: '300px',
   overflowY: 'auto',
   width: '85%',
   marginLeft: '8%',
+  
 });
 
 const TableHeadStyled = styled(TableHead)({
@@ -50,6 +51,11 @@ const TableHeadStyled = styled(TableHead)({
   fontSize: '14px',
   zIndex: 1100,
   borderBottom: '2px solid #A54BFF',
+  margin: 0,
+  padding: 0,
+  '& th': {
+    padding: '8px', // or any padding value you prefer
+  },
 });
 
 const TableRowStyled = styled(TableRow)(({ isEven }: { isEven: boolean }) => ({
@@ -70,6 +76,7 @@ const TableCellStyled = styled(TableCell)({
 interface Enquiry {
   enquiry: string;
   date: string;
+  response: string; // Added the new field
 }
 
 interface EnquiryTableProps {
@@ -94,6 +101,11 @@ const EnquiryTable: React.FC<EnquiryTableProps> = ({ enquiries }) => {
                   Date
                 </Typography>
               </TableCellStyled>
+              <TableCellStyled>
+                <Typography variant="h6" style={{ fontWeight: 'bold', color: '#fff', fontSize: '14px' }}>
+                  Response
+                </Typography>
+              </TableCellStyled>
             </TableRow>
           </TableHeadStyled>
           <TableBody>
@@ -104,6 +116,9 @@ const EnquiryTable: React.FC<EnquiryTableProps> = ({ enquiries }) => {
                 </TableCellStyled>
                 <TableCellStyled>
                   {enquiry.date}
+                </TableCellStyled>
+                <TableCellStyled>
+                  {enquiry.response}
                 </TableCellStyled>
               </TableRowStyled>
             ))}
