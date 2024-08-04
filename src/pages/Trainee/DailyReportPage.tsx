@@ -5,7 +5,7 @@ import Buttons from '../../components/Trainee/DailyReport/Button';
 import data from '../../components/Trainee/DailyReport/data.json';
 import PendingSubmissionsModal from '../../components/Trainee/DailyReport/PendingSubmissionsModal';
 import { Container, Box, Typography, Button } from '@mui/material';
-import TraineeHeader from '../../constants/TraineeHeader';
+import TraineeHeader from '../../shared components/TraineeHeader';
 
 const DailyReport: React.FC = () => {
   const [date, setDate] = useState<Date | null>(new Date());

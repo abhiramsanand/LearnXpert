@@ -1,6 +1,6 @@
 import React from 'react';
 import CourseComponent from '../../components/Trainee/Course/Course';
-import TraineeHeader from '../../constants/TraineeHeader';
+import TraineeHeader from '../../shared components/TraineeHeader';
 
 const CoursePage = () => {
   return (

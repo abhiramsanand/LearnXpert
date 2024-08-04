@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import CompletedAssessmentTable from '../../components/Trainee/Assessment/CompletedAssessmentTable';
 import PendingAssessmentTable from '../../components/Trainee/Assessment/PendingAssessmentTable';
-import TraineeHeader from '../../constants/TraineeHeader';
-import Footer from '../../constants/Footer';
+import TraineeHeader from '../../shared components/TraineeHeader';
+import Footer from '../../shared components/Footer';
 
 const AssessmentsPage: React.FC = () => {
   return (
