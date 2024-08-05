@@ -5,7 +5,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 1",
-          "status": "Completed",
+          "status": "Inactive",
           "studentsAttended": {
             "count": 3,
             "students": [
@@ -29,7 +29,7 @@
         },
         {
           "assessmentName": "Assessment 2",
-          "status": "In Progress",
+          "status": "Active",
           "studentsAttended": {
             "count": 2,
             "students": [
@@ -48,7 +48,7 @@
         },
         {
           "assessmentName": "Assessment 3",
-          "status": "Completed",
+          "status": "Inactive",
           "studentsAttended": {
             "count": 4,
             "students": [
@@ -82,7 +82,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 9",
-          "status": "Completed",
+          "status": "Inactive",
           "studentsAttended": {
             "count": 2,
             "students": [
@@ -101,7 +101,7 @@
         },
         {
           "assessmentName": "Assessment 20",
-          "status": "In Progress",
+          "status": "Active",
           "studentsAttended": {
             "count": 1,
             "students": [
@@ -120,7 +120,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 1",
-          "status": "In Progress",
+          "status": "Active",
           "studentsAttended": {
             "count": 1,
             "students": [
@@ -134,7 +134,7 @@
         },
         {
           "assessmentName": "Assessment 2",
-          "status": "Scheduled",
+          "status": "Active",
           "studentsAttended": {
             "count": 0,
             "students": []
@@ -147,7 +147,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 1",
-          "status": "Scheduled",
+          "status": "Active",
           "studentsAttended": {
             "count": 0,
             "students": []
@@ -155,7 +155,7 @@
         },
         {
           "assessmentName": "Assessment 2",
-          "status": "Scheduled",
+          "status": "Active",
           "studentsAttended": {
             "count": 0,
             "students": []

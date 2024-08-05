@@ -12,18 +12,27 @@ const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) 
   };
 
   return (
-    <FormControl sx={{ minWidth: 120, marginBottom: 2 }}>
+    <FormControl
+      sx={{ 
+        marginTop: 4,
+        minWidth: 160,  // Adjusted width
+        marginBottom: 2 
+      }}
+    >
       <InputLabel id="sort-label">Sort By</InputLabel>
       <Select
         labelId="sort-label"
         value={currentSort}
         onChange={handleChange}
         label="Sort By"
+        sx={{
+          width: 200,  // Set desired width
+          height: 36,  // Set height to be smaller
+        }}
       >
         <MenuItem value="all">All</MenuItem>
-        <MenuItem value="in-progress">In Progress</MenuItem>
-        <MenuItem value="scheduled">Scheduled</MenuItem>
-        <MenuItem value="completed">Completed</MenuItem>
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="inactive">Inactive</MenuItem>
       </Select>
     </FormControl>
   );
