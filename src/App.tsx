@@ -22,6 +22,7 @@ import {
   Legend,
 } from 'chart.js';
 import AdminLayout from "./AdminLayout";
+import BatchListPage from "./pages/Admin/BatchListPage";
 
 ChartJS.register(
   CategoryScale,
@@ -50,8 +51,8 @@ function App() {
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
         </Route>
-        <Route path="/" element={<AdminLayout />}>
-        
+        <Route path="/" element={<AdminLayout />}/>
+        <Route path="/Admin-Batchlist" element={<BatchListPage />}>
         </Route>
       </Routes>
     </Router>
