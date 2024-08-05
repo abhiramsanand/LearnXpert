@@ -40,9 +40,7 @@ const Sidebar: React.FC = () => {
   }, []);
 
   const handleDrawerToggle = () => {
-    if (window.innerWidth > 600) {
-      setOpen(!open);
-    }
+    setOpen(!open);
   };
 
   return (
@@ -64,7 +62,13 @@ const Sidebar: React.FC = () => {
             LearnXpert
           </Typography>
         )}
-        <IconButton onClick={handleDrawerToggle} sx={{ ml: open ? "auto" : 0 }}>
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{
+            ml: open ? "auto" : 0,
+            display: { xs: "none", sm: "inline-flex" }, // Hide on xs devices
+          }}
+        >
           <MenuIcon sx={{ color: "#8518FF" }} />
         </IconButton>
       </Toolbar>
