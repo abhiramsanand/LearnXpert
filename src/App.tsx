@@ -13,6 +13,7 @@ import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
+import AdminCoursePage from "./pages/Admin/AdminCoursePage";
 
 
 import {
@@ -60,6 +61,7 @@ function App() {
           <Route path="Admin-Assessments" element={< AdminAssessmentViewPage />} />
           <Route path="/assignment/:name"  element={< AdminAssessmentDetailsPage />} />
           <Route path="/Admin-AssessmentCreation" element={< AdminAssessmentCreationPage />} />
+          <Route path="/Admin-Courses" element={< AdminCoursePage />} />
         </Route>
       </Routes>
     </Router>
