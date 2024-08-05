@@ -1,116 +1,167 @@
 {
-    "batches": [
-      {
-        "batch": "Batch 1",
-        "assessments": [
-          {
-            "assessmentName": "Assessment 1",
-            "status": "Completed",
-            "studentsAttended": {
-              "count": 3,
-              "students": [
-                "Student A",
-                "Student B",
-                "Student C"
-              ]
-            }
-          },
-          {
-            "assessmentName": "Assessment 2",
-            "status": "Pending",
-            "studentsAttended": {
-              "count": 2,
-              "students": [
-                "Student A",
-                "Student C"
-              ]
-            }
-          },
-          {
-            "assessmentName": "Assessment 3",
-            "status": "Completed",
-            "studentsAttended": {
-              "count": 4,
-              "students": [
-                "Student A",
-                "Student B",
-                "Student C",
-                "Student D"
-              ]
-            }
+  "batches": [
+    {
+      "batch": "Batch 1",
+      "assessments": [
+        {
+          "assessmentName": "Assessment 1",
+          "status": "Completed",
+          "studentsAttended": {
+            "count": 3,
+            "students": [
+              {
+                "name": "Athira",
+                "status": "Submitted",
+                "marks": 85
+              },
+              {
+                "name": "Rehna",
+                "status": "Submitted",
+                "marks": 90
+              },
+              {
+                "name": "Student C",
+                "status": "Submitted",
+                "marks": 88
+              }
+            ]
           }
-        ]
-      },
-      {
-        "batch": "Batch 2",
-        "assessments": [
-          {
-            "assessmentName": "Assessment 1",
-            "status": "Completed",
-            "studentsAttended": {
-              "count": 2,
-              "students": [
-                "Student D",
-                "Student E"
-              ]
-            }
-          },
-          {
-            "assessmentName": "Assessment 2",
-            "status": "In Progress",
-            "studentsAttended": {
-              "count": 1,
-              "students": [
-                "Student E"
-              ]
-            }
+        },
+        {
+          "assessmentName": "Assessment 2",
+          "status": "In Progress",
+          "studentsAttended": {
+            "count": 2,
+            "students": [
+              {
+                "name": "Student A",
+                "status": "Submitted",
+                "marks": 78
+              },
+              {
+                "name": "Student C",
+                "status": "Pending",
+                "marks": 0
+              }
+            ]
           }
-        ]
-      },
-      {
-        "batch": "Batch 3",
-        "assessments": [
-          {
-            "assessmentName": "Assessment 1",
-            "status": "In Progress",
-            "studentsAttended": {
-              "count": 1,
-              "students": [
-                "Student F"
-              ]
-            }
-          },
-          {
-            "assessmentName": "Assessment 2",
-            "status": "Scheduled",
-            "studentsAttended": {
-              "count": 0,
-              "students": []
-            }
+        },
+        {
+          "assessmentName": "Assessment 3",
+          "status": "Completed",
+          "studentsAttended": {
+            "count": 4,
+            "students": [
+              {
+                "name": "Student A",
+                "status": "Submitted",
+                "marks": 92
+              },
+              {
+                "name": "Student B",
+                "status": "Submitted",
+                "marks": 87
+              },
+              {
+                "name": "Student C",
+                "status": "Submitted",
+                "marks": 81
+              },
+              {
+                "name": "Student D",
+                "status": "Submitted",
+                "marks": 85
+              }
+            ]
           }
-        ]
-      },
-      {
-        "batch": "Batch 4",
-        "assessments": [
-          {
-            "assessmentName": "Assessment 1",
-            "status": "Scheduled",
-            "studentsAttended": {
-              "count": 0,
-              "students": []
-            }
-          },
-          {
-            "assessmentName": "Assessment 2",
-            "status": "Scheduled",
-            "studentsAttended": {
-              "count": 0,
-              "students": []
-            }
+        }
+      ]
+    },
+    {
+      "batch": "Batch 2",
+      "assessments": [
+        {
+          "assessmentName": "Assessment 9",
+          "status": "Completed",
+          "studentsAttended": {
+            "count": 2,
+            "students": [
+              {
+                "name": "Student D",
+                "status": "Submitted",
+                "marks": 80
+              },
+              {
+                "name": "Student E",
+                "status": "Submitted",
+                "marks": 75
+              }
+            ]
           }
-        ]
-      }
-    ]
-  }
-  
+        },
+        {
+          "assessmentName": "Assessment 20",
+          "status": "In Progress",
+          "studentsAttended": {
+            "count": 1,
+            "students": [
+              {
+                "name": "Student E",
+                "status": "Pending",
+                "marks": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "batch": "Batch 3",
+      "assessments": [
+        {
+          "assessmentName": "Assessment 1",
+          "status": "In Progress",
+          "studentsAttended": {
+            "count": 1,
+            "students": [
+              {
+                "name": "Student F",
+                "status": "Pending",
+                "marks": 0
+              }
+            ]
+          }
+        },
+        {
+          "assessmentName": "Assessment 2",
+          "status": "Scheduled",
+          "studentsAttended": {
+            "count": 0,
+            "students": []
+          }
+        }
+      ]
+    },
+    {
+      "batch": "Batch 4",
+      "assessments": [
+        {
+          "assessmentName": "Assessment 1",
+          "status": "Scheduled",
+          "studentsAttended": {
+            "count": 0,
+            "students": []
+          }
+        },
+        {
+          "assessmentName": "Assessment 2",
+          "status": "Scheduled",
+          "studentsAttended": {
+            "count": 0,
+            "students": []
+          }
+        }
+      ]
+    }
+  ]
+}

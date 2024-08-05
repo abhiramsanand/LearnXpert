@@ -11,6 +11,7 @@ import WholeReportPage from "./pages/Trainee/WholeReportPage";
 import EnquiryPage from "./pages/Trainee/EnquiryPage";
 import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
+import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 
 import {
   Chart as ChartJS,
@@ -52,7 +53,8 @@ function App() {
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
-            
+          <Route path="Admin-ViewAssessment" element={< AdminAssessmentViewPage />} />
+          <Route path="/assignment/:name"  element={< AdminAssessmentDetailsPage />} />
         </Route>
       </Routes>
     </Router>

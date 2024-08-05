@@ -1,10 +1,10 @@
 import React from 'react'
-import Assessmentview from '../../components/Admin/Assessment/AdminAssessmentView'
+import  AssessmentTabs from '../../components/Admin/AssessmentView/AssessmentTabs'
 
 const AdminAssessmentViewPage = () => {
   return (
     <div>
-      <Assessmentview/>
+       <AssessmentTabs />
     </div>
   )
 }
