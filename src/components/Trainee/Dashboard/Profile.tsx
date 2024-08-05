@@ -86,7 +86,7 @@ const Profile: React.FC = () => {
                 border: "1px solid #8518FF",
                 borderRadius: "20px",
               }}
-              component={Link} to="/Dailyreport"
+              component={Link} to="/Trainee-Dailyreport"
             >
               Daily Report
             </Button>
@@ -98,7 +98,7 @@ const Profile: React.FC = () => {
                 border: "1px solid #8518FF",
                 borderRadius: "20px",
               }}
-              component={Link} to="/Enquiry"
+              component={Link} to="/Trainee-Enquiry"
             >
               Enquiry
             </Button>

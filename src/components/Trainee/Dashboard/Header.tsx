@@ -51,7 +51,7 @@ const Header = () => {
               <Notifications />
               <Typography
                 component={Link}
-                to="/Courses"
+                to="/Trainee-Courses"
                 sx={{
                   fontSize: "20px",
                   textDecoration: "none",
@@ -62,7 +62,7 @@ const Header = () => {
               </Typography>
               <Typography
                 component={Link}
-                to="/Assessments"
+                to="/Trainee-Assessments"
                 sx={{
                   fontSize: "20px",
                   textDecoration: "none",
