@@ -20,8 +20,9 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 import AdminLayout from "./AdminLayout";
+import AdminHomePage from "./pages/Admin/AdminHomePage";
 
 ChartJS.register(
   CategoryScale,
@@ -51,7 +52,7 @@ function App() {
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
-        
+          <Route path="Admin-Home" element={<AdminHomePage />} />
         </Route>
       </Routes>
     </Router>
