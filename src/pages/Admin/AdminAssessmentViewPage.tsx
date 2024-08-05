@@ -1,10 +1,10 @@
 import React from 'react'
-import 
+import Assessmentview from '../../components/Admin/Assessment/AdminAssessmentView'
 
 const AdminAssessmentViewPage = () => {
   return (
     <div>
-      
+      <Assessmentview/>
     </div>
   )
 }

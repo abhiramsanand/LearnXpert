@@ -10,6 +10,7 @@ import DailyReport from "./pages/Trainee/DailyReportPage";
 import WholeReportPage from "./pages/Trainee/WholeReportPage";
 import EnquiryPage from "./pages/Trainee/EnquiryPage";
 import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
+import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 
 import {
   Chart as ChartJS,
@@ -51,7 +52,7 @@ function App() {
           <Route path="Enquiry" element={<EnquiryPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
-        
+            
         </Route>
       </Routes>
     </Router>
