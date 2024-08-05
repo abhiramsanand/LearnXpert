@@ -42,13 +42,13 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Dashboard" element={<TraineeDashboardPage />} />
+        <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
         <Route path="/" element={<TraineeLayout />}>
-          <Route path="Courses" element={<CoursePage />} />
-          <Route path="Assessments" element={<AssessmentPage />} />
-          <Route path="Dailyreport" element={<DailyReport />} />
-          <Route path="Wholereport" element={<WholeReportPage />} />
-          <Route path="Enquiry" element={<EnquiryPage />} />
+          <Route path="Trainee-Courses" element={<CoursePage />} />
+          <Route path="Trainee-Assessments" element={<AssessmentPage />} />
+          <Route path="Trainee-Dailyreport" element={<DailyReport />} />
+          <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
+          <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
         

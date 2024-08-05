@@ -55,7 +55,7 @@ const TraineeHeader: React.FC<HeaderProps> = ({ title }) => {
         <Container maxWidth="lg">
           <Toolbar>
             <Title>{title}</Title>
-            <Box component={Link} to="/Dashboard" sx={{mr: 3}}>
+            <Box component={Link} to="/Trainee-Dashboard" sx={{mr: 3}}>
               <StyledIconButton>
                 <AiFillHome />
               </StyledIconButton>
@@ -71,28 +71,28 @@ const TraineeHeader: React.FC<HeaderProps> = ({ title }) => {
             >
               <MenuItem
                 component={Link}
-                to="/courses"
+                to="/Trainee-courses"
                 onClick={handleMenuClose}
               >
                 Courses
               </MenuItem>
               <MenuItem
                 component={Link}
-                to="/assessments"
+                to="/Trainee-assessments"
                 onClick={handleMenuClose}
               >
                 Assessments
               </MenuItem>
               <MenuItem
                 component={Link}
-                to="/Dailyreport"
+                to="/Trainee-Dailyreport"
                 onClick={handleMenuClose}
               >
                 Daily Report
               </MenuItem>
               <MenuItem
                 component={Link}
-                to="/Enquiry"
+                to="/Trainee-Enquiry"
                 onClick={handleMenuClose}
               >
                 Enquiries
