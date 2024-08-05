@@ -22,6 +22,7 @@ import {
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import Person2Icon from "@mui/icons-material/Person2";
+import { Link } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   const [open, setOpen] = useState(window.innerWidth > 600);
@@ -66,7 +67,7 @@ const Sidebar: React.FC = () => {
           onClick={handleDrawerToggle}
           sx={{
             ml: open ? "auto" : 0,
-            display: { xs: "none", sm: "inline-flex" }, // Hide on xs devices
+            display: { xs: "none", sm: "inline-flex" }, 
           }}
         >
           <MenuIcon sx={{ color: "#8518FF" }} />
@@ -74,22 +75,26 @@ const Sidebar: React.FC = () => {
       </Toolbar>
       <List>
         {[
-          { text: "Home", icon: <HomeIcon sx={{ color: "#8518FF" }} /> },
-          { text: "Batches", icon: <GroupIcon sx={{ color: "#8518FF" }} /> },
-          { text: "Trainees", icon: <Person2Icon sx={{ color: "#8518FF" }} /> },
+          { text: "Home", icon: <HomeIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Home" },
+          { text: "Batches", icon: <GroupIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Batches" },
+          { text: "Trainees", icon: <Person2Icon sx={{ color: "#8518FF" }} />, to: "/Admin-Trainees" },
           {
             text: "Assessments",
             icon: <AssessmentIcon sx={{ color: "#8518FF" }} />,
+            to: "/Admin-Assessments",
           },
-          { text: "Courses", icon: <SchoolIcon sx={{ color: "#8518FF" }} /> },
+          { text: "Courses", icon: <SchoolIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Courses" },
           {
             text: "Add Admin",
             icon: <AdminPanelSettingsIcon sx={{ color: "#8518FF" }} />,
+            to: "/Add-Admin",
           },
         ].map((item, _index) => (
           <ListItem
             button
             key={item.text}
+            component={Link}
+            to={item.to}
             sx={{
               "&:hover .MuiListItemText-root": {
                 display: open ? "block" : "block",
@@ -110,12 +115,15 @@ const Sidebar: React.FC = () => {
           {
             text: "Notifications",
             icon: <NotificationsIcon sx={{ color: "#8518FF" }} />,
+            to: "",
           },
-          { text: "Logout", icon: <LogoutIcon sx={{ color: "#8518FF" }} /> },
+          { text: "Logout", icon: <LogoutIcon sx={{ color: "#8518FF" }} />, to: "/" },
         ].map((item, _index) => (
           <ListItem
             button
             key={item.text}
+            component={Link}
+            to={item.to}
             sx={{
               "&:hover .MuiListItemText-root": {
                 display: open ? "block" : "block",
