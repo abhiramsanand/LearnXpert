@@ -53,7 +53,8 @@ function App() {
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}/>
-        <Route path="/Admin-Batchlist" element={<BatchListPage />}>  <Route path="Admin-Home" element={<AdminHomePage />} />
+        <Route path="/Admin-Home" element={<AdminHomePage />} />
+        <Route path="/Admin-Batchlist" element={<BatchListPage />}>  
         </Route>
 
       </Routes>
