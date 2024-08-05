@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./shared components/Footer";
 
-const Layout = () => {
+const AdminLayout = () => {
   return (
     <>
       <main className="main-content">
@@ -12,4 +12,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default AdminLayout;

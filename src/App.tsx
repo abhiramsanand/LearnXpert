@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Login from "./pages/Login/LoginPage";
-import Layout from "./Layout";
+import TraineeLayout from "./TraineeLayout";
 import CoursePage from "./pages/Trainee/CoursePage";
 import AssessmentPage from "./pages/Trainee/AssessmentPage";
 import DailyReport from "./pages/Trainee/DailyReportPage";
@@ -21,6 +21,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import AdminLayout from "./AdminLayout";
 
 ChartJS.register(
   CategoryScale,
@@ -42,12 +43,15 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/Dashboard" element={<TraineeDashboardPage />} />
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<TraineeLayout />}>
           <Route path="Courses" element={<CoursePage />} />
           <Route path="Assessments" element={<AssessmentPage />} />
           <Route path="Dailyreport" element={<DailyReport />} />
           <Route path="Wholereport" element={<WholeReportPage />} />
           <Route path="Enquiry" element={<EnquiryPage />} />
+        </Route>
+        <Route path="/" element={<AdminLayout />}>
+        
         </Route>
       </Routes>
     </Router>
