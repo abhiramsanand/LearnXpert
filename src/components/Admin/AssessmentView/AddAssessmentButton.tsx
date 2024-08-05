@@ -8,7 +8,7 @@ const AddAssessmentButton: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/addassessment');
+    navigate('/Admin-AssessmentCreation');
   };
 
   return (

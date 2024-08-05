@@ -1,4 +1,3 @@
-// AssessmentTable.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
@@ -33,11 +32,11 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
 
   return (
     <div style={{ position: 'relative' }}> {/* Add relative positioning for the button */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8,marginRight:20 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <SortOptions currentSort={sortOption} onSortChange={onSortChange} />
-          <AddAssessmentButton /> 
         </div>
+        <AddAssessmentButton />
       </div>
       <TableContainer component={Paper}>
         <Table>
