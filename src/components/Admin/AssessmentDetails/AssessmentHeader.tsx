@@ -1,33 +1,32 @@
-// Header.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconButton, TextField, InputAdornment } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchIcon from '@mui/icons-material/Search';
 
-interface HeaderProps {
+interface AssessmentHeaderProps {
   assessmentName: string;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ assessmentName, searchTerm, setSearchTerm }) => {
+const AssessmentHeader: React.FC<AssessmentHeaderProps> = ({ assessmentName, searchTerm, setSearchTerm }) => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+    <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
       <IconButton
-        onClick={() => navigate('/Admin-ViewAssessment')}
+        onClick={() => navigate('/Admin-Assessments')}
         style={{
-          backgroundColor: '#f5f5f5',
+          backgroundColor: 'F3E8FF', // Light background color for the button
           borderRadius: '50%',
           padding: 8,
           marginRight: 16,
         }}
       >
-        <ArrowBackIcon />
+        <ArrowBackIcon style={{ color: '8518FF' }} /> {/* Dark color for the arrow */}
       </IconButton>
-      <h1 style={{ flexGrow: 1 }}>{assessmentName}</h1>
+      <h3 style={{ flexGrow: 1 }}>{assessmentName}</h3>
       <TextField
         placeholder="Search"
         variant="outlined"
@@ -37,9 +36,14 @@ const Header: React.FC<HeaderProps> = ({ assessmentName, searchTerm, setSearchTe
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <SearchIcon />
+              <SearchIcon style={{ color: '#8518FF' }} /> {/* Customize color of the search icon */}
             </InputAdornment>
           ),
+          sx: {
+            '& .MuiInputBase-input': {
+              backgroundColor: '#F3E8FF', // Set background color for the input box
+            },
+          },
         }}
         style={{ marginLeft: 'auto' }}
       />
@@ -47,4 +51,4 @@ const Header: React.FC<HeaderProps> = ({ assessmentName, searchTerm, setSearchTe
   );
 };
 
-export default Header;
+export default AssessmentHeader;

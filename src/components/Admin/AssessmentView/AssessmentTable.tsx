@@ -1,7 +1,9 @@
+// AssessmentTable.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
-import SortOptions from './SortOptions'; // Adjust the import path as needed
+import SortOptions from './SortOptions';
+import AddAssessmentButton from './AddAssessmentButton'; // Import the AddAssessmentButton component
 
 interface StudentAttended {
   name: string;
@@ -30,35 +32,40 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
     : assessments.filter(assessment => assessment.status.toLowerCase() === sortOption);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-        <SortOptions currentSort={sortOption} onSortChange={onSortChange} />
+    <div style={{ position: 'relative' }}> {/* Add relative positioning for the button */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <SortOptions currentSort={sortOption} onSortChange={onSortChange} />
+          <AddAssessmentButton /> 
+        </div>
       </div>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black' ,fontWeight:'bolder'}}>Assessment Name</TableCell>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black',fontWeight:'bolder' }}>Status</TableCell>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black',fontWeight:'bolder' }}>Students Attended</TableCell>
+              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>#</TableCell>
+              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Assessment Name</TableCell>
+              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Status</TableCell>
+              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Students Attended</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredAssessments.map((assessment) => (
+            {filteredAssessments.map((assessment, index) => (
               <TableRow key={assessment.assessmentName}>
-                <TableCell>
+                <TableCell style={{ fontSize: '12px' }}>{index + 1}</TableCell> {/* Serial number */}
+                <TableCell style={{ fontSize: '12px' }}>
                   <Typography
                     component={Link}
                     to={`/assignment/${assessment.assessmentName}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }} // Normal link color
+                    style={{ textDecoration: 'none', color: 'inherit', fontSize: '12px' }} // Apply fontSize to Typography
                   >
                     {assessment.assessmentName}
                   </Typography>
                 </TableCell>
-                <TableCell style={{ color: getStatusColor(assessment.status) }}>
+                <TableCell style={{ color: getStatusColor(assessment.status), fontSize: '12px' }}>
                   {assessment.status}
                 </TableCell>
-                <TableCell>{assessment.studentsAttended.count}</TableCell>
+                <TableCell style={{ fontSize: '12px' }}>{assessment.studentsAttended.count}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -72,9 +79,9 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'Active':
-      return 'green'; // Color for Completed
+      return 'green'; // Color for Active
     case 'Inactive':
-      return 'grey';  // Color for In Progres
+      return 'red';  // Color for Inactive
     default:
       return 'black'; // Default color
   }

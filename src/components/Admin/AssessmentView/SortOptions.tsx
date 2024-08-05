@@ -26,8 +26,8 @@ const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) 
         onChange={handleChange}
         label="Sort By"
         sx={{
-          width: 200,  // Set desired width
-          height: 36,  // Set height to be smaller
+          width: 140,  // Set desired width
+          height: 30,  // Set height to be smaller
         }}
       >
         <MenuItem value="all">All</MenuItem>

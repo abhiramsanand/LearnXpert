@@ -1,5 +1,6 @@
 import React from 'react'
-import  AssessmentTabs from '../../components/Admin/AssessmentView/AssessmentTabs'
+import  AssessmentTabs from '../../components/Admin/Assessmentview/AssessmentTabs'
+
 
 const AdminAssessmentViewPage = () => {
   return (

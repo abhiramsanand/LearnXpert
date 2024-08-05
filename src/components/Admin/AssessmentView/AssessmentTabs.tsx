@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import BatchTabs from './BatchTabs'; // Adjust the import path as needed
-import AssessmentTable from './AssessmentTable'; // Adjust the import path as needed
+import BatchTabs from './BatchTabs';
+import AssessmentTable from './AssessmentTable';
 import assessmentData from '../../../../public/AssessmentList.json';
 
 interface StudentAttended {

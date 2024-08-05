@@ -13,6 +13,7 @@ import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -55,8 +56,9 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
-          <Route path="Admin-ViewAssessment" element={< AdminAssessmentViewPage />} />
+          <Route path="Admin-Assessments" element={< AdminAssessmentViewPage />} />
           <Route path="/assignment/:name"  element={< AdminAssessmentDetailsPage />} />
+         
         </Route>
       </Routes>
     </Router>

@@ -1,4 +1,3 @@
-// AssignmentDetails.tsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AssessmentHeader from './AssessmentHeader';
@@ -29,7 +28,7 @@ interface AssessmentList {
   batches: Batch[];
 }
 
-const AssignmentDetails: React.FC = () => {
+const AssessmentDetails: React.FC = () => {
   const { name } = useParams();
   const data: AssessmentList = assessmentData;
 
@@ -62,11 +61,13 @@ const AssignmentDetails: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: 16 }}>
-      <AssessmentHeader assessmentName={assessment.assessmentName} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+    <div style={{ padding: 0 }}>
+      <div style={{ marginTop: 0 }}> {/* Adjust marginTop as needed */}
+        <AssessmentHeader assessmentName={assessment.assessmentName} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
       <StudentTable students={filteredStudents} getStatusStyle={getStatusStyle} />
     </div>
   );
 };
 
-export default AssignmentDetails;
+export default AssessmentDetails;
