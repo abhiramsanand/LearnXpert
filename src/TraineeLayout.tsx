@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./constants/Footer";
 
-const Layout = () => {
+const TraineeLayout = () => {
   return (
     <>
       <main className="main-content">
@@ -12,4 +12,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default TraineeLayout;
