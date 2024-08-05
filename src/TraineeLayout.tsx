@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./constants/Footer";
+import Footer from "./shared components/Footer";
 
 const TraineeLayout = () => {
   return (
