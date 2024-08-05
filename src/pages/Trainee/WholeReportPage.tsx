@@ -1,8 +1,8 @@
 
 import ReportTable from '../../components/Trainee/WholeReport/ReportTable';
-import TraineeHeader from '../../constants/TraineeHeader';
+import TraineeHeader from '../../shared components/TraineeHeader';
 
-import Footer from '../../constants/Footer';
+import Footer from '../../shared components/Footer';
 const WholeReportPage: React.FC = () => {
   
 
