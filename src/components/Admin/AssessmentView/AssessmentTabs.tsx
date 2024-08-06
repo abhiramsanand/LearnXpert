@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import assessmentData from '../../../../public/AssessmentList.json';
 import BatchTabs from './BatchTabs';
 import AssessmentTable from './AssessmentTable';
-import assessmentData from '../../../../public/AssessmentList.json';
 
 interface StudentAttended {
   count: number;

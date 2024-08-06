@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Box, styled } from '@mui/material';
 
@@ -29,7 +30,6 @@ const TabContainer = styled(Box)(({ theme, isSelected }: { isSelected: boolean }
   borderRadius: '20px', // Make the background square
   width: '20%', // Adjust the width as needed
   height: '40px', // Adjust the height as needed
-  margin: '4px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -38,11 +38,11 @@ const TabContainer = styled(Box)(({ theme, isSelected }: { isSelected: boolean }
   cursor: 'pointer',
   transition: 'background-color 0.3s ease',
   fontWeight:'bolder',
-  // '&:hover': {
-  //   backgroundColor:  '#F3E8FF'  , // Set hover color
-  //   color:'black'
+  '&:hover': {
+    backgroundColor:  '#F3E8FF'  ,
+    color:'black'
     
-  // },
+  },
 }));
 
 const BatchTabs: React.FC<BatchTabsProps> = ({ batches, selectedIndex, onTabChange }) => {
