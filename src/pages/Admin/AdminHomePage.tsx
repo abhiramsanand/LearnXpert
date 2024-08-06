@@ -1,11 +1,11 @@
-import { Box } from "@mui/material";
+import BatchSelect from "../../components/Admin/Homepage/BatchSelect"
 
 const AdminHomePage = () => {
   return (
-    <Box>
-      
-    </Box>
-  );
-};
+    <div>
+      <BatchSelect/>
+    </div>
+  )
+}
 
-export default AdminHomePage;
+export default AdminHomePage
