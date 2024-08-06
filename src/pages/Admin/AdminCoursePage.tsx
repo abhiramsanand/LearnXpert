@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BatchSelector from '../../components/Admin/CourseView/BatchSelector';
 import DayList from '../../components/Admin/CourseView/DayList';
 import CourseDisplay from '../../components/Admin/CourseView/CourseDisplay';
-import { Container, Grid, Paper, Typography, Box } from '@mui/material';
+import { Container, Grid, Paper, Typography} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 // Styled components
@@ -15,10 +15,10 @@ const StyledPaper = styled(Paper)({
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
 });
 
-const Header = styled(Typography)({
-  marginBottom: '10px',
-  textAlign: 'center',
-});
+// const Header = styled(Typography)({
+//   marginBottom: '10px',
+//   textAlign: 'center',
+// });
 
 const AdminCoursePage: React.FC = () => {
   const [coursesData, setCoursesData] = useState<Record<string, any>>({});

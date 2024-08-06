@@ -225,7 +225,7 @@ const AssessmentForm: React.FC = () => {
             </Button>
           </label>
           <Link
-            href="/template.xlsx"
+            href="/LearnXpert/src/assets/Files/Assessment Creation Template.xlsx"
             download
             sx={{ ml: 2, fontSize: "0.75rem", color: "#8518FF" }}
           >
