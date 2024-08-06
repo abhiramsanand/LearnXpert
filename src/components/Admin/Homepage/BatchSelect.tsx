@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonGroup, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 
 interface BatchSelectProps {
   selectedBatch: number;
@@ -13,27 +13,44 @@ const batches = [
   { id: 4, name: 'Batch 4', status: 'Completed' },
 ];
 
+const TabsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  width: '80%',
+  borderRadius: '50px',
+  boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.3)`,
+}));
+
+const TabContainer = styled(Box)(({ theme, isSelected }: { isSelected: boolean }) => ({
+  borderRadius: '50px',
+  width: '25%',
+  height: '50px',
+  backgroundColor: isSelected ? '#8518FF' : theme.palette.background.default,
+  color: isSelected ? 'white' : '#8518FF',
+  cursor: 'pointer',
+  transition: 'background-color 0.3s ease',
+  fontWeight: 'bolder',
+  '&:hover': {
+    backgroundColor: '#F3E8FF',
+    color: 'black',
+  },
+}));
+
 const BatchSelect: React.FC<BatchSelectProps> = ({ selectedBatch, onBatchSelect }) => {
   return (
-    <ButtonGroup variant="contained" aria-label="outlined primary button group" sx={{ borderRadius: 50 }}>
+    <TabsContainer>
       {batches.map((batch) => (
-        <Button
+        <TabContainer
           key={batch.id}
+          isSelected={selectedBatch === batch.id}
           onClick={() => onBatchSelect(batch.id)}
-          sx={{
-            backgroundColor: selectedBatch === batch.id ? 'purple' : 'white',
-            color: selectedBatch === batch.id ? 'white' : 'purple',
-            borderRadius: batch.id === 1 ? '50px 0 0 50px' : batch.id === batches.length ? '0 50px 50px 0' : '0',
-            '&:hover': {
-              backgroundColor: selectedBatch === batch.id ? 'purple' : 'lightgray',
-            },
-          }}
         >
-          <Typography variant="h6">{batch.name}</Typography>
-          <Typography variant="body2">{batch.status}</Typography>
-        </Button>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Typography variant="h6">{batch.name}</Typography>
+            <Typography variant="body2">{batch.status}</Typography>
+          </Box>
+        </TabContainer>
       ))}
-    </ButtonGroup>
+    </TabsContainer>
   );
 };
 

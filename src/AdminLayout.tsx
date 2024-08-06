@@ -21,7 +21,6 @@ const AdminLayout = () => {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
               }),
-            marginLeft: { lg: `calc(1px)`},
           }}
         >
           <main className="main-content">
