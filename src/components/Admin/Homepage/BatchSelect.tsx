@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { Button, ButtonGroup, Box, Typography } from '@mui/material';
+import React from 'react';
+import { Button, ButtonGroup, Typography } from '@mui/material';
+
+interface BatchSelectProps {
+  selectedBatch: number;
+  onBatchSelect: (batchId: number) => void;
+}
 
 const batches = [
   { id: 1, name: 'Batch 1', status: 'Completed' },
@@ -8,33 +13,27 @@ const batches = [
   { id: 4, name: 'Batch 4', status: 'Completed' },
 ];
 
-const BatchSelect: React.FC = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(1);
-
+const BatchSelect: React.FC<BatchSelectProps> = ({ selectedBatch, onBatchSelect }) => {
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
-      <ButtonGroup variant="contained" aria-label="outlined primary button group" sx={{ borderRadius: 50 }}>
-        {batches.map((batch) => (
-          <Button
-            key={batch.id}
-            onClick={() => setSelectedBatch(batch.id)}
-            sx={{
-              backgroundColor: selectedBatch === batch.id ? '#9D46FF' : 'white',
-              color: selectedBatch === batch.id ? 'white' : '#9D46FF',
-              borderRadius: batch.id === 1 ? '50px 0 0 50px' : batch.id === batches.length ? '0 50px 50px 0' : '0',
-              '&:hover': {
-                backgroundColor: selectedBatch === batch.id ? '#9D46FF' : '#F3E8FF',
-              },
-            }}
-          >
-            <Box sx={{display: 'flex', flexDirection: 'column'}}>
-            <Typography variant="h6" sx={{px: '70px', fontSize: '13px'}}>{batch.name}</Typography>
-            <Typography variant="body2" sx={{fontSize: '8px'}}>{batch.status}</Typography>
-            </Box>
-          </Button>
-        ))}
-      </ButtonGroup>
-    </Box>
+    <ButtonGroup variant="contained" aria-label="outlined primary button group" sx={{ borderRadius: 50 }}>
+      {batches.map((batch) => (
+        <Button
+          key={batch.id}
+          onClick={() => onBatchSelect(batch.id)}
+          sx={{
+            backgroundColor: selectedBatch === batch.id ? 'purple' : 'white',
+            color: selectedBatch === batch.id ? 'white' : 'purple',
+            borderRadius: batch.id === 1 ? '50px 0 0 50px' : batch.id === batches.length ? '0 50px 50px 0' : '0',
+            '&:hover': {
+              backgroundColor: selectedBatch === batch.id ? 'purple' : 'lightgray',
+            },
+          }}
+        >
+          <Typography variant="h6">{batch.name}</Typography>
+          <Typography variant="body2">{batch.status}</Typography>
+        </Button>
+      ))}
+    </ButtonGroup>
   );
 };
 
