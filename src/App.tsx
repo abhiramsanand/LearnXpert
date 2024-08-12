@@ -43,8 +43,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
         <Route path="/" element={<TraineeLayout />}>
+        <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
           <Route path="Trainee-Courses" element={<CoursePage />} />
           <Route path="Trainee-Assessments" element={<AssessmentPage />} />
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
