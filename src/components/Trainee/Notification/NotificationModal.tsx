@@ -1,52 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './NotificationPage.module.css';
-import axios from 'axios';
 
 interface Notification {
   id: number;
   title: string;
   message: string;
+  read: boolean;
 }
 
 interface NotificationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  notifications: Notification[];
+  onNotificationClose: (id: number) => void;
 }
 
-const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  useEffect(() => {
-    if (isOpen) {
-      // Fetch notifications when the modal opens
-      const fetchNotifications = async () => {
-        try {
-          // Assuming the JSON file is in the public directory
-          const response = await axios.get('/notifications.json');
-          setNotifications(response.data);
-        } catch (error) {
-          console.error('Error fetching notifications:', error);
-        }
-      };
-      fetchNotifications();
-    }
-  }, [isOpen]);
+const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, notifications, onNotificationClose }) => {
 
   if (!isOpen) return null;
+
+  const getRandomColor = () => {
+    const colors = ['#FFC107', '#FF5722', '#4CAF50', '#2196F3', '#9C27B0'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <button className={styles.closeButton} onClick={onClose}>X</button>
         <h2>Notifications</h2>
-        <ul className={styles.notificationList}>
+        <div className={styles.notificationContainer}>
           {notifications.map((notification) => (
-            <li key={notification.id} className={styles.notificationItem}>
-              <h3>{notification.title}</h3>
-              <p>{notification.message}</p>
-            </li>
+            !notification.read && (
+              <div
+                key={notification.id}
+                className={styles.notificationItem}
+                style={{ backgroundColor: getRandomColor() }}
+              >
+                <button
+                  className={styles.notificationCloseButton}
+                  onClick={() => onNotificationClose(notification.id)}
+                >
+                  X
+                </button>
+                <h3>{notification.title}</h3>
+                <p>{notification.message}</p>
+              </div>
+            )
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
