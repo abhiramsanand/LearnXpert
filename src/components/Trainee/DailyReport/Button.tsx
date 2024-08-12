@@ -19,7 +19,7 @@ const Buttons: React.FC<ButtonsProps> = ({ onPendingSubmissionsClick }) => {
   return (
     <ThemeProvider theme={theme}>
       <Box display="flex" justifyContent="space-around" mb={2}>
-        <Button variant="outlined" color="primary" component={Link} to="/Wholereport">View Whole Report</Button>
+        <Button variant="outlined" color="primary" component={Link} to="/Trainee-Wholereport">View Whole Report</Button>
         <Button variant="outlined" color="primary" onClick={onPendingSubmissionsClick}>Pending Submissions</Button>
       </Box>
     </ThemeProvider>

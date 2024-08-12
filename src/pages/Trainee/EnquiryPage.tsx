@@ -5,7 +5,7 @@ import { Box, Container } from '@mui/material';
 import { styled } from '@mui/system';
 import EnquiryForm from '../../components/Trainee/Enquiry/EnquiryForm';
 import EnquiryTable from '../../components/Trainee/Enquiry/EnquiryTable';
-import TraineeHeader from '../../constants/TraineeHeader';
+import TraineeHeader from '../../shared components/TraineeHeader';
 
 
 

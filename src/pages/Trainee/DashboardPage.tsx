@@ -1,10 +1,17 @@
+import React from "react";
+import { Container } from "@mui/material";
+import Profile from "../../components/Trainee/Dashboard/Profile";
+import Graph from "../../components/Trainee/Dashboard/Graph";
 
-const DashboardPage = () => {
+const TraineeDashboardPage: React.FC = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <>
+      <Container>
+        <Profile />
+        <Graph />
+      </Container>
+    </>
+  );
+};
 
-export default DashboardPage
+export default TraineeDashboardPage;

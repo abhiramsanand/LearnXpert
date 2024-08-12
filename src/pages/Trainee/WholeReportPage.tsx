@@ -1,19 +1,22 @@
-
+import React from 'react';
 import ReportTable from '../../components/Trainee/WholeReport/ReportTable';
-import TraineeHeader from '../../constants/TraineeHeader';
+import TraineeHeader from '../../shared components/TraineeHeader';
+import Footer from '../../shared components/Footer';
+import BackButton from '../../components/Trainee/WholeReport/BackButton';
 
-import Footer from '../../constants/Footer';
 const WholeReportPage: React.FC = () => {
-  
-
-    return (
-        <div style={{ padding: '20px' }}>
-            <TraineeHeader title={'Whole Report'} />
-           
-            <ReportTable/>
-            <Footer/>
-        </div>
-    );
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={{ position: 'relative' }}>
+        <BackButton />
+        <TraineeHeader title={'Whole Report'} />
+      </div>
+      <main style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+        <ReportTable />
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default WholeReportPage;
