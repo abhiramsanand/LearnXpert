@@ -114,7 +114,7 @@ const TraineeSidebar: React.FC = () => {
           {
             text: "Notifications",
             icon: <NotificationsIcon sx={{ color: "#8518FF" }} />,
-            to: "",
+            to: "/Trainee-Notification",
           },
           { text: "Logout", icon: <LogoutIcon sx={{ color: "#8518FF" }} />, to: "/" },
         ].map((item, _index) => (

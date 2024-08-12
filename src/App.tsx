@@ -10,6 +10,7 @@ import DailyReport from "./pages/Trainee/DailyReportPage";
 import WholeReportPage from "./pages/Trainee/WholeReportPage";
 import EnquiryPage from "./pages/Trainee/EnquiryPage";
 import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
+import NotificationPage from "./pages/Trainee/NotificationPage";
 
 import {
   Chart as ChartJS,
@@ -50,9 +51,11 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+          <Route path="Trainee-Notification" element={<NotificationPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+
         </Route>
       </Routes>
     </Router>
