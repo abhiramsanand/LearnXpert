@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./shared components/Footer";
 import AdminHeader from "./shared components/AdminHeader";
-import Sidebar from "./shared components/Sidebar";
+import Sidebar from "./shared components/AdminSidebar";
 import { Box, CssBaseline } from "@mui/material";
 
 const AdminLayout = () => {
@@ -21,7 +21,6 @@ const AdminLayout = () => {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
               }),
-            marginLeft: { lg: `calc(1px)`},
           }}
         >
           <main className="main-content">
