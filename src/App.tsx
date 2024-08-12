@@ -23,6 +23,10 @@ import {
 } from "chart.js";
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
+import AdminWholeReportPage from "./pages/Admin/AdminWholeReportPage";
+import CreateAdminPage from "./pages/Admin/CreateAdminPage";
+import NewAssessmentPage from "./pages/Trainee/NewAssessmentPage";
+import ReportPage from "./pages/Trainee/ReportPage";
 
 ChartJS.register(
   CategoryScale,
@@ -50,9 +54,14 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+         
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-Report" element={<AdminWholeReportPage/>} />
+          <Route path="Admin-Creation" element={<CreateAdminPage/>} />
+          <Route path="Trainee-NewAssessment" element={<NewAssessmentPage />} />
+          <Route path="Trainee-NewReport" element={<ReportPage/>} />
         </Route>
       </Routes>
     </Router>

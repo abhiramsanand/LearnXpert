@@ -1,0 +1,95 @@
+{
+    "reports": [
+      {
+        "name": "Alice",
+        "day": "2024-08-25",
+        "course": "React",
+        "timeTaken": "3 hours",
+        "keyLearnings": "Hooks and State Management",
+        "planForTomorrow": "Component Lifecycle",
+        "status": "submitted"
+      },
+      {
+        "name": "Bob",
+        "day": "2024-08-26",
+        "course": "TypeScript",
+        "timeTaken": "4 hours",
+        "keyLearnings": "Types and Interfaces",
+        "planForTomorrow": "Generics",
+        "status": "pending"
+      },
+      {
+        "name": "Charlie",
+        "day": "2024-08-27",
+        "course": "JavaScript",
+        "timeTaken": "2.5 hours",
+        "keyLearnings": "Async/Await",
+        "planForTomorrow": "Promises",
+        "status": "submitted"
+      },
+      {
+        "name": "David",
+        "day": "2024-08-28",
+        "course": "HTML & CSS",
+        "timeTaken": "3.5 hours",
+        "keyLearnings": "Flexbox and Grid",
+        "planForTomorrow": "Responsive Design",
+        "status": "pending"
+      },
+      {
+        "name": "Eve",
+        "day": "2024-08-29",
+        "course": "Node.js",
+        "timeTaken": "4 hours",
+        "keyLearnings": "Express and Routing",
+        "planForTomorrow": "Middleware",
+        "status": "submitted"
+      },
+      {
+        "name": "Frank",
+        "day": "2024-08-30",
+        "course": "Database",
+        "timeTaken": "3 hours",
+        "keyLearnings": "SQL and NoSQL",
+        "planForTomorrow": "Data Modeling",
+        "status": "pending"
+      },
+      {
+        "name": "Grace",
+        "day": "2024-08-31",
+        "course": "DevOps",
+        "timeTaken": "2 hours",
+        "keyLearnings": "CI/CD",
+        "planForTomorrow": "Containerization",
+        "status": "submitted"
+      },
+      {
+        "name": "Heidi",
+        "day": "2024-09-01",
+        "course": "React",
+        "timeTaken": "3 hours",
+        "keyLearnings": "Context API",
+        "planForTomorrow": "Redux",
+        "status": "pending"
+      },
+      {
+        "name": "Ivan",
+        "day": "2024-09-02",
+        "course": "TypeScript",
+        "timeTaken": "3 hours",
+        "keyLearnings": "Advanced Types",
+        "planForTomorrow": "Type Narrowing",
+        "status": "submitted"
+      },
+      {
+        "name": "Judy",
+        "day": "2024-09-03",
+        "course": "JavaScript",
+        "timeTaken": "2 hours",
+        "keyLearnings": "Event Loop",
+        "planForTomorrow": "JavaScript Engines",
+        "status": "pending"
+      }
+    ]
+  }
+  
