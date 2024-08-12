@@ -5,7 +5,7 @@ const CoursePage = () => {
   return (
     <div>
       {/* <TraineeHeader title={'Courses'} /> */}
-      <div style={{ marginTop: '7%' }}> {/* Adjust the margin as needed */}
+      <div style={{ }}> {/* Adjust the margin as needed */}
        <CourseContainer/>
       </div>
     </div>
