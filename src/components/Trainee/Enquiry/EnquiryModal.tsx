@@ -43,10 +43,13 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
             className={styles.textarea}
           />
         </div>
-        <button className={styles.submitButton} onClick={handleSubmit}>Submit</button>
+        <button className={styles.submitButton} onClick={handleSubmit}>Enquire</button>
       </div>
     </div>
   );
 };
 
 export default EnquiryModal;
+
+
+
