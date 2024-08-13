@@ -1,9 +1,0 @@
-body {
-  overflow-x: hidden;
-}
-
-@media (min-width: 768px) {
-  body {
-    overflow-y: hidden;
-  }
-}

@@ -29,7 +29,7 @@ const TraineeHeader = () => {
             </Box>
         </Container>
       </HeaderContainer>
-      <Box sx={{ mt: "56px" }}></Box>
+      <Box sx={{ mt: "26px" }}></Box>
     </>
   );
 };
