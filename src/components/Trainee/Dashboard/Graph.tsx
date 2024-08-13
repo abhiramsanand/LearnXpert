@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Container, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import BarChart from './BarChart';
 import PieChart from './PieChart';
 import PieChart2 from './PieChart2';
@@ -9,7 +9,7 @@ const Graph: React.FC = () => {
     datasets: [
       {
         data: [72, 28],
-        backgroundColor: ['#8518FF', '#F5F5F5'],
+        backgroundColor: ['#8061C3', '#F5F5F5'],
       },
     ],
   };
@@ -18,7 +18,7 @@ const Graph: React.FC = () => {
     datasets: [
       {
         data: [90, 10],
-        backgroundColor: ['#8518FF', '#F5F5F5'],
+        backgroundColor: ['#8061C3', '#F5F5F5'],
       },
     ],
   };
@@ -33,19 +33,15 @@ const Graph: React.FC = () => {
   };
 
   return (
-    <Container sx={{ height: '300px' }}>
-      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          <Grid item md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
+    <Container sx={{mt: '15px'}}>
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '80px' }}>
+          <Box>
             <BarChart />
-          </Grid>
-          <Grid item md={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <PieChart data={pieData} options={options}/>
-          </Grid>
-          <Grid item md={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PieChart2 data={pieData2} options={options} />
-          </Grid>
-        </Grid>
+          </Box>
       </Box>
     </Container>
   );

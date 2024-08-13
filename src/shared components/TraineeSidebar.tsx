@@ -13,15 +13,14 @@ import {
 } from "@mui/material";
 import {
   Home as HomeIcon,
-  Group as GroupIcon,
+  Class as ClassIcon,
   Assessment as AssessmentIcon,
-  School as SchoolIcon,
-  AdminPanelSettings as AdminPanelSettingsIcon,
+  Report as ReportIcon,
+  HelpOutline as HelpOutlineIcon,
   Notifications as NotificationsIcon,
   Logout as LogoutIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import Person2Icon from "@mui/icons-material/Person2";
 import { Link } from "react-router-dom";
 
 const TraineeSidebar: React.FC = () => {
@@ -53,13 +52,13 @@ const TraineeSidebar: React.FC = () => {
         "& .MuiDrawer-paper": {
           width: open ? 240 : 72,
           boxSizing: "border-box",
-          backgroundColor: "#F3E8FF",
+          backgroundColor: "rgba(128, 97, 195, 0.1)",
         },
       }}
     >
       <Toolbar>
         {open && (
-          <Typography variant="h6" noWrap sx={{ color: "#8518FF" }}>
+          <Typography variant="h6" noWrap sx={{ color: "rgba(128, 97, 195, 1)" }}>
             LearnXpert
           </Typography>
         )}
@@ -67,25 +66,25 @@ const TraineeSidebar: React.FC = () => {
           onClick={handleDrawerToggle}
           sx={{
             ml: open ? "auto" : 0,
-            display: { xs: "none", sm: "inline-flex" }, 
+            display: { xs: "none", sm: "inline-flex" },
           }}
         >
-          <MenuIcon sx={{ color: "#8518FF" }} />
+          <MenuIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
         </IconButton>
       </Toolbar>
       <List>
         {[
-          { text: "Dashboard", icon: <HomeIcon sx={{ color: "#8518FF" }} />, to: "/Trainee-Dashboard" },
-          { text: "Courses", icon: <GroupIcon sx={{ color: "#8518FF" }} />, to: "/Trainee-Courses" },
-          { text: "Assessments", icon: <Person2Icon sx={{ color: "#8518FF" }} />, to: "/Trainee-Assessments" },
+          { text: "Dashboard", icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Dashboard" },
+          { text: "Courses", icon: <ClassIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Courses" },
+          { text: "Assessments", icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Assessments" },
           {
             text: "Daily Report",
-            icon: <AssessmentIcon sx={{ color: "#8518FF" }} />,
+            icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Trainee-DailyReport",
           },
           {
             text: "Enquiry",
-            icon: <AdminPanelSettingsIcon sx={{ color: "#8518FF" }} />,
+            icon: <HelpOutlineIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Trainee-Enquiry",
           },
         ].map((item, _index) => (
@@ -113,10 +112,10 @@ const TraineeSidebar: React.FC = () => {
         {[
           {
             text: "Notifications",
-            icon: <NotificationsIcon sx={{ color: "#8518FF" }} />,
+            icon: <NotificationsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "",
           },
-          { text: "Logout", icon: <LogoutIcon sx={{ color: "#8518FF" }} />, to: "/" },
+          { text: "Logout", icon: <LogoutIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/" },
         ].map((item, _index) => (
           <ListItem
             button

@@ -15,14 +15,13 @@ const PieChart2: React.FC<{ data: any; options: any }> = ({
       sx={{
         height: "150px",
         width: "100%",
-        ml: 6,
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+        boxShadow: "0px 4px 8px rgba(128, 97, 195, 0.25)",
         borderRadius: "8px",
-        p: 4,
         overflow: "hidden",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        p: '10px'
       }}
     >
       <Pie data={data} options={options} />

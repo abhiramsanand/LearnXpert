@@ -53,13 +53,13 @@ const Sidebar: React.FC = () => {
         "& .MuiDrawer-paper": {
           width: open ? 240 : 72,
           boxSizing: "border-box",
-          backgroundColor: "#F3E8FF",
+          backgroundColor: "rgba(128, 97, 195, 0.1)",
         },
       }}
     >
       <Toolbar>
         {open && (
-          <Typography variant="h6" noWrap sx={{ color: "#8518FF" }}>
+          <Typography variant="h6" noWrap sx={{ color: "rgba(128, 97, 195, 1)" }}>
             LearnXpert
           </Typography>
         )}
@@ -70,23 +70,23 @@ const Sidebar: React.FC = () => {
             display: { xs: "none", sm: "inline-flex" }, 
           }}
         >
-          <MenuIcon sx={{ color: "#8518FF" }} />
+          <MenuIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
         </IconButton>
       </Toolbar>
       <List>
         {[
-          { text: "Home", icon: <HomeIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Home" },
-          { text: "Batches", icon: <GroupIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Batches" },
-          { text: "Trainees", icon: <Person2Icon sx={{ color: "#8518FF" }} />, to: "/Admin-Trainees" },
+          { text: "Home", icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Home" },
+          { text: "Batches", icon: <GroupIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Batches" },
+          { text: "Trainees", icon: <Person2Icon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Trainees" },
           {
             text: "Assessments",
-            icon: <AssessmentIcon sx={{ color: "#8518FF" }} />,
+            icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Admin-Assessments",
           },
-          { text: "Courses", icon: <SchoolIcon sx={{ color: "#8518FF" }} />, to: "/Admin-Courses" },
+          { text: "Courses", icon: <SchoolIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Courses" },
           {
             text: "Add Admin",
-            icon: <AdminPanelSettingsIcon sx={{ color: "#8518FF" }} />,
+            icon: <AdminPanelSettingsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Add-Admin",
           },
         ].map((item, _index) => (

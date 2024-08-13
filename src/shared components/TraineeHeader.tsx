@@ -7,7 +7,7 @@ import {
 import { styled } from "@mui/system";
 
 const HeaderContainer = styled(AppBar)({
-  backgroundColor: "#F3E8FF",
+  backgroundColor: "rgba(128, 97, 195, 0.1)",
   boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
   width: "100%",
   height: "56px",

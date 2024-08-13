@@ -17,12 +17,12 @@ const BarChart: React.FC = () => {
     labels: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
     datasets: [
       {
-        backgroundColor: "#C18BFF",
+        backgroundColor: "#BFAFE0",
         data: [65, 59, 80, 81, 56, 55, 40],
         borderRadius: 30,
       },
       {
-        backgroundColor: "#8518FF",
+        backgroundColor: "rgba(128, 97, 195, 1)",
         data: [28, 48, 40, 19, 86, 27, 90],
         borderRadius: 30,
       },
@@ -62,39 +62,50 @@ const BarChart: React.FC = () => {
   return (
     <Box
       sx={{
-        height: "200px",
+        height: "300px",
         width: "100%",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+        boxShadow: "0px 4px 8px rgba(128, 97, 195, 0.25)",
         borderRadius: "8px",
         p: 4,
         overflow: "hidden",
       }}
     >
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'row',
-      }}>
-      <Typography sx={{fontSize: '15px', mr: 4}}><span style={{color: '#C18BFF'}}>Actual Watch Time</span> VS <span style={{color: '#8518FF'}}>Trainee Watch Time</span></Typography>
-      <TextField
-        id="date"
-        label="Select Date"
-        type="date"
-        value={selectedDate}
-        onChange={handleDateChange}
-        InputLabelProps={{
-          shrink: true,
-        }}
+      <Box
         sx={{
-          width: "150px",
-          "& .MuiInputBase-root": {
-            height: "20px",
-            fontSize: "10px",
-          },
-          "& .MuiFormLabel-root": {
-            fontSize: "10px",
-          },
+          display: "flex",
+          flexDirection: "row",
         }}
-      />
+      >
+        <Typography sx={{ fontSize: "15px", mr: 4 }}>
+          <span style={{ color: "#BFAFE0" }}>
+            Actual Watch Time
+          </span>{" "}
+          VS{" "}
+          <span style={{ color: "rgba(128, 97, 195, 1)" }}>
+            Trainee Watch Time
+          </span>
+        </Typography>
+
+        <TextField
+          id="date"
+          label="Select Date"
+          type="date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          sx={{
+            width: "150px",
+            "& .MuiInputBase-root": {
+              height: "20px",
+              fontSize: "10px",
+            },
+            "& .MuiFormLabel-root": {
+              fontSize: "10px",
+            },
+          }}
+        />
       </Box>
       <Bar data={data} options={options} />
     </Box>
