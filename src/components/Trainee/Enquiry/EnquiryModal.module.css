@@ -1,0 +1,68 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(230, 228, 228, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px); /* Adds blur effect to the background */
+}
+
+.modalContent {
+  background: linear-gradient(to bottom, rgba(83, 51, 151, 0.3), #fff);
+  border: 2px solid #8061C3;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  width: 700px;
+  max-width: 100%;
+  box-shadow: 0 12px 20px rgba(0, 0, 10, 0.70);
+}
+
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 9px;
+
+}
+
+.textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 9px;
+  height: 100px;
+}
+
+.submitButton {
+  background-color: #8518FF;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 15%;
+}
+
+.submitButton:hover {
+  background-color: #6c14cc;
+}

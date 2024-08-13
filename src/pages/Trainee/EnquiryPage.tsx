@@ -1,56 +1,34 @@
-// src/pages/EnquiryPage.tsx
-
 import React, { useState, useEffect } from 'react';
-import { Box, Container } from '@mui/material';
-import { styled } from '@mui/system';
-import EnquiryForm from '../../components/Trainee/Enquiry/EnquiryForm';
-import EnquiryTable from '../../components/Trainee/Enquiry/EnquiryTable';
-import TraineeHeader from '../../shared components/TraineeHeader';
-
-
-
-const Content = styled(Box)({
-  flexGrow: 1,
-  padding: '20px',
- 
-  marginBottom: '60px',
-  display: 'flex',
-  flexDirection: 'column',
-  minHeight: 'calc(100vh - 140px)',
-  overflow: 'auto',
-});
+import { useLocation, useNavigate } from 'react-router-dom';
+import EnquiryModal from '../../components/Trainee/Enquiry/EnquiryModal';
+ // Import your EnquiryModal component
 
 const EnquiryPage: React.FC = () => {
-  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isBlurred, setBlurred] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the JSON data from the public directory
-    fetch('./enquiry.json')
-      .then((response) => response.json())
-      .then((data) => setEnquiries(data.enquiries))
-      .catch((error) => console.error('Error fetching the JSON data:', error));
-  }, []);
+    if (location.pathname === '/Trainee-Enquiry') {
+      setModalOpen(true);
+      setBlurred(true);
+    } else {
+      setModalOpen(false);
+      setBlurred(false);
+    }
+  }, [location]);
 
-  const handleAddEnquiry = (enquiryText: string) => {
-    const newEnquiry: Enquiry = {
-      enquiry: enquiryText,
-      date: new Date().toISOString().split('T')[0],
-    };
-
-    setEnquiries([...enquiries, newEnquiry]);
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setBlurred(false);
+    navigate('/'); // Navigate back to a different route after closing the modal
   };
 
   return (
-    <Box display="flex" flexDirection="column" minHeight="100vh">
-      <TraineeHeader title={'Enquiry'}/>
-      <Content>
-        <Container>
-          <EnquiryForm onAddEnquiry={handleAddEnquiry} />
-          <EnquiryTable enquiries={enquiries} />
-        </Container>
-      </Content>
-     
-    </Box>
+    <div className={isBlurred ? 'blurred' : ''}>
+      <EnquiryModal isOpen={isModalOpen} onClose={handleCloseModal} />
+    </div>
   );
 };
 
