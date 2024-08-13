@@ -51,9 +51,10 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+         
         </Route>
         <Route path="/" element={<AdminLayout />}>
-          <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-Home" element={<AdminHomePage />} />          
         </Route>
       </Routes>
     </Router>
