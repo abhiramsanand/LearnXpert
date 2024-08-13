@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { Grid, Pagination } from '@mui/material';
 import AssessmentCard from './AssessmentCard';
-
+ 
 interface AssessmentListProps {
-  assessments: { id: number; name: string; dateToBeTaken?: string; dateTaken?: string; score?: number }[];
+  assessments: {
+    id: number;
+    name: string;
+    dateToBeTaken?: string; // Represents the due date for pending assessments
+    dateTaken?: string; // Represents the date of submission for completed assessments
+    score?: number;
+  }[];
+  isCompleted: boolean; // Prop to determine if the assessments are completed or pending
 }
-
-const AssessmentList: React.FC<AssessmentListProps> = ({ assessments }) => {
+ 
+const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isCompleted }) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 3;
-
+ 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-
+ 
   const paginatedAssessments = assessments.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
+ 
   return (
     <div>
       <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -23,8 +30,9 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments }) => {
           <Grid item xs={12} key={assessment.id}>
             <AssessmentCard
               title={assessment.name}
-              description={assessment.dateToBeTaken ? 'Pending' : 'Completed'}
-              date={assessment.dateToBeTaken || assessment.dateTaken!}
+              description={isCompleted ? 'Completed' : 'Pending'}
+              date={isCompleted ? assessment.dateTaken : assessment.dateToBeTaken}
+              dateLabel={isCompleted ? 'Date of Submission' : 'Due Date'}
               score={assessment.score}
             />
           </Grid>
@@ -35,10 +43,12 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments }) => {
         page={page}
         onChange={handleChange}
         color="primary"
-        sx={{ mt: 2 }} // Adding margin-top to create a gap
+        sx={{ mt: 2 }}
       />
     </div>
   );
 };
-
+ 
 export default AssessmentList;
+ 
+ 

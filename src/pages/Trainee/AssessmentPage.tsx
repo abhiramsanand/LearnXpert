@@ -1,33 +1,112 @@
-import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
-import CompletedAssessmentTable from '../../components/Trainee/Assessment/CompletedAssessmentTable';
-import PendingAssessmentTable from '../../components/Trainee/Assessment/PendingAssessmentTable';
-import TraineeHeader from '../../shared components/TraineeHeader';
-import Footer from '../../shared components/Footer';
+import React, { useEffect, useState } from 'react';
+import { Grid, Box } from '@mui/material';
+import SearchBar from '../../components/Trainee/Assessment/SearchBar';
+import Filter from '../../components/Trainee/Assessment/Filter';
+import AssessmentList from '../../components/Trainee/Assessment/AssessmentList';
+import CompletedAssessmentCard from '../../components/Trainee/Assessment/CompletedAssessmentCard';
+import PendingAssessmentCard from '../../components/Trainee/Assessment/PendingAssessmentCard';
 
-const AssessmentsPage: React.FC = () => {
+interface Assessment {
+  id: number;
+  name: string;
+  dateTaken?: string;  // For completed assessments
+  score?: number;
+  dateToBeTaken?: string;  // For pending assessments
+}
+
+const NewAssessmentPage: React.FC = () => {
+  const [showCompleted, setShowCompleted] = useState(true);
+  const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
+  const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
+  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending' | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState<string>(''); // Added state for filter
+
+  useEffect(() => {
+    fetch('/CompletedAssessment.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => setCompletedAssessments(data.completedAssessments))
+      .catch((error) => console.error('Error loading completed assessments:', error));
+
+    fetch('/PendingAssessment.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => setPendingAssessments(data.pendingAssessments))
+      .catch((error) => console.error('Error loading pending assessments:', error));
+  }, []);
+
+  const handleSearchChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+  };
+
+  const handleFilterChange = (filter: string) => {
+    setFilter(filter);
+  };
+
+  // Filter assessments based on searchTerm and selected filter
+  const filterAssessments = (assessments: Assessment[]) => {
+    return assessments
+      .filter((assessment) =>
+        assessment.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => {
+        if (filter === 'dateOfSubmission') {
+          return (new Date(b.dateTaken || '').getTime() - new Date(a.dateTaken || '').getTime());
+        } else if (filter === 'dueDate') {
+          return (new Date(b.dateToBeTaken || '').getTime() - new Date(a.dateToBeTaken || '').getTime());
+        } else {
+          return 0;
+        }
+      });
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <TraineeHeader title={'Assessment'} />
-      <main style={{ flex: 1, overflowY: 'auto', paddingTop: '5px', paddingBottom: '50px' }}>
-        <Container maxWidth="lg">
-          <Box mt={1} mb={2}>
-            <Typography variant="h5" gutterBottom sx={{ fontSize: { xs: '1rem', sm: '1.3rem' } }}>
-              Completed Assessments
-            </Typography>
-            <CompletedAssessmentTable />
+    <Box sx={{ padding: '5px', height: '100vh', overflow: 'hidden' }}>
+      <Grid container spacing={2} sx={{ height: '100%' }}>
+        <Grid item xs={3} sx={{ overflowY: 'auto', height: '100%',width:'50%' }}>
+          <Box sx={{ display: 'flex', gap: '8px', marginBottom: '30px' }}>
+            <SearchBar onSearchChange={handleSearchChange} />
+            <Filter onFilterChange={handleFilterChange} />
           </Box>
-          <Box mt={2} mb={4}>
-            <Typography variant="h5" gutterBottom sx={{ fontSize: { xs: '1rem', sm: '1.3rem' } }}>
-              Pending Assessments
-            </Typography>
-            <PendingAssessmentTable />
+          <Box sx={{ marginBottom: '24px', marginTop: '80px' }}>
+            <CompletedAssessmentCard
+              onClick={() => {
+                setShowCompleted(true);
+                setSelectedCard('completed');
+              }}
+              isSelected={selectedCard === 'completed'}
+            />
           </Box>
-        </Container>
-      </main>
-      <Footer />
-    </div>
+          <Box>
+            <PendingAssessmentCard
+              onClick={() => {
+                setShowCompleted(false);
+                setSelectedCard('pending');
+              }}
+              isSelected={selectedCard === 'pending'}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={9} sx={{ overflowY: 'auto', height: '100%' }}>
+          <Box sx={{ maxWidth: '700px', margin: '0 auto' }}>
+            <AssessmentList
+              assessments={showCompleted ? filterAssessments(completedAssessments) : filterAssessments(pendingAssessments)}
+              isCompleted={showCompleted}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
-export default AssessmentsPage;
+export default NewAssessmentPage;

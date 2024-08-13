@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
-const Filter: React.FC = () => {
+interface FilterProps {
+  onFilterChange: (filter: string) => void;
+}
+
+const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [filter, setFilter] = useState<string>('');
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -15,10 +18,8 @@ const Filter: React.FC = () => {
   };
 
   const handleSelect = (filter: string) => {
-    setFilter(filter);
+    onFilterChange(filter);
     handleClose();
-    // Optionally handle the filter selection logic here
-    console.log('Selected filter:', filter);
   };
 
   return (

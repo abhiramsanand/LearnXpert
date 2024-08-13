@@ -5,80 +5,80 @@
       "name": "Assessment 1",
       "dateTaken": "2024-07-01",
       "score": 85,
-      "dateOfSubmission": "2024-06-30",
-      "dueDate": "2024-07-05"
+      "dateOfSubmission": "2024-06-30"
+      
     },
     {
       "id": 2,
       "name": "Assessment 2",
       "dateTaken": "2024-07-15",
       "score": 90,
-      "dateOfSubmission": "2024-07-10",
-      "dueDate": "2024-07-17"
+      "dateOfSubmission": "2024-07-10"
+      
     },
     {
       "id": 3,
       "name": "Assessment 3",
       "dateTaken": "2024-07-20",
       "score": 45,
-      "dateOfSubmission": "2024-07-15",
-      "dueDate": "2024-07-22"
+      "dateOfSubmission": "2024-07-15"
+      
     },
     {
       "id": 4,
       "name": "Assessment 4",
       "dateTaken": "2024-07-25",
       "score": 60,
-      "dateOfSubmission": "2024-07-20",
-      "dueDate": "2024-07-27"
+      "dateOfSubmission": "2024-07-20"
+     
     },
     {
       "id": 5,
       "name": "Assessment 5",
       "dateTaken": "2024-07-30",
       "score": 30,
-      "dateOfSubmission": "2024-07-25",
-      "dueDate": "2024-08-01"
+      "dateOfSubmission": "2024-07-25"
+     
     },
     {
       "id": 6,
       "name": "Assessment 6",
       "dateTaken": "2024-08-01",
       "score": 95,
-      "dateOfSubmission": "2024-07-27",
-      "dueDate": "2024-08-02"
+      "dateOfSubmission": "2024-07-27"
+     
     },
     {
       "id": 7,
       "name": "Assessment 7",
       "dateTaken": "2024-08-05",
       "score": 40,
-      "dateOfSubmission": "2024-08-01",
-      "dueDate": "2024-08-07"
+      "dateOfSubmission": "2024-08-01"
+     
     },
     {
       "id": 8,
       "name": "Assessment 8",
       "dateTaken": "2024-08-10",
       "score": 50,
-      "dateOfSubmission": "2024-08-05",
-      "dueDate": "2024-08-12"
+      "dateOfSubmission": "2024-08-05"
+      
     },
     {
       "id": 9,
       "name": "Assessment 9",
       "dateTaken": "2024-08-15",
       "score": 75,
-      "dateOfSubmission": "2024-08-10",
-      "dueDate": "2024-08-17"
+      "dateOfSubmission": "2024-08-10"
+     
     },
     {
       "id": 10,
       "name": "Assessment 10",
       "dateTaken": "2024-08-20",
       "score": 20,
-      "dateOfSubmission": "2024-08-15",
-      "dueDate": "2024-08-22"
+      "dateOfSubmission": "2024-08-15"
+     
     }
   ]
 }
