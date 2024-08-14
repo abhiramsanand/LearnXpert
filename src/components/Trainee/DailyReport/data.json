@@ -1,30 +1,15 @@
-{
-    "report": [
-      {
-        "course": "Course1",
-        "timeTaken": "1h 30m",
-        "keyLearnings": "Abcd",
-        "planForTomorrow": "Uvw"
-      },
-      {
-        "course": "Course1",
-        "timeTaken": "25m",
-        "keyLearnings": "Efgh",
-        "planForTomorrow": "Yzab"
-      },
-      {
-        "course": "Course1",
-        "timeTaken": "10m",
-        "keyLearnings": "Ijkl",
-        "planForTomorrow": "Cdef"
-      },
-      {
-        "course": "Course1",
-        "timeTaken": "20m",
-        "keyLearnings": "Mnop",
-        "planForTomorrow": "ghij"
-      }
-     
-    ]
-  }
+[
+    {
+      "name": "Choosing and Implementing Right Solution",
+      "duration": "1 Hour 30 Minutes"
+    },
+    {
+      "name": "Choosing and Implementing Right Solution",
+      "duration": "1 Hour 30 Minutes"
+    },
+    {
+      "name": "Choosing and Implementing Right Solution",
+      "duration": "1 Hour 30 Minutes"
+    }
+  ]
   
