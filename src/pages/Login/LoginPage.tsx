@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Button, TextField, Typography, Link, Grid } from "@mui/material";
+import { Box, Button, TextField, Typography, Grid } from "@mui/material";
 import leftBackgroundImage from "../../assets/Left Content.png";
 import rightBackgroundImage from "../../assets/Bg.png";
 import exp from "../../assets/exp.png";
-import '@fontsource/montserrat';
+import "@fontsource/montserrat";
+import { Link } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
   return (
@@ -29,8 +30,11 @@ const LoginPage: React.FC = () => {
             color: "#FFFFFF",
           }}
         >
-          <Typography sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif" }}>
-            ILPex <span style={{fontSize: '10px', marginLeft: '-15px'}}>WEB</span>
+          <Typography
+            sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif" }}
+          >
+            ILPex{" "}
+            <span style={{ fontSize: "10px", marginLeft: "-15px" }}>WEB</span>
           </Typography>
         </Box>
       </Grid>
@@ -58,7 +62,14 @@ const LoginPage: React.FC = () => {
             borderRadius: 2,
           }}
         >
-          <Typography variant="h4" sx={{ mb: 3, color: "#8061C3", fontFamily: "Montserrat, sans-serif" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              mb: 3,
+              color: "#8061C3",
+              fontFamily: "Montserrat, sans-serif",
+            }}
+          >
             Login
           </Typography>
           <img
@@ -129,12 +140,26 @@ const LoginPage: React.FC = () => {
                 backgroundColor: "#6D4BB6",
               },
             }}
+            component={Link}
+            to="/Trainee-Dashboard"
           >
             LOGIN
           </Button>
-          <Link href="#" underline="hover" sx={{ color: "#8061C3" }}>
+          <a
+            href="#"
+            style={{
+              color: "#8061C3",
+              textDecoration: "none",
+              position: "relative",
+              display: "inline-block",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.textDecoration = "underline")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+          >
             Forgot password?
-          </Link>
+          </a>
         </Box>
       </Grid>
     </Grid>
