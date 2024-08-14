@@ -6,7 +6,7 @@ import Graph from "../../components/Trainee/Dashboard/Graph";
 const TraineeDashboardPage: React.FC = () => {
   return (
     <>
-      <Container>
+      <Container sx={{mt: 4}}>
         <Profile />
         <Graph />
       </Container>

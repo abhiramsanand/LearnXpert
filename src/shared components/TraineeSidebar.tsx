@@ -9,7 +9,6 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  Box,
 } from "@mui/material";
 import {
   Home as HomeIcon,
@@ -17,8 +16,6 @@ import {
   Assessment as AssessmentIcon,
   Report as ReportIcon,
   HelpOutline as HelpOutlineIcon,
-  Notifications as NotificationsIcon,
-  Logout as LogoutIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -87,35 +84,6 @@ const TraineeSidebar: React.FC = () => {
             icon: <HelpOutlineIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Trainee-Enquiry",
           },
-        ].map((item, _index) => (
-          <ListItem
-            button
-            key={item.text}
-            component={Link}
-            to={item.to}
-            sx={{
-              "&:hover .MuiListItemText-root": {
-                display: open ? "block" : "block",
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText
-              primary={item.text}
-              sx={{ display: open ? "block" : "none" }}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Box sx={{ flexGrow: 1 }} />
-      <List sx={{ mb: "50px" }}>
-        {[
-          {
-            text: "Notifications",
-            icon: <NotificationsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "",
-          },
-          { text: "Logout", icon: <LogoutIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/" },
         ].map((item, _index) => (
           <ListItem
             button

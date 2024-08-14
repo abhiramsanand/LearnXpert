@@ -1,33 +1,143 @@
 import React from "react";
-import { Container } from "@mui/material";
-
-import Logo from "../../components/Login/Logo.tsx";
-import LoginContainer from "../../components/Login/LoginContainer";
+import { Box, Button, TextField, Typography, Link, Grid } from "@mui/material";
+import leftBackgroundImage from "../../assets/Left Content.png";
+import rightBackgroundImage from "../../assets/Bg.png";
+import exp from "../../assets/exp.png";
+import '@fontsource/montserrat';
 
 const LoginPage: React.FC = () => {
   return (
-    <Container
-      sx={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        padding: 0,
-        margin: 0,
-        minWidth: "100vw",
-        background: "linear-gradient(160deg, #F3E8FF 50%, white 50%)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "Numans, sans-serif",
-        textAlign: "center",
-      }}
-    >
-      <Logo />
-      <LoginContainer />
-    </Container>
+    <Grid container sx={{ minHeight: "100vh" }}>
+      <Grid
+        item
+        md={6}
+        sx={{
+          position: "relative",
+          backgroundImage: `url(${leftBackgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          minHeight: "100vh",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 60,
+            right: 40,
+            textAlign: "right",
+            color: "#FFFFFF",
+          }}
+        >
+          <Typography sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif" }}>
+            ILPex <span style={{fontSize: '10px', marginLeft: '-15px'}}>WEB</span>
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sx={{
+          backgroundImage: `url(${rightBackgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 4,
+        }}
+      >
+        <Box
+          sx={{
+            width: "60%",
+            maxWidth: 400,
+            textAlign: "center",
+            padding: 3,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h4" sx={{ mb: 3, color: "#8061C3", fontFamily: "Montserrat, sans-serif" }}>
+            Login
+          </Typography>
+          <img
+            src={exp}
+            alt="Experion Technologies"
+            style={{ marginBottom: 24, width: "60px" }}
+          />
+          <TextField
+            fullWidth
+            label="USERNAME"
+            variant="outlined"
+            margin="normal"
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: "#8061C3",
+              },
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "20px",
+                "& fieldset": {
+                  borderColor: "#8061C3",
+                  backgroundColor: "#F6F1F1",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#8061C3",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3",
+                },
+              },
+            }}
+          />
+          <TextField
+            fullWidth
+            label="PASSWORD"
+            type="password"
+            variant="outlined"
+            margin="normal"
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: "#8061C3",
+              },
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "20px",
+                "& fieldset": {
+                  borderColor: "#8061C3",
+                  backgroundColor: "#F6F1F1",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#8061C3",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3",
+                },
+              },
+              mb: 3,
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{
+              mt: 2,
+              mb: 3,
+              backgroundColor: "#8061C3",
+              borderRadius: "20px",
+              "&:hover": {
+                backgroundColor: "#6D4BB6",
+              },
+            }}
+          >
+            LOGIN
+          </Button>
+          <Link href="#" underline="hover" sx={{ color: "#8061C3" }}>
+            Forgot password?
+          </Link>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

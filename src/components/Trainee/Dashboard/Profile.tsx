@@ -8,10 +8,23 @@ const Profile: React.FC = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        gap: '80px'
+        gap: "80px",
       }}
     >
-      <Box sx={{ boxShadow: "0px 4px 10px rgba(128, 97, 195, 0.25)", display: 'flex', flexDirection: 'column', justifyContent: 'center', px: '30px', borderRadius: '20px' }}>
+      <Box
+        sx={{
+          boxShadow: "0px 4px 10px rgba(128, 97, 195, 0.25)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          px: "30px",
+          borderRadius: "20px",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+      >
         <Typography variant="h5">Athira R Krishnan</Typography>
         <Typography variant="body2" color="rgba(128, 97, 195, 0.7)">
           ILP Batch 4
@@ -42,6 +55,10 @@ const Profile: React.FC = () => {
               flexDirection: "column",
               justifyContent: "center",
               height: "80px",
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
             }}
           >
             <Typography variant="h5" sx={{ color: "#FFFFFF", pt: "20px" }}>
@@ -60,6 +77,10 @@ const Profile: React.FC = () => {
               flexDirection: "column",
               justifyContent: "center",
               height: "80px",
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)", 
+              },
             }}
           >
             <Typography variant="h5" sx={{ color: "#FFFFFF", pt: "20px" }}>

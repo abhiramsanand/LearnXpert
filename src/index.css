@@ -2,6 +2,12 @@ body {
   overflow-x: hidden;
 }
 
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 
 @media (min-width: 768px) {
   body {
