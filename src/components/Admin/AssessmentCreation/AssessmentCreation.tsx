@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import UploadIcon from "@mui/icons-material/Upload";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import batches from "../../../../public/batches.json";
+
 const AssessmentForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [batch, setBatch] = useState<string>("");
@@ -43,19 +44,77 @@ const AssessmentForm: React.FC = () => {
   };
 
   return (
-    <Box component={Paper} sx={{ maxWidth: 800, padding: 2, height: 400 }}>
+    <Box
+      component={Paper}
+      sx={{
+        maxWidth: '100%',
+        padding: 4,
+        // margin: "auto,
+        mt: 4,
+        boxShadow: 3,
+        borderRadius: 2,
+        backgroundColor: "#f9f9f9",
+      }}
+    >
       <Typography
         variant="h4"
         gutterBottom
-        sx={{ fontSize: "30px", fontWeight: "20px" }}
+        sx={{
+          fontSize: "24px",
+          fontWeight: "bold",
+          textAlign: "center",
+          color: "#333",
+          mb: 4,
+        }}
       >
         Create Assessment
       </Typography>
 
+      {/* Title and batch selection */}
+      <Box sx={{ mb: 4 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
+              Title
+            </Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              sx={{ fontSize: "0.875rem" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
+              Select Batch
+            </Typography>
+            <FormControl fullWidth variant="outlined" size="small">
+              <Select
+                value={batch}
+                onChange={(e) => setBatch(e.target.value)}
+                displayEmpty
+                renderValue={(selected) =>
+                  selected ? selected : "Select Batch"
+                }
+                sx={{ fontSize: "0.875rem" }}
+              >
+                {batches.map((batch) => (
+                  <MenuItem key={batch.id} value={batch.id}>
+                    {batch.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Box>
+
       {/* Date fields */}
-      <Grid container spacing={3} sx={{ mb: 2 }}>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }}>
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
             Start Date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -68,15 +127,15 @@ const AssessmentForm: React.FC = () => {
                   {...params}
                   size="small"
                   sx={{
-                    fontSize: "0.75rem",
+                    fontSize: "0.875rem",
                     height: "40px",
                     "& .MuiInputBase-input": {
                       height: "40px",
                       padding: "0 8px",
-                      fontSize: "0.75rem",
+                      fontSize: "0.875rem",
                     },
                     "& .MuiInputAdornment-root": {
-                      fontSize: "0.75rem",
+                      fontSize: "0.875rem",
                     },
                   }}
                 />
@@ -99,8 +158,8 @@ const AssessmentForm: React.FC = () => {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
             End Date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -113,15 +172,15 @@ const AssessmentForm: React.FC = () => {
                   {...params}
                   size="small"
                   sx={{
-                    fontSize: "0.75rem",
+                    fontSize: "0.875rem",
                     height: "40px",
                     "& .MuiInputBase-input": {
                       height: "40px",
                       padding: "0 8px",
-                      fontSize: "0.75rem",
+                      fontSize: "0.875rem",
                     },
                     "& .MuiInputAdornment-root": {
-                      fontSize: "0.75rem",
+                      fontSize: "0.875rem",
                     },
                   }}
                 />
@@ -146,57 +205,28 @@ const AssessmentForm: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Title and batch selection */}
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }}>
-            Title
-          </Typography>
-          <TextField
-            fullWidth
-            variant="outlined"
-            size="small"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            sx={{ fontSize: "0.75rem" }}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }}>
-            Select Batch
-          </Typography>
-          <FormControl
-            fullWidth
-            variant="outlined"
-            size="small"
-            sx={{ maxWidth: "150px" }}
-          >
-            <Select
-              value={batch}
-              onChange={(e) => setBatch(e.target.value)}
-              displayEmpty
-              renderValue={(selected) => (selected ? selected : "Select Batch")}
-              sx={{ fontSize: "0.75rem" }}
-            >
-              {batches.map((batch) => (
-                <MenuItem key={batch.id} value={batch.id}>
-                  {batch.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-
       {/* File upload */}
-      <Box sx={{ mb: 2 }}>
+      <Box
+        sx={{
+          mb: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 4,
+        }}
+      >
         <Typography
           variant="subtitle1"
-          sx={{ fontSize: "0.75rem", color: "#8518FF" }}
+          sx={{
+            fontSize: "0.875rem",
+            color: "black",
+            textTransform: "uppercase",
+            fontWeight: "bold",
+          }}
         >
-          Upload File
+          Upload the Assessment
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <label htmlFor="upload-file">
             <Input
               id="upload-file"
@@ -212,12 +242,12 @@ const AssessmentForm: React.FC = () => {
               color="primary"
               size="small"
               sx={{
-                fontSize: "0.625rem",
-                borderColor: "#8518FF", // Set border color
-                color: "#8518FF", // Set text color
+                fontSize: "0.875rem",
+                borderColor: "#8518FF",
+                color: "#8518FF",
                 "&:hover": {
-                  borderColor: "#8518FF", // Ensure border color is maintained on hover
-                  backgroundColor: "#f0eaff", // Optional: set a light background color on hover
+                  borderColor: "#8518FF",
+                  backgroundColor: "#f0eaff",
                 },
               }}
             >
@@ -227,7 +257,7 @@ const AssessmentForm: React.FC = () => {
           <Link
             href="/template.xlsx"
             download
-            sx={{ ml: 2, fontSize: "0.75rem", color: "#8518FF" }}
+            sx={{ ml: 2, fontSize: "0.875rem", color: "#8518FF" }}
           >
             Get Template
           </Link>
@@ -235,11 +265,18 @@ const AssessmentForm: React.FC = () => {
       </Box>
 
       {/* Buttons */}
-      <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <Button
           variant="contained"
-          // color="primary"
-          sx={{ mr: 1, fontSize: "0.625rem", backgroundColor: "#8518FF" }}
+          sx={{
+            mr: 1,
+            fontSize: "0.875rem",
+            backgroundColor: "#8518FF",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#7318e5",
+            },
+          }}
           onClick={handleSubmit}
           size="small"
         >
@@ -250,7 +287,7 @@ const AssessmentForm: React.FC = () => {
           color="secondary"
           onClick={() => console.log("Cancel")}
           size="small"
-          sx={{ fontSize: "0.625rem" }}
+          sx={{ fontSize: "0.875rem", color: "#8518FF", borderColor: "#8518FF" }}
         >
           Cancel
         </Button>

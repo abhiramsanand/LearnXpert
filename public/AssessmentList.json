@@ -5,7 +5,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 1",
-          "status": "Inactive",
+          "status": "Completed",
           "studentsAttended": {
             "count": 3,
             "students": [
@@ -48,7 +48,7 @@
         },
         {
           "assessmentName": "Assessment 3",
-          "status": "Inactive",
+          "status": "Completed",
           "studentsAttended": {
             "count": 4,
             "students": [
@@ -82,7 +82,7 @@
       "assessments": [
         {
           "assessmentName": "Assessment 9",
-          "status": "Inactive",
+          "status": "Completed",
           "studentsAttended": {
             "count": 2,
             "students": [
