@@ -1,4 +1,5 @@
-import AssessmentTabs from "../../components/Admin/AssessmentView/AssessmentTabs"
+import  AssessmentTabs from '../../components/Admin/AssessmentView/AssessmentTabs';
+
 
 const AdminAssessmentViewPage = () => {
   return (

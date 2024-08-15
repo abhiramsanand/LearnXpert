@@ -79,8 +79,8 @@ const getStatusColor = (status: string) => {
   switch (status) {
     case 'Active':
       return 'green'; // Color for Active
-    case 'Inactive':
-      return 'red';  // Color for Inactive
+    case 'Completed':
+      return 'grey';  // Color for Inactive
     default:
       return 'black'; // Default color
   }
