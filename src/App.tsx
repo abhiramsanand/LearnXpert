@@ -24,6 +24,7 @@ import {
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
 import Login from "./pages/Login/LoginPage";
+import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
 
 ChartJS.register(
   CategoryScale,
@@ -55,7 +56,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />     
-          <Route path="Admin-Batchlist" element={<BatchListPage />}/>       
+          <Route path="Admin-Batchlist" element={<AdminBatchListPage />}/>       
         </Route>
       </Routes>
     </Router>
