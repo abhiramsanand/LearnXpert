@@ -15,7 +15,7 @@ const HeaderContainer = styled(AppBar)({
   top: 0,
 });
 
-const TraineeHeader = () => {
+const AdminHeader = () => {
   return (
     <>
       <HeaderContainer position="fixed">
@@ -29,9 +29,9 @@ const TraineeHeader = () => {
             </Box>
         </Container>
       </HeaderContainer>
-      <Box sx={{ mt: "26px" }}></Box>
+      <Box sx={{ mt: "56px" }}></Box>
     </>
   );
 };
 
-export default TraineeHeader;
+export default AdminHeader;

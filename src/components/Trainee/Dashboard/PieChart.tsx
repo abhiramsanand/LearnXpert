@@ -12,14 +12,14 @@ const PieChart: React.FC<{ data: any; options: any }> = ({ data, options }) => {
       sx={{
         height: "150px",
         width: "100%",
-        ml: 6,
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+        boxShadow: "0px 4px 8px rgba(128, 97, 195, 0.25)",
         borderRadius: "8px",
-        p: 4,
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        py: '10px',
+        px: '25px'
       }}
     >
       <Pie data={data} options={options} />
@@ -33,7 +33,7 @@ const PieChart: React.FC<{ data: any; options: any }> = ({ data, options }) => {
           mt: 3
         }}
       >
-        <Typography sx={{ fontSize: "8px", color: "#737373" }}>
+        <Typography sx={{ fontSize: "7px", color: "#737373" }}>
           Trainee Days Completed
         </Typography>
         <Typography sx={{ fontSize: "20px", color: "black" }}>72%</Typography>

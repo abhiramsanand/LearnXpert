@@ -6,10 +6,11 @@ const FooterContainer = styled('div')({
   bottom: 0,
   left: 0,
   width: '100%',
-  backgroundColor: '#8518FF', 
+  backgroundColor: '#8061C3', 
   color: '#FFFFFF', 
   padding: '16px',
   textAlign: 'center',
+  zIndex: '2000'
 });
 
 const Footer = () => {
