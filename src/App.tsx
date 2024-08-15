@@ -23,6 +23,7 @@ import {
 } from "chart.js";
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
+import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 
 ChartJS.register(
   CategoryScale,
@@ -53,6 +54,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-Creation" element={<CreateAdminPage />} />
         </Route>
       </Routes>
     </Router>
