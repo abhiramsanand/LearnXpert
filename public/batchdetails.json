@@ -1,0 +1,17 @@
+{
+    "batchDetails": {
+      "program": "Developer",
+      "status": true,
+      "batchName": "Batch A",
+      "startDate": "2024-08-01",
+      "noOfTrainees": 10,
+      "endDate": "2024-12-01"
+    },
+    "trainees": [
+      { "no": 1, "name": "John Doe" },
+      { "no": 2, "name": "Jane Smith" },
+      { "no": 3, "name": "John Doe" },
+      { "no": 4, "name": "Jane Smith" }
+    ]
+  }
+  
