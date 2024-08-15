@@ -54,7 +54,7 @@ const WholeReportPageComponent: React.FC = () => {
       <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
         <BackButtonComponent  /> {/* Move the button slightly to the left */}
         <Typography sx={{ ml: 1, fontWeight: 'bold', fontSize: '20px' }}>Report</Typography>
-        <Box sx={{ display: 'flex', gap: 2, ml: 'auto' }}>
+        <Box sx={{ display: 'flex', gap: 2, ml: 'auto',mt:3 }}>
           <SearchBarComponent onSearch={handleSearch} sx={{ width: 300, height: 40 }} />
           <SortByComponent onSortChange={handleSortChange} sx={{ width: 50, height: 40 }} />
         </Box>
