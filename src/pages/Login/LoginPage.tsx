@@ -3,7 +3,6 @@ import { Box, Button, TextField, Typography, Grid } from "@mui/material";
 import leftBackgroundImage from "../../assets/Left Content.png";
 import rightBackgroundImage from "../../assets/Bg.png";
 import exp from "../../assets/exp.png";
-import "@fontsource/montserrat";
 import { Link } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
@@ -31,7 +30,7 @@ const LoginPage: React.FC = () => {
           }}
         >
           <Typography
-            sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif" }}
+            sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
           >
             ILPex{" "}
             <span style={{ fontSize: "10px", marginLeft: "-15px" }}>WEB</span>

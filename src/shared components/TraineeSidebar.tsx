@@ -55,8 +55,11 @@ const TraineeSidebar: React.FC = () => {
     >
       <Toolbar>
         {open && (
-          <Typography variant="h6" noWrap sx={{ color: "rgba(128, 97, 195, 1)" }}>
-            LearnXpert
+          <Typography
+            sx={{ fontSize: "30px", color:"rgba(128, 97, 195)", fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
+          >
+            ILPex{" "}
+            <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
           </Typography>
         )}
         <IconButton
@@ -71,9 +74,21 @@ const TraineeSidebar: React.FC = () => {
       </Toolbar>
       <List>
         {[
-          { text: "Dashboard", icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Dashboard" },
-          { text: "Courses", icon: <ClassIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Courses" },
-          { text: "Assessments", icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Trainee-Assessments" },
+          {
+            text: "Dashboard",
+            icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Trainee-Dashboard",
+          },
+          {
+            text: "Courses",
+            icon: <ClassIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Trainee-Courses",
+          },
+          {
+            text: "Assessments",
+            icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Trainee-Assessments",
+          },
           {
             text: "Daily Report",
             icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
