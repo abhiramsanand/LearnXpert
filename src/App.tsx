@@ -27,10 +27,10 @@ import {
 } from "chart.js";
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
-import Login from "./pages/Login/LoginPage";
 import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
 import ManageBatchPage from "./pages/Admin/ManageBatchPage";
+import LoginPage from "./pages/Login/LoginPage";
 
 ChartJS.register(
   CategoryScale,
@@ -50,7 +50,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/" element={<TraineeLayout />}>
           <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
           <Route path="Trainee-Courses" element={<CoursePage />} />
