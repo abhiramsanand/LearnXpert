@@ -35,11 +35,11 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
         label: 'Percentage',
         data: [speedPercentage, 100 - speedPercentage],
         backgroundColor: [
-          '#8518FF', 
+          '#8061C3', 
           '#ffffff',
         ],
         borderColor: [
-          '#8518FF', 
+          '#8061C3', 
           '#ffffff',
         ],
         borderWidth: 1,
@@ -65,7 +65,8 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       alignItems="center"
       justifyContent="center"
       boxShadow={3}
-      height="170px"
+      height="190px"
+      width="27%"
       position="relative" 
     >
       <Box width="100%" height="70%">
@@ -82,20 +83,21 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
           alignItems: "center",
         }}
       >
-        <Typography sx={{ fontSize: "7px", color: "#737373" }}>
+        <Typography sx={{ fontSize: "7px", color: "#000000" }}>
           Trainee Days Completed
         </Typography>
         <Typography sx={{ fontSize: "20px", color: "black" }}>
           {speedPercentage}%
         </Typography>
       </Box>
-      <Box width="100%" height="10%" display="flex" justifyContent="flex-end">
+      <Box width="100%" height="0%" display="flex" justifyContent="flex-end">
         <Button
           variant="text"
           sx={{
-            color: "#8518FF",
+            color: "#8061C3",
             fontSize: "10px",
             textDecoration: "underline",
+            mt: 1
           }}
         >
           List Trainees

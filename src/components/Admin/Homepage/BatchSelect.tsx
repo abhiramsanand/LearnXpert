@@ -32,7 +32,6 @@ const BatchSelect: React.FC<BatchSelectProps> = ({ selectedBatch, onBatchSelect 
             backgroundColor: 'lightgray', 
           },
         },
-        ml: '-70px',
         mt: '-10px'
       }}
     >
@@ -41,8 +40,8 @@ const BatchSelect: React.FC<BatchSelectProps> = ({ selectedBatch, onBatchSelect 
           key={batch.id}
           onClick={() => onBatchSelect(batch.id)}
           sx={{
-            backgroundColor: selectedBatch === batch.id ? '#8518FF' : 'white',
-            color: selectedBatch === batch.id ? 'white' : '#8518FF',
+            backgroundColor: selectedBatch === batch.id ? '#8061C3' : 'white',
+            color: selectedBatch === batch.id ? 'white' : '#8061C3',
           }}
         >
           <Box sx={{display: 'flex', flexDirection: 'column'}}>

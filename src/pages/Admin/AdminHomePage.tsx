@@ -1,10 +1,11 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import BatchSelect from "../../components/Admin/Homepage/BatchSelect";
 import ProgressTracker from "../../components/Admin/Homepage/ProgressTracker";
 import { useState } from "react";
 import HigherSpeed from "../../components/Admin/Homepage/HigherSpeed";
 import DailyReportTrack from "../../components/Admin/Homepage/DailyReportTrack";
 import PercipioAssessment from "../../components/Admin/Homepage/PercipioAssessment";
+import ILPexAssessment from "../../components/Admin/Homepage/ILPexAssessment";
 
 const AdminHomePage = () => {
   const [selectedBatch, setSelectedBatch] = useState<number>(1);
@@ -15,15 +16,12 @@ const AdminHomePage = () => {
         selectedBatch={selectedBatch}
         onBatchSelect={setSelectedBatch}
       />
-      <Typography sx={{ fontSize: "17px", color: "#8518FF", mt: "10px" }}>
-        BATCH’S SCHEDULED TRAINING DAY - 10
-      </Typography>
       <Box
         display="flex"
         flexDirection="row"
         alignItems="center"
         gap="20px"
-        marginTop="10px"
+        marginTop="20px"
       >
         <ProgressTracker selectedBatch={selectedBatch} />
         <HigherSpeed selectedBatch={selectedBatch} />
@@ -37,6 +35,7 @@ const AdminHomePage = () => {
         marginTop="10px"
       >
         <PercipioAssessment selectedBatch={selectedBatch} />
+        <ILPexAssessment selectedBatch={selectedBatch} />
       </Box>
     </Box>
   );

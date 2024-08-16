@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -10,9 +10,7 @@ interface AssessmentScoreProps {
   selectedBatch: number;
 }
 
-const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
-  selectedBatch,
-}) => {
+const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
   const [scoreData, setScoreData] = useState({
     above80: 3,
     between70and80: 10,
@@ -65,11 +63,11 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
     ],
   };
 
-  const options: any = {
+  const options = {
     plugins: {
       legend: {
         display: true,
-        position: "right" as const, 
+        position: "right" as "right", 
       },
     },
     cutout: "70%",
@@ -94,20 +92,16 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
         </Typography>
         <Box>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80%
-            ({scoreData.above80})
+            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80% ({scoreData.above80})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between
-            70% and 80% ({scoreData.between70and80})
+            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 70% and 80% ({scoreData.between70and80})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between
-            60% and 70% ({scoreData.between60and70})
+            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 60% and 70% ({scoreData.between60and70})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60%
-            ({scoreData.below60})
+            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60% ({scoreData.below60})
           </Typography>
         </Box>
       </Box>
@@ -118,4 +112,4 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
   );
 };
 
-export default PercipioAssessment;
+export default ILPexAssessment;

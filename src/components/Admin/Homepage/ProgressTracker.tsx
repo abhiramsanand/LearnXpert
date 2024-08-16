@@ -18,19 +18,19 @@ const data = {
   datasets: [
     {
       data: [10, 20, 40],
-      backgroundColor: '#8518FF',
+      backgroundColor: '#8061C3',
     },
     {
       data: [15, 25, 20],
-      backgroundColor: '#8518FF',
+      backgroundColor: '#8061C3',
     },
     {
       data: [5, 40, 15],
-      backgroundColor: '#8518FF',
+      backgroundColor: '#8061C3',
     },
     {
       data: [12, 32, 18],
-      backgroundColor: '#8518FF',
+      backgroundColor: '#8061C3',
     },
   ],
 };
@@ -61,7 +61,7 @@ const options = {
     y: {
       grid: {
         display: true,
-        borderColor: '#e0e0e0', 
+        borderColor: '#000000', 
       },
       ticks: {
         display: true,
@@ -80,11 +80,11 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
     <Box
       display="flex"
       flexDirection="column"
-      alignItems="center"
       boxShadow={3}
-      height="170px"
+      height="190px"
+      alignContent="center"
     >
-      <Box width="100%" height="90%">
+      <Box width="100%" height="90%" sx={{px: '45px'}}>
         <Bar
           options={options}
           data={{
@@ -93,8 +93,8 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
           }}
         />
       </Box>
-      <Box width="100%" height="10%" display="flex" justifyContent="flex-end">
-        <Button variant="text" sx={{ color: '#8518FF', fontSize: '10px', textDecoration: 'underline' }}>
+      <Box width="100%" height="10%" display="flex" justifyContent="flex-end" alignItems="flex-end">
+        <Button variant="text" sx={{ color: '#8061C3', fontSize: '10px', textDecoration: 'underline' }}>
           List Trainees
         </Button>
       </Box>
