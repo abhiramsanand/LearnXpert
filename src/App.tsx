@@ -23,6 +23,7 @@ import {
 } from "chart.js";
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
+import AdminWholeReportPage from "./pages/Admin/AdminWholeReportPage";
 
 ChartJS.register(
   CategoryScale,
@@ -53,6 +54,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-WholeReport" element={<AdminWholeReportPage/>} />
         </Route>
       </Routes>
     </Router>
