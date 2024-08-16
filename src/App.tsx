@@ -56,7 +56,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />     
-          <Route path="Admin-Batchlist" element={<AdminBatchListPage />}/>       
+          <Route path="Admin-Batches" element={<AdminBatchListPage />}/>       
         </Route>
       </Routes>
     </Router>
