@@ -31,6 +31,7 @@ import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
 import ManageBatchPage from "./pages/Admin/ManageBatchPage";
 import LoginPage from "./pages/Login/LoginPage";
+import AdminWholeReportPage from "./pages/Admin/AdminWholeReportPage";
 
 ChartJS.register(
   CategoryScale,
@@ -76,6 +77,7 @@ function App() {
           <Route path="/Add-Admin" element={<CreateAdminPage />} />
           <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
           <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
+          <Route path="/Admin-DailyReport" element={<AdminWholeReportPage />} />
         </Route>
       </Routes>
     </Router>

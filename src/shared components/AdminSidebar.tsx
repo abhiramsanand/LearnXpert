@@ -100,7 +100,7 @@ const Sidebar: React.FC = () => {
           {
             text: "Daily Report",
             icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Daily-Report",
+            to: "/Admin-DailyReport",
           },
           {
             text: "Courses",
