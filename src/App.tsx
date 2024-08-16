@@ -15,7 +15,6 @@ import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
 
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,6 +28,7 @@ import {
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
 import Login from "./pages/Login/LoginPage";
+import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 
 ChartJS.register(
   CategoryScale,
@@ -50,26 +50,32 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/" element={<TraineeLayout />}>
-        <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
+          <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
           <Route path="Trainee-Courses" element={<CoursePage />} />
           <Route path="Trainee-Assessments" element={<AssessmentPage />} />
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
-         
         </Route>
-        <Route path="/" element={<AdminLayout />}>         
+        <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
-          <Route path="Admin-Assessments" element={< AdminAssessmentViewPage />} />
-          <Route path="/assignment/:name"  element={< AdminAssessmentDetailsPage />} />
-          <Route path="/Admin-AssessmentCreation" element={< AdminAssessmentCreationPage />} />
+          <Route
+            path="Admin-Assessments"
+            element={<AdminAssessmentViewPage />}
+          />
+          <Route
+            path="/assignment/:name"
+            element={<AdminAssessmentDetailsPage />}
+          />
+          <Route
+            path="/Admin-AssessmentCreation"
+            element={<AdminAssessmentCreationPage />}
+          />
+          <Route path="/Add-Admin" element={<CreateAdminPage />} />
         </Route>
       </Routes>
     </Router>
   );
 }
-
-
-
 
 export default App;

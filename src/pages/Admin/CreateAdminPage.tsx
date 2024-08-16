@@ -1,70 +1,27 @@
-import React, { useState } from 'react';
-import { Container, Box } from '@mui/material';
-import AdminForm from '../../components/Admin/CreateAdmin/AdminForm';
-import AdminModal from '../../components/Admin/CreateAdmin/AdminModal';
-import ShowAdminsButton from '../../components/Admin/CreateAdmin/ShowAdminsButton';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+import AdminTable from '../../components/Admin/CreateAdmin/AdminTable';
+import CreateAdminForm from '../../components/Admin/CreateAdmin/CreateAdminForm';
 
-interface Admin {
-  username: string;
-  email: string;
+interface CreateAdminPageProps {
+  onDeleteClick: (admin: { slno: number, name: string }) => void;
 }
 
-const CreateAdminPage: React.FC = () => {
-  const [admins, setAdmins] = useState<Admin[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleAddAdmin = (admin: Admin) => {
-    setAdmins([...admins, admin]);
-  };
-
-  const handleDeleteAdmin = (index: number) => {
-    setAdmins(admins.filter((_, i) => i !== index));
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+const CreateAdminPage: React.FC<CreateAdminPageProps> = ({ onDeleteClick }) => {
+  const handleCreateAdmin = (username: string, email: string, password: string) => {
+    // Handle the admin creation logic here
+    console.log('Creating admin:', { username, email, password });
   };
 
   return (
-    <Container
-      sx={{
-        height: '100vh', // Full viewport height
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '2px',
-        overflowY: 'auto', // Enable vertical scrolling
-        
-      }}
-    >
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'flex-end', // Align to the right
-        width: '100%',
-        mb: 2,
-    
+    <Box sx={{ padding: '1px' }}>
+      <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '20px', sm: '24px', md: '28px' } }}>
+        List of Admins
+      </Typography>
 
-      }}>
-        <ShowAdminsButton onClick={handleOpenModal} />
-      </Box>
-      <Box
-        sx={{
-          flex: 1, // Take up remaining space
-          overflowY: 'auto', // Enable vertical scrolling if needed
-        }}
-      >
-        <AdminForm onAddAdmin={handleAddAdmin} />
-      </Box>
-      <AdminModal
-        open={isModalOpen}
-        admins={admins}
-        onClose={handleCloseModal}
-        onDeleteAdmin={handleDeleteAdmin}
-      />
-    </Container>
+      <AdminTable onDeleteClick={onDeleteClick} />
+      <CreateAdminForm onCreate={handleCreateAdmin} />
+    </Box>
   );
 };
 
