@@ -1,4 +1,3 @@
-import React from 'react';
 import AssignmentDetails from '../../components/Admin/AssessmentDetails/AssessmentDetails';
 import { Container } from '@mui/material';
 

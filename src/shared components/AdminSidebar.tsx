@@ -9,7 +9,6 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  Box,
 } from "@mui/material";
 import {
   Home as HomeIcon,
@@ -17,8 +16,7 @@ import {
   Assessment as AssessmentIcon,
   School as SchoolIcon,
   AdminPanelSettings as AdminPanelSettingsIcon,
-  Notifications as NotificationsIcon,
-  Logout as LogoutIcon,
+  Report as ReportIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -59,7 +57,11 @@ const Sidebar: React.FC = () => {
     >
       <Toolbar>
         {open && (
-          <Typography variant="h6" noWrap sx={{ color: "rgba(128, 97, 195, 1)" }}>
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{ color: "rgba(128, 97, 195, 1)" }}
+          >
             LearnXpert
           </Typography>
         )}
@@ -67,7 +69,7 @@ const Sidebar: React.FC = () => {
           onClick={handleDrawerToggle}
           sx={{
             ml: open ? "auto" : 0,
-            display: { xs: "none", sm: "inline-flex" }, 
+            display: { xs: "none", sm: "inline-flex" },
           }}
         >
           <MenuIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
@@ -75,49 +77,43 @@ const Sidebar: React.FC = () => {
       </Toolbar>
       <List>
         {[
-          { text: "Home", icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Home" },
-          { text: "Batches", icon: <GroupIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Batches" },
-          { text: "Trainees", icon: <Person2Icon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Trainees" },
+          {
+            text: "Home",
+            icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Admin-Home",
+          },
+          {
+            text: "Batches",
+            icon: <GroupIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Admin-Batches",
+          },
+          {
+            text: "Trainees",
+            icon: <Person2Icon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Admin-Trainees",
+          },
           {
             text: "Assessments",
             icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Admin-Assessments",
           },
-          { text: "Courses", icon: <SchoolIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />, to: "/Admin-Courses" },
+          {
+            text: "Daily Report",
+            icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Daily-Report",
+          },
+          {
+            text: "Courses",
+            icon: <SchoolIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            to: "/Admin-Courses",
+          },
           {
             text: "Add Admin",
-            icon: <AdminPanelSettingsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
+            icon: (
+              <AdminPanelSettingsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
+            ),
             to: "/Add-Admin",
           },
-        ].map((item, _index) => (
-          <ListItem
-            button
-            key={item.text}
-            component={Link}
-            to={item.to}
-            sx={{
-              "&:hover .MuiListItemText-root": {
-                display: open ? "block" : "block",
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText
-              primary={item.text}
-              sx={{ display: open ? "block" : "none" }}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Box sx={{ flexGrow: 1 }} />
-      <List sx={{ mb: "50px" }}>
-        {[
-          {
-            text: "Notifications",
-            icon: <NotificationsIcon sx={{ color: "#8518FF" }} />,
-            to: "",
-          },
-          { text: "Logout", icon: <LogoutIcon sx={{ color: "#8518FF" }} />, to: "/" },
         ].map((item, _index) => (
           <ListItem
             button

@@ -1,9 +1,8 @@
+import { AppBar, Container, Box } from "@mui/material";
 import {
-  AppBar,
-  Container,
-  Box,
-  Avatar,
-} from "@mui/material";
+  Notifications as NotificationsIcon,
+  Logout as LogoutIcon,
+} from "@mui/icons-material";
 import { styled } from "@mui/system";
 
 const HeaderContainer = styled(AppBar)({
@@ -20,13 +19,12 @@ const AdminHeader = () => {
     <>
       <HeaderContainer position="fixed">
         <Container maxWidth="lg">
-            <Box sx={{ display: "flex", justifyContent: 'flex-end' }}>
-              <Avatar
-                alt="Athira"
-                src=""
-                sx={{ width: 40, height: 40, mt: 1}}
-              />
-            </Box>
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: 4 }}
+          >
+            <NotificationsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
+            <LogoutIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
+          </Box>
         </Container>
       </HeaderContainer>
       <Box sx={{ mt: "56px" }}></Box>
