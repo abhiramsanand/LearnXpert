@@ -1,0 +1,45 @@
+{
+    "admins": [
+      {
+        "slno": 1,
+        "name": "John Doe"
+      },
+      {
+        "slno": 2,
+        "name": "Jane Smith"
+      },
+      {
+        "slno": 3,
+        "name": "Alice Johnson"
+      },
+      {
+        "slno": 4,
+        "name": "Bob Brown"
+      },
+      {
+        "slno": 5,
+        "name": "Charlie Davis"
+      },
+      {
+        "slno": 6,
+        "name": "Diana Evans"
+      },
+      {
+        "slno": 7,
+        "name": "Edward Fox"
+      },
+      {
+        "slno": 8,
+        "name": "Fiona Green"
+      },
+      {
+        "slno": 9,
+        "name": "George Harris"
+      },
+      {
+        "slno": 10,
+        "name": "Hannah Ives"
+      }
+    ]
+  }
+  

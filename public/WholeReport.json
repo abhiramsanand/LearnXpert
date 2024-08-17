@@ -1,0 +1,85 @@
+{
+    "reports": [
+      {
+        "day": "2024-08-25",
+        "course": "React",
+        "timeTaken": "3 hours",
+        "keyLearnings": " Flowers consist of a combination of vegetative organs – sepals that enclose and protect the developing flower. ",
+        "planForTomorrow": "Flowers consist of a combination of vegetative organs – sepals that enclose and protect the developing flower. ",
+        "status": "submitted"
+      },
+      {
+        "day": "2024-08-26",
+        "course": "TypeScript",
+        "timeTaken": "4 hours",
+        "keyLearnings": "Types and Interfaces",
+        "planForTomorrow": "Generics",
+        "status": "pending"
+      },
+      {
+        "day": "2024-08-27",
+        "course": "JavaScript",
+        "timeTaken": "2.5 hours",
+        "keyLearnings": "Async/Await",
+        "planForTomorrow": "Promises",
+        "status": "submitted"
+      },
+      {
+        "day": "2024-08-28",
+        "course": "HTML & CSS",
+        "timeTaken": "3.5 hours",
+        "keyLearnings": "Flexbox and Grid",
+        "planForTomorrow": "Responsive Design",
+        "status": "pending"
+      },
+      {
+        "day": "2024-08-29",
+        "course": "Node.js",
+        "timeTaken": "4 hours",
+        "keyLearnings": "Express and Routing",
+        "planForTomorrow": "Middleware",
+        "status": "submitted"
+      },
+      {
+        "day": "2024-08-30",
+        "course": "Database",
+        "timeTaken": "3 hours",
+        "keyLearnings": "SQL and NoSQL",
+        "planForTomorrow": "Data Modeling",
+        "status": "pending"
+      },
+      {
+        "day": "2024-08-31",
+        "course": "DevOps",
+        "timeTaken": "2 hours",
+        "keyLearnings": "CI/CD",
+        "planForTomorrow": "Containerization",
+        "status": "submitted"
+      },
+      {
+        "day": "2024-09-01",
+        "course": "React",
+        "timeTaken": "3 hours",
+        "keyLearnings": "Context API",
+        "planForTomorrow": "Redux",
+        "status": "pending"
+      },
+      {
+        "day": "2024-09-02",
+        "course": "TypeScript",
+        "timeTaken": "3 hours",
+        "keyLearnings": "Advanced Types",
+        "planForTomorrow": "Type Narrowing",
+        "status": "submitted"
+      },
+      {
+        "day": "2024-09-03",
+        "course": "JavaScript",
+        "timeTaken": "2 hours",
+        "keyLearnings": "Event Loop",
+        "planForTomorrow": "JavaScript Engines",
+        "status": "pending"
+      }
+    ]
+  }
+  

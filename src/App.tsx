@@ -1,9 +1,48 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/Login/Login";
-import Enquiry from "./pages/Trainee/EnquiryPage"
-import Course from "./pages/Trainee/CoursePage"
-import AOS from 'aos';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import "@fontsource/montserrat";
+
+import TraineeLayout from "./TraineeLayout";
+import CoursePage from "./pages/Trainee/CoursePage";
+import AssessmentPage from "./pages/Trainee/AssessmentPage";
+import DailyReport from "./pages/Trainee/DailyReportPage";
+import WholeReportPage from "./pages/Trainee/WholeReportPage";
+import EnquiryPage from "./pages/Trainee/EnquiryPage";
+import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
+import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
+import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
+import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import AdminLayout from "./AdminLayout";
+import AdminHomePage from "./pages/Admin/AdminHomePage";
+import CreateAdminPage from "./pages/Admin/CreateAdminPage";
+import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
+import ManageBatchPage from "./pages/Admin/ManageBatchPage";
+import LoginPage from "./pages/Login/LoginPage";
+import AdminWholeReportPage from "./pages/Admin/AdminWholeReportPage";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function App() {
   useEffect(() => {
@@ -12,16 +51,48 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <main className="main-content">
-          <Routes>
-            <Route path="/Login" element={<Login />} />
-            <Route path="/course" element={<Course/>}/>
-            <Route path="/enquiry" element={<Enquiry/>}/>
-          
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<TraineeLayout />}>
+          <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
+          <Route path="Trainee-Courses" element={<CoursePage />} />
+          <Route path="Trainee-Assessments" element={<AssessmentPage />} />
+          <Route path="Trainee-Dailyreport" element={<DailyReport />} />
+          <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
+          <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+        </Route>
+        <Route path="/" element={<AdminLayout />}>
+          <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route
+            path="Admin-Assessments"
+            element={<AdminAssessmentViewPage />}
+          />
+          <Route
+            path="/assignment/:name"
+            element={<AdminAssessmentDetailsPage />}
+          />
+          <Route
+            path="/Admin-AssessmentCreation"
+            element={<AdminAssessmentCreationPage />}
+          />
+          <Route
+            path="/Add-Admin"
+            element={
+              <CreateAdminPage
+                onDeleteClick={function (_admin: {
+                  slno: number;
+                  name: string;
+                }): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
+            }
+          />
+          <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
+          <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
+          <Route path="/Admin-DailyReport" element={<AdminWholeReportPage />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

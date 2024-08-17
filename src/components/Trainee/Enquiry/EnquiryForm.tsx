@@ -1,5 +1,3 @@
-// src/components/EnquiryForm.tsx
-
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import { styled } from '@mui/system';
