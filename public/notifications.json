@@ -1,0 +1,28 @@
+[
+    {
+      "id": 1,
+      "title": "Welcome!",
+      "message": "Thank you for joining our platform. We hope you have a great experience."
+    },
+    {
+      "id": 2,
+      "title": "Update Available",
+      "message": "A new update is available for your account. Please check the update details."
+    },
+    {
+      "id": 3,
+      "title": "Reminder",
+      "message": "Don't forget to complete your profile setup to get the most out of our features."
+    },
+    {
+      "id": 4,
+      "title": "System Maintenance",
+      "message": "We will be undergoing scheduled maintenance on Saturday, 10th August. Services may be intermittent."
+    },
+    {
+      "id": 5,
+      "title": "Security Alert",
+      "message": "We detected a login attempt from an unrecognized device. Please verify your recent login activity."
+    }
+  ]
+  

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AOS from "aos";
@@ -14,6 +15,7 @@ import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
+import NotificationPage from "./pages/Trainee/NotificationPage";
 
 import {
   Chart as ChartJS,
@@ -59,6 +61,7 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+          <Route path="Trainee-Notification" element={<NotificationPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
@@ -74,7 +77,19 @@ function App() {
             path="/Admin-AssessmentCreation"
             element={<AdminAssessmentCreationPage />}
           />
-          <Route path="/Add-Admin" element={<CreateAdminPage />} />
+          <Route
+            path="/Add-Admin"
+            element={
+              <CreateAdminPage
+                onDeleteClick={function (_admin: {
+                  slno: number;
+                  name: string;
+                }): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
+            }
+          />
           <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
           <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
           <Route path="/Admin-DailyReport" element={<AdminWholeReportPage />} />
