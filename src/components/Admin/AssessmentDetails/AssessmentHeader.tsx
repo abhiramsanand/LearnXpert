@@ -18,13 +18,13 @@ const AssessmentHeader: React.FC<AssessmentHeaderProps> = ({ assessmentName, sea
       <IconButton
         onClick={() => navigate('/Admin-Assessments')}
         style={{
-          backgroundColor: 'F3E8FF', // Light background color for the button
+          backgroundColor: 'rgba(128, 97, 195, 0.2)', // Light background color for the button
           borderRadius: '50%',
           padding: 8,
           marginRight: 16,
         }}
       >
-        <ArrowBackIcon style={{ color: '8518FF' }} /> {/* Dark color for the arrow */}
+        <ArrowBackIcon style={{ color: 'rgba(128, 97, 195)' }} /> {/* Dark color for the arrow */}
       </IconButton>
       <h3 style={{ flexGrow: 1 }}>{assessmentName}</h3>
       <TextField
@@ -36,12 +36,12 @@ const AssessmentHeader: React.FC<AssessmentHeaderProps> = ({ assessmentName, sea
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <SearchIcon style={{ color: '#8518FF' }} /> {/* Customize color of the search icon */}
+              <SearchIcon style={{ color: 'rgba(128, 97, 195)' }} /> {/* Customize color of the search icon */}
             </InputAdornment>
           ),
           sx: {
             '& .MuiInputBase-input': {
-              backgroundColor: '#F3E8FF', // Set background color for the input box
+              backgroundColor: 'rgba(128, 97, 195, 0.1)', // Set background color for the input box
             },
           },
         }}

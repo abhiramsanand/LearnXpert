@@ -15,10 +15,10 @@ const AddAssessmentButton: React.FC = () => {
     <IconButton
       onClick={handleClick}
       style={{
-        backgroundColor: '#F3E8FF',
+        backgroundColor: 'rgba(128, 97, 195, 0.1)',
         borderRadius: '50%',
         padding: 10,
-        color: '#8518FF',
+        color: 'rgba(128, 97, 195, 1)',
         marginLeft: 16, // Adjust margin if needed
       }}
     >

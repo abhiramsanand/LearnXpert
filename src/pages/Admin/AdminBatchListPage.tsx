@@ -1,16 +1,11 @@
 import React from 'react';
 import { Container, Box, Typography } from '@mui/material';
-import AdminHeader from '../../shared components/AdminHeader';
-import Footer from '../../shared components/Footer';
-import Sidebar from '../../shared components/AdminSidebar';
 import BatchList from '../../components/Admin/AdminBatchList/BatchList';
 import CreateNewButton from '../../components/Admin/AdminBatchList/CreateNewButton';
 
 const AdminBatchListPage: React.FC = () => {
   return (
     <>
-      <AdminHeader />
-      <Sidebar />
       <Container>
         <Box>
           {/* Header with title and button */}
@@ -20,7 +15,6 @@ const AdminBatchListPage: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               mb: { xs: 2, sm: 3 }, // Adjust margin-bottom for different screen sizes
-              mt: { xs: -5, sm: -7 }, // Adjust margin-top to avoid overlap with other elements
               flexDirection: { xs: 'column', sm: 'row' }, // Stack title and button on small screens
             }}
           >
@@ -41,7 +35,6 @@ const AdminBatchListPage: React.FC = () => {
           <BatchList />
         </Box>
       </Container>
-      <Footer />
     </>
   );
 };

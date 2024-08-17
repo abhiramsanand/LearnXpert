@@ -58,11 +58,15 @@ const Sidebar: React.FC = () => {
       <Toolbar>
         {open && (
           <Typography
-            variant="h6"
-            noWrap
-            sx={{ color: "rgba(128, 97, 195, 1)" }}
+            sx={{
+              fontSize: "30px",
+              color: "rgba(128, 97, 195)",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: "bold",
+            }}
           >
-            LearnXpert
+            ILPex{" "}
+            <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
           </Typography>
         )}
         <IconButton

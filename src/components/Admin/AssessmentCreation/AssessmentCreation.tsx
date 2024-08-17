@@ -48,9 +48,8 @@ const AssessmentForm: React.FC = () => {
       component={Paper}
       sx={{
         maxWidth: '100%',
-        padding: 4,
-        // margin: "auto,
-        mt: 4,
+        py: "18px",
+        px: "40px",
         boxShadow: 3,
         borderRadius: 2,
         backgroundColor: "#f9f9f9",
@@ -243,11 +242,11 @@ const AssessmentForm: React.FC = () => {
               size="small"
               sx={{
                 fontSize: "0.875rem",
-                borderColor: "#8518FF",
-                color: "#8518FF",
+                borderColor: "rgba(128, 97, 195)",
+                color: "rgba(128, 97, 195)",
                 "&:hover": {
-                  borderColor: "#8518FF",
-                  backgroundColor: "#f0eaff",
+                  borderColor: "rgba(128, 97, 195)",
+                  backgroundColor: "rgba(128, 97, 195)",
                 },
               }}
             >
@@ -257,7 +256,7 @@ const AssessmentForm: React.FC = () => {
           <Link
             href="/template.xlsx"
             download
-            sx={{ ml: 2, fontSize: "0.875rem", color: "#8518FF" }}
+            sx={{ ml: 2, fontSize: "0.875rem", color: "rgba(128, 97, 195)" }}
           >
             Get Template
           </Link>
@@ -271,7 +270,7 @@ const AssessmentForm: React.FC = () => {
           sx={{
             mr: 1,
             fontSize: "0.875rem",
-            backgroundColor: "#8518FF",
+            backgroundColor: "rgba(128, 97, 195)",
             color: "#fff",
             "&:hover": {
               backgroundColor: "#7318e5",
@@ -287,7 +286,7 @@ const AssessmentForm: React.FC = () => {
           color="secondary"
           onClick={() => console.log("Cancel")}
           size="small"
-          sx={{ fontSize: "0.875rem", color: "#8518FF", borderColor: "#8518FF" }}
+          sx={{ fontSize: "0.875rem", color: "rgba(128, 97, 195)", borderColor: "rgba(128, 97, 195)" }}
         >
           Cancel
         </Button>

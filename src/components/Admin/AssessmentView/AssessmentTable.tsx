@@ -42,10 +42,10 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>#</TableCell>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Assessment Name</TableCell>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Status</TableCell>
-              <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Students Attended</TableCell>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>#</TableCell>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Assessment Name</TableCell>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Status</TableCell>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Students Attended</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

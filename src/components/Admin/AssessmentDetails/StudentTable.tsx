@@ -18,16 +18,16 @@ const StudentTable: React.FC<StudentTableProps> = ({ students, getStatusStyle })
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder' }}>
+            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder' }}>
               #
             </TableCell>
-            <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder' }}>
+            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder' }}>
               Student Name
             </TableCell>
-            <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder' }}>
+            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder' }}>
               Status
             </TableCell>
-            <TableCell style={{ backgroundColor: '#F3E8FF', color: 'black', fontWeight: 'bolder' }}>
+            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder' }}>
               Marks Scored
             </TableCell>
           </TableRow>
