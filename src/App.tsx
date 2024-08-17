@@ -23,6 +23,8 @@ import {
 } from "chart.js";
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
+import BatchForm from "./pages/Admin/BatchAdd";
+import BatchAdd2 from "./pages/Admin/BatchAdd2";
 
 ChartJS.register(
   CategoryScale,
@@ -50,6 +52,8 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+          <Route path="Admin-BatchAdd" element={<BatchForm />} />
+          <Route path="Admin-BatchAdd2" element={<BatchAdd2 />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
