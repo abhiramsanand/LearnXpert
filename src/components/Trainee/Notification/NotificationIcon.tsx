@@ -1,5 +1,5 @@
 import React from 'react';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
+import NotificationsNoneOutlinedIcon  from '@mui/icons-material/NotificationsNoneOutlined';
 import styles from './NotificationPage.module.css';
 
 interface NotificationIconProps {
@@ -10,7 +10,7 @@ interface NotificationIconProps {
 const NotificationIcon: React.FC<NotificationIconProps> = ({ unreadCount, onClick }) => {
   return (
     <div className={styles.notificationIconContainer} onClick={onClick}>
-      <NotificationsIcon fontSize="large" sx={{ color: "#8518FF" }} />
+      <NotificationsNoneOutlinedIcon sx={{ color: "#8061C3", fontSize: '30px' }} />
       {unreadCount > 0 && (
         <div className={styles.notificationBadge}>
           {unreadCount}

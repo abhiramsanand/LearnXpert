@@ -50,7 +50,6 @@ const NotificationPage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <h1>Notifications Page</h1>
       <NotificationIcon unreadCount={unreadCount} onClick={handleOpenModal} />
       <NotificationModal
         isOpen={isModalOpen}

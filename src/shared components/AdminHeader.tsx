@@ -1,9 +1,9 @@
 import { AppBar, Container, Box } from "@mui/material";
 import {
-  Notifications as NotificationsIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
+import NotificationPage from "../pages/Trainee/NotificationPage";
 
 const HeaderContainer = styled(AppBar)({
   backgroundColor: "rgba(128, 97, 195, 0.1)",
@@ -22,7 +22,7 @@ const AdminHeader = () => {
           <Box
             sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: 4 }}
           >
-            <NotificationsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
+            <NotificationPage />
             <LogoutIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
           </Box>
         </Container>

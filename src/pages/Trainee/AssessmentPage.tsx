@@ -70,7 +70,7 @@ const NewAssessmentPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ padding: '5px', height: '100vh', overflow: 'hidden' }}>
+    <Box sx={{ padding: '5px', height: '100vh', overflow: 'hidden', mt: 3 }}>
       <Grid container spacing={2} sx={{ height: '100%' }}>
         <Grid item xs={3} sx={{ overflowY: 'auto', height: '100%',width:'50%' }}>
           <Box sx={{ display: 'flex', gap: '8px', marginBottom: '30px' }}>
