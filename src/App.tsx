@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "@fontsource/montserrat";
-
 import TraineeLayout from "./TraineeLayout";
 import CoursePage from "./pages/Trainee/CoursePage";
 import AssessmentPage from "./pages/Trainee/AssessmentPage";
@@ -32,9 +31,10 @@ import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
 import ManageBatchPage from "./pages/Admin/ManageBatchPage";
 import LoginPage from "./pages/Login/LoginPage";
-import AdminWholeReportPage from "./pages/Admin/AdminWholeReportPage";
 import BatchAdd2 from "./pages/Admin/BatchAdd2";
 import BatchForm from "./components/Admin/BatchCreate1/BatchForm";
+import AdminReportPage from "./pages/Admin/AdminReportPage";
+
 
 ChartJS.register(
   CategoryScale,
@@ -92,9 +92,9 @@ function App() {
           />
           <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
           <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
-          <Route path="/Admin-DailyReport" element={<AdminWholeReportPage />} />
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
           <Route path="Admin-BatchAdd2" element={<BatchAdd2 />} />
+          <Route path="/Admin-DailyReport" element={<AdminReportPage />} />
         </Route>
       </Routes>
     </Router>

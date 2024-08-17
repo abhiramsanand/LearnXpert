@@ -1,105 +1,606 @@
 {
-    "students": [
-      {
-        "name": "Alice",
-        "reports": [
-          {
-            "day": "2024-08-25",
-            "course": "React",
-            "timeTaken": "3 hours",
-            "keyLearnings": "Hooks and State Management",
-            "planForTomorrow": "Component Lifecycle",
-            "status": "submitted"
-          },
-          {
-            "day": "2024-08-26",
-            "course": "TypeScript",
-            "timeTaken": "4 hours",
-            "keyLearnings": "Types and Interfaces",
-            "planForTomorrow": "Generics",
-            "status": "pending"
-          },
-          {
-            "day": "2024-08-27",
-            "course": "JavaScript",
-            "timeTaken": "2.5 hours",
-            "keyLearnings": "Async/Await",
-            "planForTomorrow": "Promises",
-            "status": "submitted"
-          }
-        ]
-      },
-      {
-        "name": "Bob",
-        "reports": [
-          {
-            "day": "2024-08-28",
-            "course": "HTML & CSS",
-            "timeTaken": "3.5 hours",
-            "keyLearnings": "Flexbox and Grid",
-            "planForTomorrow": "Responsive Design",
-            "status": "pending"
-          },
-          {
-            "day": "2024-08-29",
-            "course": "Node.js",
-            "timeTaken": "4 hours",
-            "keyLearnings": "Express and Routing",
-            "planForTomorrow": "Middleware",
-            "status": "submitted"
-          },
-          {
-            "day": "2024-08-30",
-            "course": "Database",
-            "timeTaken": "3 hours",
-            "keyLearnings": "SQL and NoSQL",
-            "planForTomorrow": "Data Modeling",
-            "status": "pending"
-          }
-        ]
-      },
-      {
-        "name": "Charlie",
-        "reports": [
-          {
-            "day": "2024-08-31",
-            "course": "DevOps",
-            "timeTaken": "2 hours",
-            "keyLearnings": "CI/CD",
-            "planForTomorrow": "Containerization",
-            "status": "submitted"
-          },
-          {
-            "day": "2024-09-01",
-            "course": "React",
-            "timeTaken": "3 hours",
-            "keyLearnings": "Context API",
-            "planForTomorrow": "Redux",
-            "status": "pending"
-          },
-          {
-            "day": "2024-09-02",
-            "course": "TypeScript",
-            "timeTaken": "3 hours",
-            "keyLearnings": "Advanced Types",
-            "planForTomorrow": "Type Narrowing",
-            "status": "submitted"
-          }
-        ]
-      },
-      {
-        "name": "Dana",
-        "reports": [
-          {
-            "day": "2024-09-03",
-            "course": "JavaScript",
-            "timeTaken": "2 hours",
-            "keyLearnings": "Event Loop",
-            "planForTomorrow": "JavaScript Engines",
-            "status": "pending"
-          }
-        ]
-      }
-    ]
-  }
-  
+  "students": [
+    {
+      "name": "Alice",
+      "reports": [
+        {
+          "day": "2024-08-25",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Hooks and State Management",
+          "planForTomorrow": "Component Lifecycle",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-08-26",
+          "course": "TypeScript",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Types and Interfaces",
+          "planForTomorrow": "Generics",
+          "status": "pending"
+        },
+        {
+          "day": "2024-08-27",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Async/Await",
+          "planForTomorrow": "Promises",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-08-28",
+          "course": "HTML & CSS",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Flexbox and Grid",
+          "planForTomorrow": "Responsive Design",
+          "status": "submitted"
+        }
+      ]
+    },
+    {
+      "name": "Bob",
+      "reports": [
+        {
+          "day": "2024-08-28",
+          "course": "HTML & CSS",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Flexbox and Grid",
+          "planForTomorrow": "Responsive Design",
+          "status": "pending"
+        },
+        {
+          "day": "2024-08-29",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Express and Routing",
+          "planForTomorrow": "Middleware",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-08-30",
+          "course": "Database",
+          "timeTaken": "3 hours",
+          "keyLearnings": "SQL and NoSQL",
+          "planForTomorrow": "Data Modeling",
+          "status": "pending"
+        },
+        {
+          "day": "2024-09-01",
+          "course": "DevOps",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "CI/CD",
+          "planForTomorrow": "Containerization",
+          "status": "submitted"
+        }
+      ]
+    },
+    {
+      "name": "Charlie",
+      "reports": [
+        {
+          "day": "2024-08-31",
+          "course": "DevOps",
+          "timeTaken": "2 hours",
+          "keyLearnings": "CI/CD",
+          "planForTomorrow": "Containerization",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-01",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Context API",
+          "planForTomorrow": "Redux",
+          "status": "pending"
+        },
+        {
+          "day": "2024-09-02",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Advanced Types",
+          "planForTomorrow": "Type Narrowing",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-03",
+          "course": "JavaScript",
+          "timeTaken": "2 hours",
+          "keyLearnings": "Event Loop",
+          "planForTomorrow": "JavaScript Engines",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Dana",
+      "reports": [
+        {
+          "day": "2024-09-03",
+          "course": "JavaScript",
+          "timeTaken": "2 hours",
+          "keyLearnings": "Event Loop",
+          "planForTomorrow": "JavaScript Engines",
+          "status": "pending"
+        },
+        {
+          "day": "2024-09-04",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "React Hooks",
+          "planForTomorrow": "Context API",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-05",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Express and MongoDB",
+          "planForTomorrow": "Async Operations",
+          "status": "submitted"
+        }
+      ]
+    },
+    {
+      "name": "Eve",
+      "reports": [
+        {
+          "day": "2024-09-06",
+          "course": "TypeScript",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Type Guards",
+          "planForTomorrow": "Mapped Types",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-07",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Event Loop",
+          "planForTomorrow": "Async/Await",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Frank",
+      "reports": [
+        {
+          "day": "2024-09-08",
+          "course": "React",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Hooks and Context API",
+          "planForTomorrow": "Server-side Rendering",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-09",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Interfaces and Types",
+          "planForTomorrow": "Decorators",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Grace",
+      "reports": [
+        {
+          "day": "2024-09-10",
+          "course": "Node.js",
+          "timeTaken": "4.5 hours",
+          "keyLearnings": "Asynchronous Programming",
+          "planForTomorrow": "Error Handling",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-11",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Event Loop and Callbacks",
+          "planForTomorrow": "Promises and Async/Await",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Hank",
+      "reports": [
+        {
+          "day": "2024-09-12",
+          "course": "HTML & CSS",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Flexbox and Grid",
+          "planForTomorrow": "CSS Grid Layout",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-13",
+          "course": "React",
+          "timeTaken": "4 hours",
+          "keyLearnings": "State Management",
+          "planForTomorrow": "React Context API",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Ivy",
+      "reports": [
+        {
+          "day": "2024-09-14",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Union and Intersection Types",
+          "planForTomorrow": "Type Guards",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-15",
+          "course": "Database",
+          "timeTaken": "4 hours",
+          "keyLearnings": "SQL Queries",
+          "planForTomorrow": "Normalization",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Jack",
+      "reports": [
+        {
+          "day": "2024-09-16",
+          "course": "JavaScript",
+          "timeTaken": "2 hours",
+          "keyLearnings": "Closures and Scope",
+          "planForTomorrow": "Event Loop",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-17",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Asynchronous APIs",
+          "planForTomorrow": "Error Handling",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Karen",
+      "reports": [
+        {
+          "day": "2024-09-18",
+          "course": "React",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Functional Components",
+          "planForTomorrow": "Hooks",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-19",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Generics",
+          "planForTomorrow": "Advanced Types",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Leo",
+      "reports": [
+        {
+          "day": "2024-09-20",
+          "course": "Database",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Schema Design",
+          "planForTomorrow": "Indexing",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-21",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Promises",
+          "planForTomorrow": "Async/Await",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Mia",
+      "reports": [
+        {
+          "day": "2024-09-22",
+          "course": "HTML & CSS",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Responsive Design",
+          "planForTomorrow": "Flexbox",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-23",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Component Lifecycle",
+          "planForTomorrow": "React Router",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Nina",
+      "reports": [
+        {
+          "day": "2024-09-24",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Type Inference",
+          "planForTomorrow": "Mapped Types",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-25",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Closures",
+          "planForTomorrow": "Callback Functions",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Oscar",
+      "reports": [
+        {
+          "day": "2024-09-26",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "API Development",
+          "planForTomorrow": "Authentication",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-27",
+          "course": "DevOps",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Deployment Pipelines",
+          "planForTomorrow": "CI/CD",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Paul",
+      "reports": [
+        {
+          "day": "2024-09-28",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "State Management",
+          "planForTomorrow": "Context API",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-09-29",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Generics",
+          "planForTomorrow": "Advanced Types",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Quincy",
+      "reports": [
+        {
+          "day": "2024-09-30",
+          "course": "Database",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Joins and Subqueries",
+          "planForTomorrow": "Database Design",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-01",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Prototypes",
+          "planForTomorrow": "ES6 Features",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Rita",
+      "reports": [
+        {
+          "day": "2024-10-02",
+          "course": "HTML & CSS",
+          "timeTaken": "4 hours",
+          "keyLearnings": "CSS Grid",
+          "planForTomorrow": "Flexbox",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-03",
+          "course": "React",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Component Design",
+          "planForTomorrow": "Context API",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Steve",
+      "reports": [
+        {
+          "day": "2024-10-04",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Utility Types",
+          "planForTomorrow": "Type Guards",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-05",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Streams",
+          "planForTomorrow": "Error Handling",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Tina",
+      "reports": [
+        {
+          "day": "2024-10-06",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Closures",
+          "planForTomorrow": "Async/Await",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-07",
+          "course": "React",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Hooks",
+          "planForTomorrow": "Context API",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Uma",
+      "reports": [
+        {
+          "day": "2024-10-08",
+          "course": "Database",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Indexes",
+          "planForTomorrow": "Normalization",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-09",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Mapped Types",
+          "planForTomorrow": "Utility Types",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Victor",
+      "reports": [
+        {
+          "day": "2024-10-10",
+          "course": "DevOps",
+          "timeTaken": "4 hours",
+          "keyLearnings": "Infrastructure as Code",
+          "planForTomorrow": "Docker",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-11",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Async/Await",
+          "planForTomorrow": "Error Handling",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Wendy",
+      "reports": [
+        {
+          "day": "2024-10-12",
+          "course": "HTML & CSS",
+          "timeTaken": "3.5 hours",
+          "keyLearnings": "Flexbox",
+          "planForTomorrow": "CSS Grid",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-13",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "APIs",
+          "planForTomorrow": "Authentication",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Xander",
+      "reports": [
+        {
+          "day": "2024-10-14",
+          "course": "React",
+          "timeTaken": "4 hours",
+          "keyLearnings": "React Router",
+          "planForTomorrow": "Redux",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-15",
+          "course": "TypeScript",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Enums",
+          "planForTomorrow": "Type Narrowing",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Yara",
+      "reports": [
+        {
+          "day": "2024-10-16",
+          "course": "JavaScript",
+          "timeTaken": "2.5 hours",
+          "keyLearnings": "Promises",
+          "planForTomorrow": "Async/Await",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-17",
+          "course": "Database",
+          "timeTaken": "3 hours",
+          "keyLearnings": "Schema Design",
+          "planForTomorrow": "Indexes",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "Zane",
+      "reports": [
+        {
+          "day": "2024-10-18",
+          "course": "Node.js",
+          "timeTaken": "4 hours",
+          "keyLearnings": "API Development",
+          "planForTomorrow": "Error Handling",
+          "status": "submitted"
+        },
+        {
+          "day": "2024-10-19",
+          "course": "DevOps",
+          "timeTaken": "3 hours",
+          "keyLearnings": "CI/CD",
+          "planForTomorrow": "Monitoring",
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}
