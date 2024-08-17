@@ -29,22 +29,14 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
   }, [selectedBatch]);
 
   const data = {
-    labels: ['Daily Report'],
     datasets: [
       {
-        label: 'Percentage',
+        label: "Percentage",
         data: [speedPercentage, 100 - speedPercentage],
-        backgroundColor: [
-          '#8061C3', 
-          '#ffffff',
-        ],
-        borderColor: [
-          '#8061C3', 
-          '#ffffff',
-        ],
-        borderWidth: 1,
+        backgroundColor: ["#8061C3", "#ffffff"],
       },
     ],
+ 
   };
 
   const options = {
