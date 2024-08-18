@@ -34,6 +34,8 @@ import LoginPage from "./pages/Login/LoginPage";
 import BatchAdd2 from "./pages/Admin/BatchAdd2";
 import BatchForm from "./components/Admin/BatchCreate1/BatchForm";
 import AdminReportPage from "./pages/Admin/AdminReportPage";
+import TraineesPage from "./pages/Admin/TraineesPage";
+import TraineeReport from "./pages/Admin/TraineeReportPage";
 
 
 ChartJS.register(
@@ -95,6 +97,8 @@ function App() {
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
           <Route path="Admin-BatchAdd2" element={<BatchAdd2 />} />
           <Route path="/Admin-DailyReport" element={<AdminReportPage />} />
+          <Route path="/Admin-Trainees" element={<TraineesPage />} />
+        <Route path="/trainee/:id" element={<TraineeReport />} />
         </Route>
       </Routes>
     </Router>
