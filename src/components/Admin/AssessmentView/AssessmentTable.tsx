@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import SortOptions from './SortOptions';
-import AddAssessmentButton from './AddAssessmentButton'; // Import the AddAssessmentButton component
+import AddAssessmentButton from './AddAssessmentButton';
 
 interface StudentAttended {
   name: string;
@@ -31,8 +31,8 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
     : assessments.filter(assessment => assessment.status.toLowerCase() === sortOption);
 
   return (
-    <div style={{ position: 'relative' }}> {/* Add relative positioning for the button */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8,marginRight:20 }}>
+    <div style={{ position: 'relative' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, marginRight: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <SortOptions currentSort={sortOption} onSortChange={onSortChange} />
         </div>
@@ -51,12 +51,12 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
           <TableBody>
             {filteredAssessments.map((assessment, index) => (
               <TableRow key={assessment.assessmentName}>
-                <TableCell style={{ fontSize: '12px' }}>{index + 1}</TableCell> {/* Serial number */}
+                <TableCell style={{ fontSize: '12px' }}>{index + 1}</TableCell>
                 <TableCell style={{ fontSize: '12px' }}>
                   <Typography
                     component={Link}
                     to={`/assignment/${assessment.assessmentName}`}
-                    style={{ textDecoration: 'none', color: 'inherit', fontSize: '12px' }} // Apply fontSize to Typography
+                    style={{ textDecoration: 'none', color: 'inherit', fontSize: '12px' }}
                   >
                     {assessment.assessmentName}
                   </Typography>
@@ -78,11 +78,11 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOpti
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'Active':
-      return 'green'; // Color for Active
+      return 'green';
     case 'Completed':
-      return 'grey';  // Color for Inactive
+      return 'grey';
     default:
-      return 'black'; // Default color
+      return 'black';
   }
 };
 

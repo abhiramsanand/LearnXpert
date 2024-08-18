@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import BatchSelect from "../../components/Admin/Homepage/BatchSelect";
+import BatchSelect from "../../shared components/BatchSelect";
 import ProgressTracker from "../../components/Admin/Homepage/ProgressTracker";
 import { useState } from "react";
 import HigherSpeed from "../../components/Admin/Homepage/HigherSpeed";
