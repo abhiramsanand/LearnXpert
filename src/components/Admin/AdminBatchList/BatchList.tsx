@@ -7,10 +7,11 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // Import horizontal 
 
 // Define the type for the batch data
 interface Batch {
-  name: string;
-  traineeCount: number;
-  type: string;
-  status: 'Active' | 'Inactive';
+  id: number;
+  batchName: string;
+  startDate: string; // Assuming you want to display the date as a string
+  endDate: string;
+  isActive: boolean;
 }
 
 // BatchList component
@@ -19,9 +20,10 @@ const BatchList: React.FC = () => {
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch('/BatchList.json')
+    // Replace this with the actual API URL
+    fetch('http://localhost:8080/api/v1/batches')
       .then((response) => response.json())
-      .then((data) => setBatches(data.batches))
+      .then((data) => setBatches(data))
       .catch((error) => console.error('Error fetching batches:', error));
   }, []);
 
@@ -71,8 +73,8 @@ const BatchList: React.FC = () => {
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText
-          primary={batch.name}
-          secondary={`Trainees: ${batch.traineeCount} | Type: ${batch.type}`}
+          primary= {`ILP 2023 ${batch.batchName}`}
+          secondary={`Start: ${new Date(batch.startDate).toLocaleDateString()} | End: ${new Date(batch.endDate).toLocaleDateString()}`}
           primaryTypographyProps={{
             variant: 'h6',
             sx: { fontSize: { xs: '16px', sm: '18px', md: '20px' } }
@@ -87,11 +89,11 @@ const BatchList: React.FC = () => {
           <Typography
             sx={{
               fontSize: { xs: '12px', sm: '14px', md: '16px' },
-              color: batch.status === 'Active' ? 'green' : 'red',
+              color: batch.isActive ? 'green' : 'red',
               mr: 1,
             }}
           >
-            {batch.status}
+            {batch.isActive ? 'Active' : 'Inactive'}
           </Typography>
           <IconButton
             onClick={handleClick}
@@ -106,7 +108,7 @@ const BatchList: React.FC = () => {
             open={open}
             onClose={handleClose}
           >
-            {batch.status === 'Active' ? (
+            {batch.isActive ? (
               <>
                 <MenuItem onClick={handleClose}>Edit</MenuItem>
                 <MenuItem onClick={handleClose}>Disable</MenuItem>

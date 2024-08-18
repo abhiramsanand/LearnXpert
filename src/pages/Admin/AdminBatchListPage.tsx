@@ -30,8 +30,6 @@ const AdminBatchListPage: React.FC = () => {
             </Typography>
             <CreateNewButton />
           </Box>
-
-          {/* Batch List */}
           <BatchList />
         </Box>
       </Container>
