@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BatchSelect from '../../shared components/BatchSelect';
+import BatchSelect from '../../shared components/Admin/BatchSelect';
 import TraineeTable from '../../components/Admin/AdminTrainees/TraineeTable';
 
 const TraineesPage: React.FC = () => {

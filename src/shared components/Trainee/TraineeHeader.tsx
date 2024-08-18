@@ -1,9 +1,7 @@
 import { AppBar, Container, Box } from "@mui/material";
-import {
-  Logout as LogoutIcon,
-} from "@mui/icons-material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
-import NotificationPage from "../pages/Trainee/NotificationPage";
+import NotificationPage from "../../pages/Trainee/NotificationPage";
 import { Link } from "react-router-dom";
 
 const HeaderContainer = styled(AppBar)({
@@ -15,7 +13,7 @@ const HeaderContainer = styled(AppBar)({
   top: 0,
 });
 
-const AdminHeader = () => {
+const TraineeHeader = () => {
   return (
     <>
       <HeaderContainer position="fixed">
@@ -30,9 +28,9 @@ const AdminHeader = () => {
           </Box>
         </Container>
       </HeaderContainer>
-      <Box sx={{ mt: "56px" }}></Box>
+      <Box sx={{ mt: "26px" }}></Box>
     </>
   );
 };
 
-export default AdminHeader;
+export default TraineeHeader;

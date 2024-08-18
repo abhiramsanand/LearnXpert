@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./shared components/Footer";
-import AdminHeader from "./shared components/AdminHeader";
-import Sidebar from "./shared components/AdminSidebar";
+import AdminHeader from "./shared components/Admin/AdminHeader";
+import Sidebar from "./shared components/Admin/AdminSidebar";
 import { Box, CssBaseline } from "@mui/material";
 
 const AdminLayout = () => {

@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./shared components/Footer";
 import { Box, CssBaseline } from "@mui/material";
-import TraineeHeader from "./shared components/TraineeHeader";
-import TraineeSidebar from "./shared components/TraineeSidebar";
+import TraineeHeader from "./shared components/Trainee/TraineeHeader";
+import TraineeSidebar from "./shared components/Trainee/TraineeSidebar";
 
 const TraineeLayout = () => {
   return (
