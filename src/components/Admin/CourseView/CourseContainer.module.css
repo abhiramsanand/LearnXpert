@@ -1,0 +1,40 @@
+.courseDetailsContainer {
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .courseItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: white;
+  }
+  .courseDetailsContainer {
+    padding: 20px;
+  }
+  
+  .batchContainer {
+    margin-bottom: 20px;
+  }
+  
+  .batchTitle {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .dayContainer {
+    margin-bottom: 15px;
+  }
+  
+  .dayTitle {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .dayDuration {
+    font-size: 14px;
+    font-weight: bold;
+    color: #666;
+  }
+    

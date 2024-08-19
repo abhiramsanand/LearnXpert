@@ -1,429 +1,300 @@
 {
   "ILP Dev batch-1": {
-    "Day 1": [
-      { "title": "Introduction to Programming" },
-      { "title": "Basic Algorithms" },
-      { "title": "Introduction to JavaScript" }
-    ],
-    "Day 2": [
-      { "title": "Data Structures" },
-      { "title": "Sorting Algorithms" },
-      { "title": "HTML Basics" }
-    ],
-    "Day 3": [
-      { "title": "Advanced Data Structures" },
-      { "title": "Hash Tables" },
-      { "title": "CSS Fundamentals" }
-    ],
-    "Day 4": [
-      { "title": "Object-Oriented Programming" },
-      { "title": "Design Patterns" },
-      { "title": "JavaScript DOM Manipulation" }
-    ],
-    "Day 5": [
-      { "title": "Databases" },
-      { "title": "SQL Basics" },
-      { "title": "Introduction to SQL" }
-    ],
-    "Day 6": [
-      { "title": "Database Normalization" },
-      { "title": "Advanced SQL Queries" },
-      { "title": "Introduction to MongoDB" }
-    ],
-    "Day 7": [
-      { "title": "Web Development Fundamentals" },
-      { "title": "HTML5 & CSS3" },
-      { "title": "JavaScript Basics" }
-    ],
-    "Day 8": [
-      { "title": "JavaScript Basics" },
-      { "title": "DOM Manipulation" },
-      { "title": "Responsive Design" }
-    ],
-    "Day 9": [
-      { "title": "Front-End Frameworks" },
-      { "title": "Responsive Design" },
-      { "title": "React Basics" }
-    ],
-    "Day 10": [
-      { "title": "Project Work" },
-      { "title": "Course Review" }
-    ],
-    "Day 11": [
-      { "title": "Git and Version Control" },
-      { "title": "Collaboration with Git" }
-    ],
-    "Day 12": [
-      { "title": "Testing Fundamentals" },
-      { "title": "Unit Testing with Jest" }
-    ],
-    "Day 13": [
-      { "title": "APIs and Web Services" },
-      { "title": "RESTful API Basics" }
-    ],
-    "Day 14": [
-      { "title": "Introduction to Agile" },
-      { "title": "Scrum Methodology" }
-    ],
-    "Day 15": [
-      { "title": "Continuous Integration" },
-      { "title": "CI/CD Pipelines" }
-    ],
-    "Day 16": [
-      { "title": "Cloud Computing Basics" },
-      { "title": "Introduction to AWS" }
-    ],
-    "Day 17": [
-      { "title": "Docker Fundamentals" },
-      { "title": "Containerization" }
-    ],
-    "Day 18": [
-      { "title": "Security Best Practices" },
-      { "title": "Web Security Fundamentals" }
-    ],
-    "Day 19": [
-      { "title": "Capstone Project Presentation" },
-      { "title": "Final Review" }
-    ]
+    "Day 1": {
+      "duration": "2 hours",
+      "sessions": [
+        { "title": "Introduction to Programming" },
+        { "title": "Basic Algorithms" },
+        { "title": "Introduction to JavaScript" }
+      ]
+    },
+    "Day 2": {
+      "duration": "4 hours",
+      "sessions": [
+        { "title": "Data Structures" },
+        { "title": "Sorting Algorithms" },
+        { "title": "HTML Basics" }
+      ]
+    },
+    "Day 3": {
+      "duration": "1 hours",
+      "sessions": [
+        { "title": "Advanced Data Structures" },
+        { "title": "Hash Tables" },
+        { "title": "CSS Fundamentals" }
+      ]
+    },
+    "Day 4": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Object-Oriented Programming" },
+        { "title": "Design Patterns" },
+        { "title": "JavaScript DOM Manipulation" }
+      ]
+    },
+    "Day 5": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Databases" },
+        { "title": "SQL Basics" },
+        { "title": "Introduction to SQL" }
+      ]
+    },
+    "Day 6": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Database Normalization" },
+        { "title": "Advanced SQL Queries" },
+        { "title": "Introduction to MongoDB" }
+      ]
+    },
+    "Day 7": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Web Development Fundamentals" },
+        { "title": "HTML5 & CSS3" },
+        { "title": "JavaScript Basics" }
+      ]
+    },
+    "Day 8": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "JavaScript Basics" },
+        { "title": "DOM Manipulation" },
+        { "title": "Responsive Design" }
+      ]
+    },
+    "Day 9": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Front-End Frameworks" },
+        { "title": "Responsive Design" },
+        { "title": "React Basics" }
+      ]
+    },
+    "Day 10": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Project Work" },
+        { "title": "Course Review" }
+      ]
+    },
+    "Day 11": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Git and Version Control" },
+        { "title": "Collaboration with Git" }
+      ]
+    },
+    "Day 12": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Testing Fundamentals" },
+        { "title": "Unit Testing with Jest" }
+      ]
+    },
+    "Day 13": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "APIs and Web Services" },
+        { "title": "RESTful API Basics" }
+      ]
+    },
+    "Day 14": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Introduction to Agile" },
+        { "title": "Scrum Methodology" }
+      ]
+    },
+    "Day 15": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Continuous Integration" },
+        { "title": "CI/CD Pipelines" }
+      ]
+    },
+    "Day 16": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Cloud Computing Basics" },
+        { "title": "Introduction to AWS" }
+      ]
+    },
+    "Day 17": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Docker Fundamentals" },
+        { "title": "Containerization" }
+      ]
+    },
+    "Day 18": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Security Best Practices" },
+        { "title": "Web Security Fundamentals" }
+      ]
+    },
+    "Day 19": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Capstone Project Presentation" },
+        { "title": "Final Review" }
+      ]
+    }
   },
   "ILP Dev batch-2": {
-    "Day 1": [
-      { "title": "Introduction to Programming" },
-      { "title": "Basic Algorithms" },
-      { "title": "Introduction to JavaScript" }
-    ],
-    "Day 2": [
-      { "title": "Data Structures" },
-      { "title": "Sorting Algorithms" },
-      { "title": "HTML Basics" }
-    ],
-    "Day 3": [
-      { "title": "Advanced Data Structures" },
-      { "title": "Hash Tables" },
-      { "title": "CSS Fundamentals" }
-    ],
-    "Day 4": [
-      { "title": "Object-Oriented Programming" },
-      { "title": "Design Patterns" },
-      { "title": "JavaScript DOM Manipulation" }
-    ],
-    "Day 5": [
-      { "title": "Databases" },
-      { "title": "SQL Basics" },
-      { "title": "Introduction to SQL" }
-    ],
-    "Day 6": [
-      { "title": "Database Normalization" },
-      { "title": "Advanced SQL Queries" },
-      { "title": "Introduction to MongoDB" }
-    ],
-    "Day 7": [
-      { "title": "Web Development Fundamentals" },
-      { "title": "HTML5 & CSS3" },
-      { "title": "JavaScript Basics" }
-    ],
-    "Day 8": [
-      { "title": "JavaScript Basics" },
-      { "title": "DOM Manipulation" },
-      { "title": "Responsive Design" }
-    ],
-    "Day 9": [
-      { "title": "Front-End Frameworks" },
-      { "title": "Responsive Design" },
-      { "title": "React Basics" }
-    ],
-    "Day 10": [
-      { "title": "Project Work" },
-      { "title": "Course Review" }
-    ],
-    "Day 11": [
-      { "title": "Git and Version Control" },
-      { "title": "Collaboration with Git" }
-    ],
-    "Day 12": [
-      { "title": "Testing Fundamentals" },
-      { "title": "Unit Testing with Jest" }
-    ],
-    "Day 13": [
-      { "title": "APIs and Web Services" },
-      { "title": "RESTful API Basics" }
-    ],
-    "Day 14": [
-      { "title": "Introduction to Agile" },
-      { "title": "Scrum Methodology" }
-    ],
-    "Day 15": [
-      { "title": "Continuous Integration" },
-      { "title": "CI/CD Pipelines" }
-    ],
-    "Day 16": [
-      { "title": "Cloud Computing Basics" },
-      { "title": "Introduction to AWS" }
-    ],
-    "Day 17": [
-      { "title": "Docker Fundamentals" },
-      { "title": "Containerization" }
-    ],
-    "Day 18": [
-      { "title": "Security Best Practices" },
-      { "title": "Web Security Fundamentals" }
-    ],
-    "Day 19": [
-      { "title": "Capstone Project Presentation" },
-      { "title": "Final Review" }
-    ]
+    "Day 1": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Introduction to Programming" },
+        { "title": "Basic Algorithms" },
+        { "title": "Introduction to JavaScript" }
+      ]
+    },
+    "Day 2": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Data Structures" },
+        { "title": "Sorting Algorithms" },
+        { "title": "HTML Basics" }
+      ]
+    },
+    "Day 3": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Advanced Data Structures" },
+        { "title": "Hash Tables" },
+        { "title": "CSS Fundamentals" }
+      ]
+    },
+    "Day 4": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Object-Oriented Programming" },
+        { "title": "Design Patterns" },
+        { "title": "JavaScript DOM Manipulation" }
+      ]
+    },
+    "Day 5": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Databases" },
+        { "title": "SQL Basics" },
+        { "title": "Introduction to SQL" }
+      ]
+    },
+    "Day 6": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Database Normalization" },
+        { "title": "Advanced SQL Queries" },
+        { "title": "Introduction to MongoDB" }
+      ]
+    },
+    "Day 7": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Web Development Fundamentals" },
+        { "title": "HTML5 & CSS3" },
+        { "title": "JavaScript Basics" }
+      ]
+    },
+    "Day 8": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "JavaScript Basics" },
+        { "title": "DOM Manipulation" },
+        { "title": "Responsive Design" }
+      ]
+    },
+    "Day 9": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Front-End Frameworks" },
+        { "title": "Responsive Design" },
+        { "title": "React Basics" }
+      ]
+    },
+    "Day 10": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Project Work" },
+        { "title": "Course Review" }
+      ]
+    },
+    "Day 11": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Git and Version Control" },
+        { "title": "Collaboration with Git" }
+      ]
+    },
+    "Day 12": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Testing Fundamentals" },
+        { "title": "Unit Testing with Jest" }
+      ]
+    },
+    "Day 13": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "APIs and Web Services" },
+        { "title": "RESTful API Basics" }
+      ]
+    },
+    "Day 14": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Introduction to Agile" },
+        { "title": "Scrum Methodology" }
+      ]
+    },
+    "Day 15": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Continuous Integration" },
+        { "title": "CI/CD Pipelines" }
+      ]
+    },
+    "Day 16": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Cloud Computing Basics" },
+        { "title": "Introduction to AWS" }
+      ]
+    },
+    "Day 17": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Docker Fundamentals" },
+        { "title": "Containerization" }
+      ]
+    },
+    "Day 18": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Security Best Practices" },
+        { "title": "Web Security Fundamentals" }
+      ]
+    },
+    "Day 19": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Capstone Project Presentation" },
+        { "title": "Final Review" }
+      ]
+    }
   },
   "ILP BA batch-1": {
-    "Day 1": [
-      { "title": "Business Analysis Overview" },
-      { "title": "Introduction to BA Tools" },
-      { "title": "Requirements Gathering" }
-    ],
-    "Day 2": [
-      { "title": "Stakeholder Management" },
-      { "title": "Business Process Modeling" },
-      { "title": "UML Basics" }
-    ],
-    "Day 3": [
-      { "title": "Requirements Analysis" },
-      { "title": "Data Modeling" },
-      { "title": "Use Case Analysis" }
-    ],
-    "Day 4": [
-      { "title": "Agile Methodology" },
-      { "title": "Scrum Framework" },
-      { "title": "Kanban Basics" }
-    ],
-    "Day 5": [
-      { "title": "Business Case Development" },
-      { "title": "Cost-Benefit Analysis" }
-    ],
-    "Day 6": [
-      { "title": "Change Management" },
-      { "title": "Risk Management" },
-      { "title": "Requirements Validation" }
-    ],
-    "Day 7": [
-      { "title": "Data Analysis Techniques" },
-      { "title": "Excel for Data Analysis" }
-    ],
-    "Day 8": [
-      { "title": "Business Intelligence Tools" },
-      { "title": "Introduction to BI" }
-    ],
-    "Day 9": [
-      { "title": "SQL for Business Analysts" },
-      { "title": "Advanced SQL Queries" }
-    ],
-    "Day 10": [
-      { "title": "Project Management Basics" },
-      { "title": "Introduction to PM Tools" }
-    ],
-    "Day 11": [
-      { "title": "Business Reporting" },
-      { "title": "Creating Effective Reports" }
-    ],
-    "Day 12": [
-      { "title": "User Experience Design" },
-      { "title": "UX Principles" }
-    ],
-    "Day 13": [
-      { "title": "Customer Journey Mapping" },
-      { "title": "Design Thinking" }
-    ],
-    "Day 14": [
-      { "title": "Business Process Improvement" },
-      { "title": "Lean Six Sigma Overview" }
-    ],
-    "Day 15": [
-      { "title": "Negotiation Skills" },
-      { "title": "Effective Communication" }
-    ],
-    "Day 16": [
-      { "title": "Project Scope Management" },
-      { "title": "Scope Creep Management" }
-    ],
-    "Day 17": [
-      { "title": "Requirements Traceability" },
-      { "title": "Documentation Best Practices" }
-    ],
-    "Day 18": [
-      { "title": "Capstone Project" },
-      { "title": "Project Presentation" }
-    ],
-    "Day 19": [
-      { "title": "Final Review" },
-      { "title": "Feedback and Evaluation" }
-    ]
-  },
-  "ILP Dev batch-3": {
-    "Day 1": [
-      { "title": "Introduction to Programming" },
-      { "title": "Basic Algorithms" },
-      { "title": "Introduction to JavaScript" }
-    ],
-    "Day 2": [
-      { "title": "Data Structures" },
-      { "title": "Sorting Algorithms" },
-      { "title": "HTML Basics" }
-    ],
-    "Day 3": [
-      { "title": "Advanced Data Structures" },
-      { "title": "Hash Tables" },
-      { "title": "CSS Fundamentals" }
-    ],
-    "Day 4": [
-      { "title": "Object-Oriented Programming" },
-      { "title": "Design Patterns" },
-      { "title": "JavaScript DOM Manipulation" }
-    ],
-    "Day 5": [
-      { "title": "Databases" },
-      { "title": "SQL Basics" },
-      { "title": "Introduction to SQL" }
-    ],
-    "Day 6": [
-      { "title": "Database Normalization" },
-      { "title": "Advanced SQL Queries" },
-      { "title": "Introduction to MongoDB" }
-    ],
-    "Day 7": [
-      { "title": "Web Development Fundamentals" },
-      { "title": "HTML5 & CSS3" },
-      { "title": "JavaScript Basics" }
-    ],
-    "Day 8": [
-      { "title": "JavaScript Basics" },
-      { "title": "DOM Manipulation" },
-      { "title": "Responsive Design" }
-    ],
-    "Day 9": [
-      { "title": "Front-End Frameworks" },
-      { "title": "Responsive Design" },
-      { "title": "React Basics" }
-    ],
-    "Day 10": [
-      { "title": "Project Work" },
-      { "title": "Course Review" }
-    ],
-    "Day 11": [
-      { "title": "Git and Version Control" },
-      { "title": "Collaboration with Git" }
-    ],
-    "Day 12": [
-      { "title": "Testing Fundamentals" },
-      { "title": "Unit Testing with Jest" }
-    ],
-    "Day 13": [
-      { "title": "APIs and Web Services" },
-      { "title": "RESTful API Basics" }
-    ],
-    "Day 14": [
-      { "title": "Introduction to Agile" },
-      { "title": "Scrum Methodology" }
-    ],
-    "Day 15": [
-      { "title": "Continuous Integration" },
-      { "title": "CI/CD Pipelines" }
-    ],
-    "Day 16": [
-      { "title": "Cloud Computing Basics" },
-      { "title": "Introduction to AWS" }
-    ],
-    "Day 17": [
-      { "title": "Docker Fundamentals" },
-      { "title": "Containerization" }
-    ],
-    "Day 18": [
-      { "title": "Security Best Practices" },
-      { "title": "Web Security Fundamentals" }
-    ],
-    "Day 19": [
-      { "title": "Capstone Project Presentation" },
-      { "title": "Final Review" }
-    ]
-  },
-  "ILP BA batch-2": {
-    "Day 1": [
-      { "title": "Business Analysis Overview" },
-      { "title": "Introduction to BA Tools" },
-      { "title": "Requirements Gathering" }
-    ],
-    "Day 2": [
-      { "title": "Stakeholder Management" },
-      { "title": "Business Process Modeling" },
-      { "title": "UML Basics" }
-    ],
-    "Day 3": [
-      { "title": "Requirements Analysis" },
-      { "title": "Data Modeling" },
-      { "title": "Use Case Analysis" }
-    ],
-    "Day 4": [
-      { "title": "Agile Methodology" },
-      { "title": "Scrum Framework" },
-      { "title": "Kanban Basics" }
-    ],
-    "Day 5": [
-      { "title": "Business Case Development" },
-      { "title": "Cost-Benefit Analysis" }
-    ],
-    "Day 6": [
-      { "title": "Change Management" },
-      { "title": "Risk Management" },
-      { "title": "Requirements Validation" }
-    ],
-    "Day 7": [
-      { "title": "Data Analysis Techniques" },
-      { "title": "Excel for Data Analysis" }
-    ],
-    "Day 8": [
-      { "title": "Business Intelligence Tools" },
-      { "title": "Introduction to BI" }
-    ],
-    "Day 9": [
-      { "title": "SQL for Business Analysts" },
-      { "title": "Advanced SQL Queries" }
-    ],
-    "Day 10": [
-      { "title": "Project Management Basics" },
-      { "title": "Introduction to PM Tools" }
-    ],
-    "Day 11": [
-      { "title": "Business Reporting" },
-      { "title": "Creating Effective Reports" }
-    ],
-    "Day 12": [
-      { "title": "User Experience Design" },
-      { "title": "UX Principles" }
-    ],
-    "Day 13": [
-      { "title": "Customer Journey Mapping" },
-      { "title": "Design Thinking" }
-    ],
-    "Day 14": [
-      { "title": "Business Process Improvement" },
-      { "title": "Lean Six Sigma Overview" }
-    ],
-    "Day 15": [
-      { "title": "Negotiation Skills" },
-      { "title": "Effective Communication" }
-    ],
-    "Day 16": [
-      { "title": "Project Scope Management" },
-      { "title": "Scope Creep Management" }
-    ],
-    "Day 17": [
-      { "title": "Requirements Traceability" },
-      { "title": "Documentation Best Practices" }
-    ],
-    "Day 18": [
-      { "title": "Capstone Project" },
-      { "title": "Project Presentation" }
-    ],
-    "Day 19": [
-      { "title": "Final Review" },
-      { "title": "Feedback and Evaluation" }
-    ]
+    "Day 1": {
+      "duration": "5 hours",
+      "sessions": [
+        { "title": "Business Analysis Overview" },
+        { "title": "Introduction to BA Tools" },
+        { "title": "Requirements Gathering" }
+      ]
+    }
   }
 }
