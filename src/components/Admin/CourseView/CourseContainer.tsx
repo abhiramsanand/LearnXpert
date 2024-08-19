@@ -1,47 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, LinearProgress, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CourseDetails from './CourseDetails';
+import styles from './CourseContainer.module.css'; // Import the CSS module
+
+interface CourseData {
+  courseName: string;
+  dayNumber: number;
+  batchName: string;
+  courseDuration: string;
+}
 
 const CourseContainer = () => {
   const [selectedBatch, setSelectedBatch] = useState<string | null>(null);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [batchData, setBatchData] = useState<any>(null);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [batchData, setBatchData] = useState<Map<string, any>>(new Map());
   const [daysData, setDaysData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/AdminCourse.json')
+    fetch('http://localhost:8080/api/v1/batches/daywise-courses')
       .then((response) => response.json())
-      .then((data) => {
-        setBatchData(data);
+      .then((data: CourseData[]) => {
+        const transformedData = data.reduce((acc, item) => {
+          if (!acc[item.batchName]) {
+            acc[item.batchName] = {};
+          }
+          if (!acc[item.batchName][item.dayNumber]) {
+            acc[item.batchName][item.dayNumber] = {
+              duration: item.courseDuration,
+              sessions: []
+            };
+          }
+          acc[item.batchName][item.dayNumber].sessions.push({ title: item.courseName });
+          return acc;
+        }, {} as Record<string, Record<number, { duration: string, sessions: { title: string }[] }>>);
+
+        setBatchData(new Map(Object.entries(transformedData)));
         if (selectedBatch) {
-          setDaysData(data[selectedBatch]);
+          setDaysData(transformedData[selectedBatch]);
         }
       })
-      .catch((error) => console.error('Error fetching the JSON data:', error));
+      .catch((error) => console.error('Error fetching the API data:', error));
   }, [selectedBatch]);
 
   const handleBatchChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const batch = event.target.value as string;
     setSelectedBatch(batch);
-    setDaysData(batchData ? batchData[batch] : null);
+    setDaysData(batchData.get(batch) || null);
     setSelectedDay(null); // Reset selected day when batch changes
   };
 
-  const days = daysData ? Object.keys(daysData) : [];
-
-  const calculateTotalProgress = (day: string): number => {
-    if (!daysData) return 0;
-
-    const dayData = daysData[day];
-    if (!dayData || dayData.sessions.length === 0) return 0;
-
-    // Assuming each session's completion is known, adjust accordingly
-    return 100; // Placeholder for total progress calculation
-  };
+  const days = daysData ? Object.keys(daysData).map(Number) : [];
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box className={styles.outerContainer}>
       <FormControl fullWidth sx={{ marginBottom: '20px' }}>
         <InputLabel id="batch-select-label">Select Batch</InputLabel>
         <Select
@@ -51,14 +63,14 @@ const CourseContainer = () => {
           displayEmpty
         >
           <MenuItem value="" disabled>Select Batch</MenuItem>
-          {batchData && Object.keys(batchData).map(batch => (
+          {Array.from(batchData.keys()).map(batch => (
             <MenuItem key={batch} value={batch}>{batch}</MenuItem>
           ))}
         </Select>
       </FormControl>
 
       {selectedBatch && (
-        <Box>
+        <Box className={styles.scrollableDaysContainer}>
           {days.map((day) => (
             <Accordion
               key={day}
@@ -71,7 +83,7 @@ const CourseContainer = () => {
                 sx={{ backgroundColor: 'white', border: '1px solid #D1B2FF', borderRadius: '8px', padding: '0' }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                  <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{day}</Typography>
+                  <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{`Day ${day}`}</Typography>
                   <Typography variant="body2" sx={{ fontSize: '16px', fontWeight: 'bold', marginRight: '7%' }}>
                     {daysData[day].duration}
                   </Typography>
