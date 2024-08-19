@@ -7,6 +7,7 @@
   background-color: #F9F9F9;
 }
 
+/* CourseContainer.module.css */
 .outerContainer {
   border: 2px solid #A54BFF;
   border-radius: 8px;
@@ -15,8 +16,8 @@
   display: flex;
   flex-direction: column;
   height: calc(80vh - 50px); /* Adjusted height */
-  width: 80%;
-  max-width: 700px;
+  width: 100%; /* Increased width */
+  max-width: 1000px; /* Increased max-width */
   overflow: hidden;
 }
 
@@ -27,4 +28,5 @@
   border-right: 1px solid #ddd;
   height: 100%; /* Ensure it takes up the remaining space */
 }
+
 
