@@ -1,104 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@mui/material';
-import { styled } from '@mui/system';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, LinearProgress, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DayAccordion from './DayAccordian';
-
-// Define a basic theme with custom colors
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#8061C3', // Main color
-    },
-    secondary: {
-      main: '#8061C3', // Lighter shade
-    },
-  },
-});
-
-// Define types for course and day data
-interface Course {
-  title: string;
-}
-
-interface DayData {
-  sessions: Course[];
-  duration: string; // Changed to string to match JSON structure
-}
-
-interface DaysData {
-  [key: string]: DayData;
-}
-
-// Container for the outer layout
-const OuterContainer = styled(Box)({
-  border: '2px solid #8061C3',
-  borderRadius: '8px',
-  padding: '15px',
-  margin: '19px auto', // Add margin top to create space
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'calc(90vh - 100px)', // Adjust height based on header/footer height
-  width: '100%',
-  maxWidth: '1000px',
-  overflow: 'hidden',
-});
-
-// Container for scrolling days
-const ScrollableDaysContainer = styled(Box)({
-  flex: '1',
-  overflowY: 'auto', // Enable vertical scrolling
-  paddingRight: '5px',
-  borderRight: '1px solid #ddd',
-  borderRadius: '8px',
-  '&::-webkit-scrollbar': {
-    width: '6px',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: '#A54BFF',
-    borderRadius: '8px',
-  },
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: '#F0F0F0',
-    borderRadius: '8px',
-  },
-});
+import CourseDetails from './CourseDetails';
 
 const CourseContainer = () => {
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [daysData, setDaysData] = useState<DaysData | null>(null);
+  const [batchData, setBatchData] = useState<any>(null);
+  const [daysData, setDaysData] = useState<any>(null);
 
   useEffect(() => {
-    // Fetch the JSON data from public directory
-    fetch('/courselist.json')
+    fetch('/AdminCourse.json')
       .then((response) => response.json())
-      .then((data) => setDaysData(data["ILP Dev batch-1"])) // Adjusted to specific batch for example
+      .then((data) => {
+        setBatchData(data);
+        if (selectedBatch) {
+          setDaysData(data[selectedBatch]);
+        }
+      })
       .catch((error) => console.error('Error fetching the JSON data:', error));
-  }, []);
+  }, [selectedBatch]);
+
+  const handleBatchChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const batch = event.target.value as string;
+    setSelectedBatch(batch);
+    setDaysData(batchData ? batchData[batch] : null);
+    setSelectedDay(null); // Reset selected day when batch changes
+  };
 
   const days = daysData ? Object.keys(daysData) : [];
 
+  const calculateTotalProgress = (day: string): number => {
+    if (!daysData) return 0;
+
+    const dayData = daysData[day];
+    if (!dayData || dayData.sessions.length === 0) return 0;
+
+    // Assuming each session's completion is known, adjust accordingly
+    return 100; // Placeholder for total progress calculation
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <OuterContainer>
-        <ScrollableDaysContainer>
-          {days.map((day) => (
-            <DayAccordion
-              key={day}
-              day={day}
-              isSelected={selectedDay === day}
-              onToggle={() => setSelectedDay(selectedDay === day ? null : day)}
-              totalHours={daysData ? daysData[day].duration : '0 hours'}
-              courses={daysData ? daysData[day].sessions : []}
-              isDetailsVisible={selectedDay === day}
-            />
+    <Box sx={{ padding: '20px' }}>
+      <FormControl fullWidth sx={{ marginBottom: '20px' }}>
+        <InputLabel id="batch-select-label">Select Batch</InputLabel>
+        <Select
+          labelId="batch-select-label"
+          value={selectedBatch || ''}
+          onChange={handleBatchChange}
+          displayEmpty
+        >
+          <MenuItem value="" disabled>Select Batch</MenuItem>
+          {batchData && Object.keys(batchData).map(batch => (
+            <MenuItem key={batch} value={batch}>{batch}</MenuItem>
           ))}
-        </ScrollableDaysContainer>
-      </OuterContainer>
-    </ThemeProvider>
+        </Select>
+      </FormControl>
+
+      {selectedBatch && (
+        <Box>
+          {days.map((day) => (
+            <Accordion
+              key={day}
+              expanded={selectedDay === day}
+              onChange={() => setSelectedDay(selectedDay === day ? null : day)}
+              sx={{ marginBottom: '8px' }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{ backgroundColor: 'white', border: '1px solid #D1B2FF', borderRadius: '8px', padding: '0' }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                  <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{day}</Typography>
+                  <Typography variant="body2" sx={{ fontSize: '16px', fontWeight: 'bold', marginRight: '7%' }}>
+                    {daysData[day].duration}
+                  </Typography>
+                </Box>
+              </AccordionSummary>
+              <AccordionDetails>
+                {selectedDay === day && daysData ? (
+                  <CourseDetails courses={daysData[day].sessions} />
+                ) : (
+                  <Typography variant="h6">Select a day to see course details</Typography>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </Box>
+      )}
+    </Box>
   );
 };
 
