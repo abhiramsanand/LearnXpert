@@ -2,6 +2,7 @@
   "batches": [
     {
       "batch": "Batch 1",
+      "status":"completed",
       "assessments": [
         {
           "assessmentName": "Assessment 1",
@@ -79,6 +80,7 @@
     },
     {
       "batch": "Batch 2",
+      "status":"ongoing",
       "assessments": [
         {
           "assessmentName": "Assessment 9",
@@ -117,6 +119,7 @@
     },
     {
       "batch": "Batch 3",
+      "status":"completed",
       "assessments": [
         {
           "assessmentName": "Assessment 1",
@@ -144,6 +147,7 @@
     },
     {
       "batch": "Batch 4",
+      "status":"completed",
       "assessments": [
         {
           "assessmentName": "Assessment 1",

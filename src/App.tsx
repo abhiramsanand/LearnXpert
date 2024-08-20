@@ -14,6 +14,7 @@ import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
+import AdminCoursePage from "./pages/Admin/AdminCoursePage";
 
 import {
   Chart as ChartJS,
@@ -99,6 +100,7 @@ function App() {
           <Route path="/Admin-DailyReport" element={<AdminReportPage />} />
           <Route path="/Admin-Trainees" element={<TraineesPage />} />
         <Route path="/trainee/:id" element={<TraineeReport />} />
+        <Route path="/Admin-Courses" element={<AdminCoursePage />} />
         </Route>
       </Routes>
     </Router>
