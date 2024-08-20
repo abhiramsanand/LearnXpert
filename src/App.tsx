@@ -37,6 +37,7 @@ import BatchForm from "./components/Admin/BatchCreate1/BatchForm";
 import AdminReportPage from "./pages/Admin/AdminReportPage";
 import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeReportPage";
+import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
 
 
 ChartJS.register(
@@ -65,6 +66,7 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
+          <Route path="Trainee-AssessmentDisplay" element={<AssessmentDisplayPage />} />
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
