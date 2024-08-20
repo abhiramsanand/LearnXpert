@@ -19,8 +19,11 @@ const theme = createTheme({
 
 // Define types for course and day data
 interface Course {
-  title: string;
-  completed: number;
+  courseName: string;
+  dayNumber: number;
+  courseDuration: string;
+  traineeDuration: number;
+  completionPercentage: number;
 }
 
 interface DayData {
@@ -69,8 +72,6 @@ const ScrollableDaysContainer = styled(Box)({
 // Container for displaying course details
 const CourseDetailsContainer = styled(Box)({
   padding: '12px',
-//   border: '1px solid #ddd',
-//   borderRadius: '8px',
   backgroundColor: 'white',
 });
 
@@ -96,10 +97,36 @@ const CourseContainer = () => {
   const [daysData, setDaysData] = useState<DaysData | null>(null);
 
   useEffect(() => {
-    // Fetch the JSON data from public directory
-    fetch('/courselist.json')
+    // Fetch the JSON data from the API
+    fetch('http://localhost:8080/api/v1/traineeprogress/courseprogress/6') // Replace with dynamic ID as needed
       .then((response) => response.json())
-      .then((data) => setDaysData(data.Days))
+      .then((data) => {
+        const processedData: DaysData = {};
+
+        data.forEach((item: Course) => {
+          const day = `Day ${item.dayNumber}`;
+
+          if (!processedData[day]) {
+            processedData[day] = { courses: [], totalTime: 0 };
+          }
+
+          // Round completionPercentage to 2 decimal points
+          const roundedPercentage = parseFloat(item.completionPercentage.toFixed(2));
+
+          processedData[day].courses.push({
+            courseName: item.courseName,
+            dayNumber: item.dayNumber,
+            courseDuration: item.courseDuration,
+            traineeDuration: item.traineeDuration,
+            completionPercentage: roundedPercentage,
+          });
+
+          // Add total time for each day
+          processedData[day].totalTime += parseFloat(item.courseDuration.split(' ')[0]); // Extract hours and sum up
+        });
+
+        setDaysData(processedData);
+      })
       .catch((error) => console.error('Error fetching the JSON data:', error));
   }, []);
 
@@ -110,7 +137,7 @@ const CourseContainer = () => {
     const previousDay = `Day ${dayIndex}`;
     const previousDayData = daysData ? daysData[previousDay] : null;
     if (!previousDayData) return true;
-    return previousDayData.courses.some((course) => course.completed < 100);
+    return previousDayData.courses.some((course) => course.completionPercentage < 100);
   };
 
   // Calculate total progress percentage for a given day
@@ -120,7 +147,7 @@ const CourseContainer = () => {
     const dayData = daysData ? daysData[day] : null;
     if (!dayData || dayData.courses.length === 0) return 0;
 
-    const totalCompleted = dayData.courses.reduce((acc, course) => acc + course.completed, 0);
+    const totalCompleted = dayData.courses.reduce((acc, course) => acc + course.completionPercentage, 0);
     const totalCourses = dayData.courses.length;
     return Math.round(totalCompleted / totalCourses);
   };
@@ -161,9 +188,9 @@ const CourseContainer = () => {
                         <LinearProgress
                           variant="determinate"
                           value={calculateTotalProgress(day)}
-                          sx={{ flex: 1, height: '8px', borderRadius: '4px', backgroundColor: '#F0F0F0', maxWidth: '20%',marginLeft: '40%', '& .MuiLinearProgress-bar': { backgroundColor: '#8518FF' } }}
+                          sx={{ flex: 1, height: '8px', borderRadius: '4px', backgroundColor: '#F0F0F0', maxWidth: '20%', marginLeft: '40%', '& .MuiLinearProgress-bar': { backgroundColor: '#8518FF' } }}
                         />
-                        <Typography variant="body2" sx={{ color: '#8518FF', fontWeight: 'bold',marginLeft:'20px' }}>
+                        <Typography variant="body2" sx={{ color: '#8518FF', fontWeight: 'bold', marginLeft: '20px' }}>
                           {calculateTotalProgress(day)}%
                         </Typography>
                       </Box>
@@ -180,21 +207,21 @@ const CourseContainer = () => {
                         {daysData[day].courses.map((course, index) => (
                           <Grid item xs={12} key={index}>
                             <Box sx={{ border: '1px solid #ddd', borderRadius: '8px', padding: '12px', backgroundColor: '#E6E6FA', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                              <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{course.title}</Typography>
+                              <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{course.courseName}</Typography>
                               <Box sx={{ flex: 1, marginLeft: '70%', display: 'flex', alignItems: 'center', }}>
                                 <Box sx={{ flex: 1, position: 'relative', height: '8px', borderRadius: '4px', border: '1px solid #A54BFF', backgroundColor: '#F0F0F0', maxWidth: '200px' }}>
-                                  <LinearProgress variant="determinate" value={course.completed} sx={{ height: '100%', borderRadius: '4px', '& .MuiLinearProgress-bar': { backgroundColor: '#8518FF' } }} />
+                                  <LinearProgress variant="determinate" value={course.completionPercentage} sx={{ height: '100%', borderRadius: '4px', '& .MuiLinearProgress-bar': { backgroundColor: '#8518FF' } }} />
                                 </Box>
-                                <Typography variant="body2" sx={{ marginLeft: '12px', color: '#8518FF', fontWeight: 'bold' }}>{course.completed}%</Typography>
+                                <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', marginLeft: '8px' }}>
+                                  {course.completionPercentage}%
+                                </Typography>
                               </Box>
                             </Box>
                           </Grid>
                         ))}
                       </Grid>
                     </CourseDetailsContainer>
-                  ) : (
-                    <Typography variant="h6">Select a day to see course details</Typography>
-                  )}
+                  ) : null}
                 </AccordionDetails>
               </Accordion>
             );
