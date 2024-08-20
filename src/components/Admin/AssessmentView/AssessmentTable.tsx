@@ -1,10 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
-import SortOptions from './SortOptions';
-import AddAssessmentButton from './AddAssessmentButton';
+import React, { useEffect, useState } from 'react';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
 
-interface StudentAttended {
+interface AssessmentsTableProps {
+  batchId: number;
+}
+
+interface Student {
   name: string;
   status: string;
   marks: number;
@@ -15,75 +16,57 @@ interface Assessment {
   status: string;
   studentsAttended: {
     count: number;
-    students: StudentAttended[];
+    students: Student[];
   };
 }
 
-interface AssessmentTableProps {
+interface Batch {
+  batchId: number;
+  status: string;
   assessments: Assessment[];
-  sortOption: string;
-  onSortChange: (sort: string) => void;
 }
 
-const AssessmentTable: React.FC<AssessmentTableProps> = ({ assessments, sortOption, onSortChange }) => {
-  const filteredAssessments = sortOption === 'all'
-    ? assessments
-    : assessments.filter(assessment => assessment.status.toLowerCase() === sortOption);
+const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+
+  useEffect(() => {
+    fetch('/AssessmentList.json')
+      .then((response) => response.json())
+      .then((data) => {
+        const batch = data.batches.find((b: Batch) => b.batchId === batchId);
+        if (batch) {
+          setAssessments(batch.assessments);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching assessments data:', error);
+      });
+  }, [batchId]);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, marginRight: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SortOptions currentSort={sortOption} onSortChange={onSortChange} />
-        </div>
-        <AddAssessmentButton />
-      </div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>#</TableCell>
-              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Assessment Name</TableCell>
-              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Status</TableCell>
-              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Students Attended</TableCell>
+    <Box>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>#</TableCell>
+            <TableCell>Assessment Name</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Trainees Attended</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {assessments.map((assessment, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell> {/* Index column */}
+              <TableCell>{assessment.assessmentName}</TableCell>
+              <TableCell>{assessment.status}</TableCell>
+              <TableCell>{assessment.studentsAttended.count}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredAssessments.map((assessment, index) => (
-              <TableRow key={assessment.assessmentName}>
-                <TableCell style={{ fontSize: '12px' }}>{index + 1}</TableCell>
-                <TableCell style={{ fontSize: '12px' }}>
-                  <Typography
-                    component={Link}
-                    to={`/assignment/${assessment.assessmentName}`}
-                    style={{ textDecoration: 'none', color: 'inherit', fontSize: '12px' }}
-                  >
-                    {assessment.assessmentName}
-                  </Typography>
-                </TableCell>
-                <TableCell style={{ color: getStatusColor(assessment.status), fontSize: '12px' }}>
-                  {assessment.status}
-                </TableCell>
-                <TableCell style={{ fontSize: '12px' }}>{assessment.studentsAttended.count}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+          ))}
+        </TableBody>
+      </Table>
+    </Box>
   );
 };
 
-// Helper function to get status color
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case 'Active':
-      return 'green';
-    case 'Completed':
-      return 'grey';
-    default:
-      return 'black';
-  }
-};
-
-export default AssessmentTable;
+export default AssessmentsTable;

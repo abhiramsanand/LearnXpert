@@ -1,13 +1,17 @@
-import { Container } from '@mui/material';
-import  AssessmentTabs from '../../components/Admin/AssessmentView/AssessmentTabs';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import BatchSelect from '../../shared components/Admin/BatchSelect';
+import AssessmentsTable from '../../components/Admin/AssessmentView/AssessmentTable';
 
+const AssessmentsPage: React.FC = () => {
+  const [selectedBatch, setSelectedBatch] = useState<number>(1);
 
-const AdminAssessmentViewPage = () => {
   return (
-    <Container sx={{mt: 6}}>
-       <AssessmentTabs />
-    </Container>
-  )
-}
+    <Box>
+      <BatchSelect selectedBatch={selectedBatch} onBatchSelect={setSelectedBatch} />
+      {selectedBatch !== 0 && <AssessmentsTable batchId={selectedBatch} />}
+    </Box>
+  );
+};
 
-export default AdminAssessmentViewPage
+export default AssessmentsPage;
