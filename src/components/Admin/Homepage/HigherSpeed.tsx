@@ -11,16 +11,19 @@ interface HigherSpeedProps {
 }
 
 const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
-  const [speedPercentage, setSpeedPercentage] = useState<number>(70);
+  const [speedPercentage, setSpeedPercentage] = useState<number>(0);
 
   useEffect(() => {
-    const batchData: Record<number, number> = {
-      1: 70,
-      2: 60,
-      3: 50,
-      4: 40,
-    };
-    setSpeedPercentage(batchData[selectedBatch] || 70);
+    if (selectedBatch) {
+      fetch(`http://localhost:8080/api/v1/accelerated?batchId=${selectedBatch}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setSpeedPercentage(data.percentage);
+        })
+        .catch((error) => {
+          console.error('Error fetching percentage data:', error);
+        });
+    }
   }, [selectedBatch]);
 
   const data = {
@@ -31,7 +34,6 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
         backgroundColor: ["#8061C3", "#ffffff"],
       },
     ],
- 
   };
 
   const options = {
@@ -54,6 +56,7 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       boxShadow={3}
       height="190px"
       width="27%"
+      position="relative"
     >
       <Box width="100%" height="70%">
         <Doughnut data={data} options={options} />
@@ -61,14 +64,16 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       <Box
         sx={{
           position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "column",
-          justifyItems: "center",
           alignItems: "center",
         }}
       >
         <Typography sx={{ fontSize: "7px", color: "#000000" }}>
-          Trainee Days Completed
+          Accelerated Trainees
         </Typography>
         <Typography sx={{ fontSize: "20px", color: "black" }}>
           {speedPercentage}%

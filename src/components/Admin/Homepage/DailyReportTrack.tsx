@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Box, Typography, Button } from '@mui/material';
@@ -19,13 +18,16 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(70);
 
   useEffect(() => {
-    const batchData: Record<number, number> = {
-      1: 80,
-      2: 90,
-      3: 50,
-      4: 100,
-    };
-    setSpeedPercentage(batchData[selectedBatch] || 70);
+    if (selectedBatch) {
+      fetch(`http://localhost:8080/api/v1/reports?batchId=${selectedBatch}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setSpeedPercentage(data.percentage);
+        })
+        .catch((error) => {
+          console.error('Error fetching percentage data:', error);
+        });
+    }
   }, [selectedBatch]);
 
   const data = {
@@ -36,7 +38,6 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
         backgroundColor: ["#8061C3", "#ffffff"],
       },
     ],
- 
   };
 
   const options = {
@@ -59,7 +60,7 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       boxShadow={3}
       height="190px"
       width="27%"
-      position="relative" 
+      position="relative"
     >
       <Box width="100%" height="70%">
         <Doughnut data={data} options={options} />
@@ -76,7 +77,7 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
         }}
       >
         <Typography sx={{ fontSize: "7px", color: "#000000" }}>
-          Trainee Days Completed
+          Pending Daily Reports
         </Typography>
         <Typography sx={{ fontSize: "20px", color: "black" }}>
           {speedPercentage}%
