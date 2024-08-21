@@ -92,13 +92,17 @@ const ProgressContainer = styled(Box)({
   marginRight: '16px',
 });
 
-const CourseContainer = () => {
+interface CourseContainerProps {
+  traineeId: number; // Prop for trainee ID
+}
+
+const CourseContainer: React.FC<CourseContainerProps> = ({ traineeId }) => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [daysData, setDaysData] = useState<DaysData | null>(null);
 
   useEffect(() => {
-    // Fetch the JSON data from the API
-    fetch('http://localhost:8080/api/v1/traineeprogress/courseprogress/6') // Replace with dynamic ID as needed
+    // Fetch the JSON data from the API based on traineeId
+    fetch(`http://localhost:8080/api/v1/traineeprogress/courseprogress/${traineeId}`)
       .then((response) => response.json())
       .then((data) => {
         const processedData: DaysData = {};
@@ -128,7 +132,7 @@ const CourseContainer = () => {
         setDaysData(processedData);
       })
       .catch((error) => console.error('Error fetching the JSON data:', error));
-  }, []);
+  }, [traineeId]); // Dependency on traineeId
 
   const days = daysData ? Object.keys(daysData) : [];
 
