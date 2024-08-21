@@ -1,11 +1,47 @@
-import React from "react";
-import { Box, Button, TextField, Typography, Grid } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Typography, Grid } from "@mui/material";
 import leftBackgroundImage from "../../assets/Left Content.png";
 import rightBackgroundImage from "../../assets/Bg.png";
 import exp from "../../assets/exp.png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userName: username, password }),
+      });
+
+      if (response.ok) {
+        const responseText = await response.text();
+        const roleIdMatch = responseText.match(/RoleID: (\d+)/);
+        const roleId = roleIdMatch ? roleIdMatch[1] : null;
+
+        if (roleId === "2") {
+          navigate("/Trainee-Dashboard");
+        } else if (roleId === "1") {
+          navigate("/Admin-Home");
+        } else {
+          console.error("Unhandled roleId:", roleId);
+        }
+      } else {
+        console.error("Login failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+    }
+  };
+
   return (
     <Grid container sx={{ minHeight: "100vh" }}>
       <Grid
@@ -30,7 +66,11 @@ const LoginPage: React.FC = () => {
           }}
         >
           <Typography
-            sx={{ fontSize: "57px", fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
+            sx={{
+              fontSize: "57px",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: "bold",
+            }}
           >
             ILPex{" "}
             <span style={{ fontSize: "10px", marginLeft: "-15px" }}>WEB</span>
@@ -76,74 +116,72 @@ const LoginPage: React.FC = () => {
             alt="Experion Technologies"
             style={{ marginBottom: 24, width: "60px" }}
           />
-          <TextField
-            fullWidth
-            label="USERNAME"
-            variant="outlined"
-            margin="normal"
+          <Box
+            component="form"
             sx={{
-              "& .MuiInputLabel-root": {
-                color: "#8061C3",
-              },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "20px",
-                "& fieldset": {
-                  borderColor: "#8061C3",
-                  backgroundColor: "#F6F1F1",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#8061C3",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#8061C3",
-                },
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            label="PASSWORD"
-            type="password"
-            variant="outlined"
-            margin="normal"
-            sx={{
-              "& .MuiInputLabel-root": {
-                color: "#8061C3",
-              },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "20px",
-                "& fieldset": {
-                  borderColor: "#8061C3",
-                  backgroundColor: "#F6F1F1",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#8061C3",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#8061C3",
-                },
-              },
               mb: 3,
-            }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{
-              mt: 2,
-              mb: 3,
-              backgroundColor: "#8061C3",
-              borderRadius: "20px",
-              "&:hover": {
-                backgroundColor: "#6D4BB6",
+              "& input": {
+                width: "100%",
+                padding: "12px",
+                margin: "8px 0",
+                display: "inline-block",
+                border: "1px solid #8061C3",
+                borderRadius: "20px",
+                boxSizing: "border-box",
+                backgroundColor: "#F6F1F1",
+                fontFamily: "Montserrat, sans-serif",
+              },
+              "& input:focus": {
+                outline: "none",
+                borderColor: "#8061C3",
+                boxShadow: "0 0 5px rgba(128, 97, 195, 0.5)",
+              },
+              "& label": {
+                display: "block",
+                textAlign: "left",
+                color: "#8061C3",
+                fontFamily: "Montserrat, sans-serif",
+                marginBottom: "8px",
               },
             }}
-            component={Link}
-            to="/Trainee-Dashboard"
+            onSubmit={handleLogin}
           >
-            LOGIN
-          </Button>
+            <input
+              placeholder="username"
+              id="username"
+              type="text"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              placeholder="password"
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              type="submit"
+              sx={{
+                mt: 2,
+                mb: 3,
+                backgroundColor: "#8061C3",
+                borderRadius: "20px",
+                "&:hover": {
+                  backgroundColor: "#6D4BB6",
+                },
+              }}
+            >
+              LOGIN
+            </Button>
+          </Box>
           <a
             href="#"
             style={{
