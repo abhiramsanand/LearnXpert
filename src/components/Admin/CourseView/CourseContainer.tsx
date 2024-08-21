@@ -18,10 +18,10 @@ const CourseContainer = () => {
   const [daysData, setDaysData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/v1/batches/daywise-courses')
+    fetch('http://localhost:8080/api/v1/ilpex/batches/daywise-courses')
       .then((response) => response.json())
-      .then((data: CourseData[]) => {
-        const transformedData = data.reduce((acc, item) => {
+      .then((data: { data: CourseData[] }) => {
+        const transformedData = data.data.reduce((acc, item) => {
           if (!acc[item.batchName]) {
             acc[item.batchName] = {};
           }
@@ -54,7 +54,7 @@ const CourseContainer = () => {
 
   return (
     <Box className={styles.outerContainer}>
-      <FormControl fullWidth sx={{ marginBottom: '20px' }}>
+      <FormControl fullWidth sx={{ marginBottom: '20px' }} className={styles.selectBatch}>
         <InputLabel id="batch-select-label">Select Batch</InputLabel>
         <Select
           labelId="batch-select-label"
@@ -76,7 +76,7 @@ const CourseContainer = () => {
               key={day}
               expanded={selectedDay === day}
               onChange={() => setSelectedDay(selectedDay === day ? null : day)}
-              sx={{ marginBottom: '8px' }}
+              className={styles.accordionItem}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}

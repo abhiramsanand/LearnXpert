@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid, LinearProgress } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 
 interface Course {
   title: string;
