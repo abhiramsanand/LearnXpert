@@ -13,9 +13,9 @@ interface QuestionCardProps {
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ questionText, options }) => {
   return (
-    <Card sx={{ mb: 2 }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
+    <Card sx={{ width: '100%', mb: 3, borderRadius: '16px', boxShadow: 3 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Typography variant="h6" gutterBottom sx={{ fontSize: '1rem', mb: 2 }}>
           {questionText}
         </Typography>
         <FormControl component="fieldset">
@@ -24,8 +24,17 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ questionText, options }) =>
               <FormControlLabel
                 key={key}
                 value={key}
-                control={<Radio />}
+                control={<Radio sx={{ '&.Mui-checked': { color: '#d1c4e9' } }} />}
                 label={value}
+                sx={{
+                  backgroundColor: '#eaeaf1',
+                  borderRadius: '8px',
+                  mb: 1,
+                  p: 1,
+                  fontSize: '0.875rem',
+                  color: '#494949',
+                  width: '100%'
+                }}
               />
             ))}
           </RadioGroup>
