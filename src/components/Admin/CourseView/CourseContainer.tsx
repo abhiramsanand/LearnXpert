@@ -18,7 +18,7 @@ const CourseContainer = () => {
   const [daysData, setDaysData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/v1/ilpex/batches/daywise-courses')
+    fetch('http://localhost:8080/api/v1/batches/daywise-courses')
       .then((response) => response.json())
       .then((data: { data: CourseData[] }) => {
         const transformedData = data.data.reduce((acc, item) => {
