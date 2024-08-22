@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, LinearProgress } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LockIcon from '@mui/icons-material/Lock';
-import CourseDetails from './CourseDetails';
+import styles from './CourseContainer.module.css'; // Import the CSS module
 
 interface Course {
   title: string;
@@ -39,7 +38,7 @@ const DayAccordion: React.FC<DayAccordionProps> = ({
       expanded={isSelected}
       onChange={onToggle}
       disabled={shouldLockDay}
-      sx={{ marginBottom: '12px', borderRadius: '8px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}
+      className={styles.accordionItem}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -54,7 +53,6 @@ const DayAccordion: React.FC<DayAccordionProps> = ({
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {shouldLockDay && <LockIcon sx={{ color: '#A54BFF', marginRight: '8px', fontSize: '20px' }} />}
           <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: 'bold' }}>
             {day}
           </Typography>
