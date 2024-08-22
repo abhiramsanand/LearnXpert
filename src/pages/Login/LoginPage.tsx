@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-
+  
     try {
       const response = await fetch("http://localhost:8080/api/v1/users/login", {
         method: "POST",
@@ -21,12 +21,19 @@ const LoginPage: React.FC = () => {
         },
         body: JSON.stringify({ userName: username, password }),
       });
-
+  
       if (response.ok) {
         const responseText = await response.text();
         const roleIdMatch = responseText.match(/RoleID: (\d+)/);
+        const traineeIdMatch = responseText.match(/TraineeID: (\d+)/); // Assuming the response includes traineeId
+  
         const roleId = roleIdMatch ? roleIdMatch[1] : null;
-
+        const traineeId = traineeIdMatch ? traineeIdMatch[1] : null;
+  
+        if (traineeId) {
+          localStorage.setItem("traineeId", traineeId); // Store traineeId in local storage
+        }
+  
         if (roleId === "2") {
           navigate("/Trainee-Dashboard");
         } else if (roleId === "1") {
@@ -41,7 +48,7 @@ const LoginPage: React.FC = () => {
       console.error("An error occurred during login:", error);
     }
   };
-
+  
   return (
     <Grid container sx={{ minHeight: "100vh" }}>
       <Grid
