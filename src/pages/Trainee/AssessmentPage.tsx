@@ -39,6 +39,7 @@ const SidebarHeader = styled('div')({
 });
 
 const NewAssessmentPage: React.FC = () => {
+  
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
   const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending'); // Default to 'pending'
@@ -46,6 +47,7 @@ const NewAssessmentPage: React.FC = () => {
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
 
   useEffect(() => {
+    
     // Fetch completed assessments
     fetch('http://localhost:8080/api/v1/assessments/completed/1')
       .then((response) => response.json())
