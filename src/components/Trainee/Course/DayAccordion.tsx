@@ -31,7 +31,6 @@ const DayAccordion: React.FC<DayAccordionProps> = ({
   courses,
   isDetailsVisible,
 }) => {
-  // Determine if the day should be locked based on the progress or isLocked status
   const shouldLockDay = isLocked || totalProgress === 0;
 
   return (
