@@ -11,8 +11,8 @@ interface Assessment {
   dueDate?: string;
   traineeId: number;
   id: number;
-  dateToBeTaken?: string; // Due date for pending assessments
-  dateTaken?: string; // Submission date for completed assessments
+  dateToBeTaken?: string; 
+  dateTaken?: string; 
 }
 
 const Container = styled('div')({
@@ -39,7 +39,6 @@ const SidebarHeader = styled('div')({
 });
 
 const NewAssessmentPage: React.FC = () => {
-  
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
   const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending'); // Default to 'pending'
@@ -47,9 +46,10 @@ const NewAssessmentPage: React.FC = () => {
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
 
   useEffect(() => {
-    
+    const traineeId = localStorage.getItem('traineeId'); // Retrieve the stored traineeId
+
     // Fetch completed assessments
-    fetch('http://localhost:8080/api/v1/assessments/completed/1')
+    fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`)
       .then((response) => response.json())
       .then((data) => {
         setCompletedAssessments(data);
@@ -58,7 +58,7 @@ const NewAssessmentPage: React.FC = () => {
       .catch((error) => console.error('Error loading completed assessments:', error));
 
     // Fetch pending assessments
-    fetch('http://localhost:8080/api/v1/assessments/pending/1')
+    fetch(`http://localhost:8080/api/v1/assessments/pending/${traineeId}`)
       .then((response) => response.json())
       .then((data) => {
         setPendingAssessments(data);
