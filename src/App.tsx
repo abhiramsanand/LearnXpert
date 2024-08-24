@@ -80,6 +80,8 @@ function App() {
             path="/assignment/:name"
             element={<AdminAssessmentDetailsPage />}
           />
+
+          
           <Route
             path="/Admin-AssessmentCreation"
             element={<AdminAssessmentCreationPage />}

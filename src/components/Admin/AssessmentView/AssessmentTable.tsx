@@ -1,47 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'; // Import Typography
+import axios from 'axios';
 
 interface AssessmentsTableProps {
   batchId: number;
 }
 
-interface Student {
-  name: string;
-  status: string;
-  marks: number;
-}
-
 interface Assessment {
   assessmentName: string;
-  status: string;
-  studentsAttended: {
-    count: number;
-    students: Student[];
-  };
-}
-
-interface Batch {
-  batchId: number;
-  status: string;
-  assessments: Assessment[];
+  assessmentStatus: string;
+  traineeCount: number;
 }
 
 const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/AssessmentList.json')
-      .then((response) => response.json())
-      .then((data) => {
-        const batch = data.batches.find((b: Batch) => b.batchId === batchId);
-        if (batch) {
-          setAssessments(batch.assessments);
-        }
-      })
-      .catch((error) => {
+    const fetchAssessments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/ilpex/assessments/details?batchId=${batchId}`);
+        setAssessments(response.data.data);
+      } catch (error) {
         console.error('Error fetching assessments data:', error);
-      });
+        setError('Failed to fetch assessments. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssessments();
   }, [batchId]);
+
+  if (loading) {
+    return <Typography>Loading assessments...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
     <Box>
@@ -57,10 +55,10 @@ const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
         <TableBody>
           {assessments.map((assessment, index) => (
             <TableRow key={index}>
-              <TableCell>{index + 1}</TableCell> {/* Index column */}
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{assessment.assessmentName}</TableCell>
-              <TableCell>{assessment.status}</TableCell>
-              <TableCell>{assessment.studentsAttended.count}</TableCell>
+              <TableCell>{assessment.assessmentStatus}</TableCell>
+              <TableCell>{assessment.traineeCount}</TableCell>
             </TableRow>
           ))}
         </TableBody>
