@@ -32,6 +32,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       2: { above80: 5, between70and80: 8, between60and70: 15, below60: 7 },
       3: { above80: 4, between70and80: 12, between60and70: 20, below60: 8 },
       4: { above80: 6, between70and80: 14, between60and70: 18, below60: 5 },
+      5: { above80: 6, between70and80: 14, between60and70: 18, below60: 5 },
     };
     setScoreData(batchData[selectedBatch] || batchData[1]);
   }, [selectedBatch]);

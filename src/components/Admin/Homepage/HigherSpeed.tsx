@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Button, Typography } from "@mui/material";
@@ -18,7 +17,9 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       fetch(`http://localhost:8080/api/v1/accelerated?batchId=${selectedBatch}`)
         .then((response) => response.json())
         .then((data) => {
-          setSpeedPercentage(data.percentage);
+          // Round the percentage value to the nearest integer
+          const roundedPercentage = Math.round(data.percentage);
+          setSpeedPercentage(roundedPercentage);
         })
         .catch((error) => {
           console.error('Error fetching percentage data:', error);
