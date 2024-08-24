@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Grid, Pagination } from '@mui/material';
-import AssessmentCard from './AssessmentCard';
+import React, { useState } from "react";
+import { Grid, Pagination } from "@mui/material";
+import AssessmentCard from "./AssessmentCard";
 
 interface AssessmentListProps {
   assessments: {
@@ -15,7 +15,10 @@ interface AssessmentListProps {
   isCompleted: boolean; // Prop to determine if the assessments are completed or pending
 }
 
-const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isCompleted }) => {
+const AssessmentList: React.FC<AssessmentListProps> = ({
+  assessments,
+  isCompleted,
+}) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -23,7 +26,10 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isComplete
     setPage(value);
   };
 
-  const paginatedAssessments = assessments.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const paginatedAssessments = assessments.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   return (
     <div>
@@ -31,10 +37,9 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isComplete
         {paginatedAssessments.map((assessment) => (
           <Grid item xs={12} key={assessment.id}>
             <AssessmentCard
-              title={assessment.assessmentName} // Changed from 'name' to 'assessmentName'
-              description={isCompleted ? 'Completed' : 'Pending'}
-              date={isCompleted ? assessment.dateTaken : assessment.dueDate} // Used the appropriate date field
-              dateLabel={isCompleted ? 'Date of Submission' : 'Due Date'}
+              title={assessment.assessmentName}
+              description={isCompleted ? "Completed" : "Pending"}
+              date={isCompleted ? assessment.dateTaken : assessment.dueDate} // Just pass the date
               score={assessment.score}
             />
           </Grid>
