@@ -10,7 +10,8 @@ interface CompletedAssessmentCardProps {
 const StyledCard = styled(Card)(({ isSelected }: { isSelected: boolean }) => ({
   marginBottom: '24px',
   marginTop: '20px',
-  borderLeft: isSelected ? '5px solid #8061C3' : '5px solid transparent', // Change color and add border
+  height:'12%',
+  borderLeft: isSelected ? '10px solid #8061C3' : '5px solid transparent', // Change color and add border
 }));
 
 const CompletedAssessmentCard: React.FC<CompletedAssessmentCardProps> = ({ onClick, isSelected }) => {
