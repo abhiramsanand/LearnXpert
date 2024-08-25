@@ -1,16 +1,4 @@
 [
-  { "id": 1, "name": "Emma", "email": "emma@example.com", "percipioEmail": "emma.percipio@example.com", "password": "pass1234" },
-  { "id": 2, "name": "Aliya Salim", "email": "aliya.salim@example.com", "percipioEmail": "aliya.percipio@example.com", "password": "pass5678" },
-  { "id": 3, "name": "Athira R Krishnan", "email": "athira.krishnan@example.com", "percipioEmail": "athira.percipio@example.com", "password": "pass91011" },
-  { "id": 4, "name": "Ashna Jamal", "email": "ashna.jamal@example.com", "percipioEmail": "ashna.percipio@example.com", "password": "pass1213" },
-  { "id": 5, "name": "Sahir Nisar", "email": "sahir.nisar@example.com", "percipioEmail": "sahir.percipio@example.com", "password": "pass1415" },
-  { "id": 6, "name": "Sreeson N", "email": "sreeson.n@example.com", "percipioEmail": "sreeson.percipio@example.com", "password": "pass1617" },
-  { "id": 8, "name": "Sarath Sasi", "email": "sarath.sasi@example.com", "percipioEmail": "sarath.percipio@example.com", "password": "pass1819" },
-  { "id": 9, "name": "Emma", "email": "emma@example.com", "percipioEmail": "emma.percipio@example.com", "password": "pass2021" },
-  { "id": 10, "name": "Aliya Salim", "email": "aliya.salim@example.com", "percipioEmail": "aliya.percipio@example.com", "password": "pass2223" },
-  { "id": 11, "name": "Athira R Krishnan", "email": "athira.krishnan@example.com", "percipioEmail": "athira.percipio@example.com", "password": "pass2425" },
-  { "id": 12, "name": "Ashna Jamal", "email": "ashna.jamal@example.com", "percipioEmail": "ashna.percipio@example.com", "password": "pass2627" },
-  { "id": 13, "name": "Sahir Nisar", "email": "sahir.nisar@example.com", "percipioEmail": "sahir.percipio@example.com", "password": "pass2829" },
-  { "id": 14, "name": "Sreeson N", "email": "sreeson.n@example.com", "percipioEmail": "sreeson.percipio@example.com", "password": "pass3031" },
-  { "id": 15, "name": "Sarath Sasi", "email": "sarath.sasi@example.com", "percipioEmail": "sarath.percipio@example.com", "password": "pass3233" }
+  { "id": 1, "name": "Emma", "email": "emma@example.com", "percipioEmail": "emma.percipio@example.com", "password": "pass1234" }
+  
 ]

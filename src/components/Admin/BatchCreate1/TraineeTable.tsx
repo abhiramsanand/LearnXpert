@@ -15,7 +15,7 @@ interface TraineeTableProps {
 
 const TraineeTable: React.FC<TraineeTableProps> = ({ trainees }) => {
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 3;
 
   // Calculate the trainees to display on the current page
   const displayedTrainees = trainees.slice((page - 1) * rowsPerPage, page * rowsPerPage);
