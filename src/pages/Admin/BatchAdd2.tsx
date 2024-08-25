@@ -45,6 +45,10 @@ const BatchAdd2: React.FC = () => {
     setModalOpen(false);
   };
 
+  const handleDeleteTrainee = (id: number) => {
+    setTrainees(trainees.filter((trainee) => trainee.id !== id));
+  };
+
   const handleSubmit = () => {
     // Assuming the API expects a JSON array of trainees
     fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
@@ -104,7 +108,11 @@ const BatchAdd2: React.FC = () => {
             />
           </Box>
 
-          <TraineeTable trainees={trainees} />
+          <TraineeTable
+  trainees={trainees}
+  batchId={batchId} // Ensure this is a valid number
+  onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
+/>
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
             <Button 
@@ -123,36 +131,33 @@ const BatchAdd2: React.FC = () => {
               Go Back
             </Button>
             <Button
-              variant="contained"
-              startIcon={<AddIcon />}
               onClick={() => setModalOpen(true)}
-              sx={{
-                bgcolor: "#8061C3",
-                color: "#ffffff",
-                borderRadius: "4px",
+              variant="outlined"
+              sx={{ 
+                color: "#8061C3", 
+                borderColor: "#8061C3", 
+                borderRadius: "4px", 
                 "&:hover": {
-                  bgcolor: "#D0C7FF",
+                  borderColor: "#D0C7FF",
+                  bgcolor: "white",
                 },
               }}
             >
-              ADD TRAINEE
+              <AddIcon />
+              Add Trainee
             </Button>
-          </Box>
-
-          <Box textAlign="center" sx={{ marginTop: 2 }}>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               sx={{
-                bgcolor: "#8061C3",
-                color: "#ffffff",
+                backgroundColor: "#8061C3",
                 borderRadius: "4px",
                 "&:hover": {
-                  bgcolor: "#D0C7FF",
+                  backgroundColor: "#6a4bc3",
                 },
               }}
-              onClick={handleSubmit}
+              onClick={handleSubmit} // Submit data to the backend
             >
-              SUBMIT
+              Submit
             </Button>
           </Box>
         </Box>
