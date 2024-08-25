@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import axios from 'axios';
 import BatchTabs from '../../components/Admin/AssessmentView/BatchTabs';
 import AssessmentsTable from '../../components/Admin/AssessmentView/AssessmentTable';
+import AddAssessmentButton from '../../components/Admin/AssessmentView/AddAssessmentButton';
 
 interface Batch {
   id: number;
@@ -47,12 +48,15 @@ const AssessmentsPage: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ padding: 2 }}>
       <BatchTabs
         batches={batches}
         selectedIndex={selectedBatchIndex}
         onTabChange={handleTabChange}
       />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2, marginBottom: 2 }}>
+        <AddAssessmentButton />
+      </Box>
       {batches[selectedBatchIndex] && (
         <AssessmentsTable batchId={batches[selectedBatchIndex].id} />
       )}

@@ -1,57 +1,82 @@
-import React, { useState } from 'react';
-import assessmentData from '../../../../public/AssessmentList.json';
-import BatchTabs from './BatchTabs';
-import AssessmentTable from './AssessmentTable';
+import React, { useEffect, useState } from 'react';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, TableContainer, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-interface StudentAttended {
-  count: number;
-  students: string[];
+interface AssessmentsTableProps {
+  batchId: number;
 }
 
 interface Assessment {
   assessmentName: string;
-  status: string;
-  studentsAttended: StudentAttended;
+  assessmentStatus: string;
+  traineeCount: number;
 }
 
-interface Batch {
-  batch: string;
-  assessments: Assessment[];
-}
+const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-interface AssessmentList {
-  batches: Batch[];
-}
+  useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/ilpex/assessments/details?batchId=${batchId}`);
+        setAssessments(response.data.data);
+      } catch (error) {
+        console.error('Error fetching assessments data:', error);
+        setError('Failed to fetch assessments. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-const AssessmentTabs: React.FC = () => {
-  const [selectedBatchIndex, setSelectedBatchIndex] = useState(0);
-  const [sortOption, setSortOption] = useState('all');
-  const data: AssessmentList = assessmentData;
+    fetchAssessments();
+  }, [batchId]);
 
-  const handleTabChange = (newIndex: number) => {
-    setSelectedBatchIndex(newIndex);
+  const handleRowClick = (assessmentName: string) => {
+    navigate(`/assignment/${assessmentName}`);
   };
 
-  const handleSortChange = (sort: string) => {
-    setSortOption(sort);
-  };
+  if (loading) {
+    return <Typography>Loading assessments...</Typography>;
+  }
 
-  const selectedBatch = data.batches[selectedBatchIndex];
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
-    <div>
-      <BatchTabs
-        batches={data.batches}
-        selectedIndex={selectedBatchIndex}
-        onTabChange={handleTabChange}
-      />
-      <AssessmentTable
-        assessments={selectedBatch.assessments}
-        sortOption={sortOption}
-        onSortChange={handleSortChange}
-      />
-    </div>
+    <Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Assessment Name</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Trainees Attended</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {assessments.map((assessment, index) => (
+              <TableRow
+                key={index}
+                onClick={() => handleRowClick(assessment.assessmentName)}
+                style={{ cursor: 'pointer' }}
+              >
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{assessment.assessmentName}</TableCell>
+                <TableCell>{assessment.assessmentStatus}</TableCell>
+                <TableCell>{assessment.traineeCount}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
-export default AssessmentTabs;
+export default AssessmentsTable;

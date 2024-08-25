@@ -1,5 +1,6 @@
-import AssignmentDetails from '../../components/Admin/AssessmentDetails/AssessmentDetails';
+import AssignmentDetails from '../../components/Admin/AssessmentDetails/TraineeAssessmentDetails';
 import { Container } from '@mui/material';
+
 
 const AdminAssessmentDetailsPage = () => {
   return (
