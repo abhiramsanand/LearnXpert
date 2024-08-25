@@ -100,7 +100,7 @@ function App() {
           <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
           <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
-          <Route path="Admin-BatchAdd2" element={<BatchAdd2 />} />
+          <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
           <Route path="/Admin-DailyReport" element={<AdminReportPage />} />
           <Route path="/Admin-Trainees" element={<TraineesPage />} />
         <Route path="/trainee/:id" element={<TraineeReport />} />

@@ -5,21 +5,50 @@ import CloseIcon from '@mui/icons-material/Close';
 interface AddTraineeModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (name: string, email: string, percipioEmail: string, password: string) => void;
+  onSubmit: (userName: string, email: string, percipioEmail: string, password: string) => void;
+  batchId: number;
 }
 
-const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubmit }) => {
-  const [name, setName] = useState('');
+const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubmit, batchId }) => {
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [percipioEmail, setPercipioEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
-    onSubmit(name, email, percipioEmail, password);
-    setName('');
-    setEmail('');
-    setPercipioEmail('');
-    setPassword('');
+    const newTrainee = {
+      userName,
+      role: 'Trainee',
+      email,
+      percipioEmail,
+      password,
+    };
+
+    fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTrainee),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Trainee added successfully:', data);
+        onSubmit(userName, email, percipioEmail, password);
+        setUserName('');
+        setEmail('');
+        setPercipioEmail('');
+        setPassword('');
+        onClose(); // Close the modal after successful submission
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
   };
 
   return (
@@ -45,27 +74,36 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
             position: 'absolute',
             top: 8,
             right: 8,
-            color:"#8061C3",
+            color: '#8061C3',
           }}
         >
           <CloseIcon />
         </IconButton>
-        <Typography variant="h6" component="h2" align="center" sx={{ mb: 2,fontWeight:"bold" }}>
+        <Typography variant="h6" component="h2" align="center" sx={{ mb: 2, fontWeight: 'bold' }}>
           Add New Trainee
         </Typography>
         <TextField
           fullWidth
-          label="Name"
-          placeholder="trainee name..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          label="User Name"
+          placeholder="Enter trainee's name..."
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           variant="outlined"
           margin="normal"
         />
+        {/* <TextField
+          fullWidth
+          label="Role"
+          placeholder="Enter trainee's name..."
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          variant="outlined"
+          margin="normal"
+        /> */}
         <TextField
           fullWidth
           label="Email"
-          placeholder="percipio email..."
+          placeholder="Enter email..."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           variant="outlined"
@@ -74,7 +112,7 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
         <TextField
           fullWidth
           label="Percipio Email"
-          placeholder="percipio email..."
+          placeholder="Enter Percipio email..."
           value={percipioEmail}
           onChange={(e) => setPercipioEmail(e.target.value)}
           variant="outlined"
@@ -83,27 +121,19 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
         <TextField
           fullWidth
           label="Password"
-          placeholder="password..."
+          placeholder="Enter password..."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           variant="outlined"
           margin="normal"
           type="password"
         />
-        <Box
-          sx={{
-            
-            textAlign: 'center',
-          }}
-        >
+        <Box sx={{ textAlign: 'center' }}>
           <Button
-            
             variant="contained"
-            
             onClick={handleSubmit}
             sx={{
               bgcolor: '#8061C3',
-              
             }}
           >
             Submit
