@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CompletedAssessmentCard from '../../components/Trainee/Assessment/CompletedAssessmentCard';
 import PendingAssessmentCard from '../../components/Trainee/Assessment/PendingAssessmentCard';
 import AssessmentList from '../../components/Trainee/Assessment/AssessmentList';
@@ -11,8 +12,8 @@ interface Assessment {
   dueDate?: string;
   traineeId: number;
   id: number;
-  dateToBeTaken?: string; // Due date for pending assessments
-  dateTaken?: string; // Submission date for completed assessments
+  dateToBeTaken?: string;
+  dateTaken?: string;
 }
 
 const Container = styled('div')({
@@ -39,17 +40,15 @@ const SidebarHeader = styled('div')({
 });
 
 const NewAssessmentPage: React.FC = () => {
-  
+  const navigate = useNavigate();
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
-  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending'); // Default to 'pending'
+  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending');
   const [filteredCompletedAssessments, setFilteredCompletedAssessments] = useState<Assessment[]>([]);
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
 
   useEffect(() => {
-    
-    // Fetch completed assessments
-    fetch('http://localhost:8080/api/v1/assessments/completed/1')
+    fetch('http://localhost:8080/api/v1/assessments/completed/1283')
       .then((response) => response.json())
       .then((data) => {
         setCompletedAssessments(data);
@@ -57,8 +56,7 @@ const NewAssessmentPage: React.FC = () => {
       })
       .catch((error) => console.error('Error loading completed assessments:', error));
 
-    // Fetch pending assessments
-    fetch('http://localhost:8080/api/v1/assessments/pending/1')
+    fetch('http://localhost:8080/api/v1/assessments/pending/1283')
       .then((response) => response.json())
       .then((data) => {
         setPendingAssessments(data);
@@ -83,6 +81,11 @@ const NewAssessmentPage: React.FC = () => {
     }
   };
 
+  const handleCardClick = (id: number) => {
+    console.log(`Navigating to assessment with ID: ${id}`);
+    navigate(`/Trainee-Assessments/${id}`);
+  };
+
   return (
     <Container>
       <Sidebar>
@@ -100,10 +103,18 @@ const NewAssessmentPage: React.FC = () => {
       </Sidebar>
       <Content>
         {selectedCard === 'completed' && (
-          <AssessmentList assessments={filteredCompletedAssessments} isCompleted={true} />
+          <AssessmentList
+            assessments={filteredCompletedAssessments}
+            isCompleted={true}
+            onCardClick={handleCardClick}
+          />
         )}
         {selectedCard === 'pending' && (
-          <AssessmentList assessments={filteredPendingAssessments} isCompleted={false} />
+          <AssessmentList
+            assessments={filteredPendingAssessments}
+            isCompleted={false}
+            onCardClick={handleCardClick}
+          />
         )}
       </Content>
     </Container>
