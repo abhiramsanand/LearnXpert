@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Box, Button } from '@mui/material';
 import {
@@ -12,28 +12,6 @@ import {
 } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const data = {
-  labels: ['Behind', 'Ontrack', 'Ahead'],
-  datasets: [
-    {
-      data: [10, 20, 40],
-      backgroundColor: '#8061C3',
-    },
-    {
-      data: [15, 25, 20],
-      backgroundColor: '#8061C3',
-    },
-    {
-      data: [5, 40, 15],
-      backgroundColor: '#8061C3',
-    },
-    {
-      data: [12, 32, 18],
-      backgroundColor: '#8061C3',
-    },
-  ],
-};
 
 const options = {
   responsive: true,
@@ -53,7 +31,7 @@ const options = {
         display: false,
       },
       ticks: {
-        display: true, 
+        display: true,
       },
       barPercentage: 0.6,
       categoryPercentage: 0.8,
@@ -61,7 +39,7 @@ const options = {
     y: {
       grid: {
         display: true,
-        borderColor: '#000000', 
+        borderColor: '#000000',
       },
       ticks: {
         display: true,
@@ -76,6 +54,30 @@ interface ProgressTrackerProps {
 }
 
 const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
+  const [progressData, setProgressData] = useState({ behind: 0, onTrack: 0, ahead: 0 });
+
+  useEffect(() => {
+    // Fetch data from the API based on the selected batch
+    fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/status?batchId=${selectedBatch}`)
+      .then(response => response.json())
+      .then(data => {
+        setProgressData(data);
+      })
+      .catch(error => {
+        console.error('Error fetching progress data:', error);
+      });
+  }, [selectedBatch]);
+
+  const data = {
+    labels: ['Behind', 'Ontrack', 'Ahead'],
+    datasets: [
+      {
+        data: [progressData.behind, progressData.onTrack, progressData.ahead],
+        backgroundColor: '#8061C3',
+      },
+    ],
+  };
+
   return (
     <Box
       display="flex"
@@ -84,17 +86,24 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
       height="190px"
       alignContent="center"
     >
-      <Box width="100%" height="90%" sx={{px: '45px'}}>
-        <Bar
-          options={options}
-          data={{
-            labels: data.labels,
-            datasets: [data.datasets[selectedBatch - 1]],
-          }}
-        />
+      <Box width="100%" height="90%" sx={{ px: '45px' }}>
+        <Bar options={options} data={data} />
       </Box>
-      <Box width="100%" height="10%" display="flex" justifyContent="flex-end" alignItems="flex-end">
-        <Button variant="text" sx={{ color: '#8061C3', fontSize: '10px', textDecoration: 'underline' }}>
+      <Box
+        width="100%"
+        height="10%"
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-end"
+      >
+        <Button
+          variant="text"
+          sx={{
+            color: '#8061C3',
+            fontSize: '10px',
+            textDecoration: 'underline',
+          }}
+        >
           List Trainees
         </Button>
       </Box>
