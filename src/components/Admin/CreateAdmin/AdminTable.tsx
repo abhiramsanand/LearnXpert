@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
 
 // Define types
 interface Admin {
@@ -18,15 +19,29 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(3);
 
   useEffect(() => {
-    fetch('/admins.json')
-      .then((response) => response.json())
-      .then((data) => setAdmins(data.admins))
-      .catch((error) => console.error('Error fetching admins:', error));
+    const fetchAdmins = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/v1/users/view');
+        setAdmins(response.data.map((user: any) => ({
+          slno: user.id,
+          name: user.userName
+        })));
+      } catch (error) {
+        console.error('Error fetching admins:', error);
+      }
+    };
+
+    fetchAdmins();
   }, []);
 
-  const handleDelete = (adminToDelete: Admin) => {
-    setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.slno !== adminToDelete.slno));
-    onDeleteClick(adminToDelete); // Notify the parent component
+  const handleDelete = async (adminToDelete: Admin) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/v1/users/${adminToDelete.slno}`);
+      setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.slno !== adminToDelete.slno));
+      onDeleteClick(adminToDelete); // Notify the parent component
+    } catch (error) {
+      console.error('Error deleting admin:', error);
+    }
   };
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -37,6 +52,9 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset to first page
   };
+
+  // Calculate serial number based on page and rows per page
+  const getSerialNumber = (index: number) => page * rowsPerPage + index + 1;
 
   return (
     <TableContainer component={Paper} sx={{ marginBottom: '5px' }}>
@@ -49,9 +67,9 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {admins.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((admin) => (
+          {admins.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((admin, index) => (
             <TableRow key={admin.slno} sx={{ height: '10px' }}>
-              <TableCell sx={{ padding: '2px' }}>{admin.slno}</TableCell>
+              <TableCell sx={{ padding: '2px' }}>{getSerialNumber(index)}</TableCell>
               <TableCell sx={{ padding: '2px' }}>{admin.name}</TableCell>
               <TableCell sx={{ padding: '2px' }}>
                 <IconButton onClick={() => handleDelete(admin)}>
