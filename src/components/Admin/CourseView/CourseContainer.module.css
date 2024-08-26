@@ -6,7 +6,7 @@
   margin: 19px auto;
   display: flex;
   flex-direction: column;
-  height: calc(80vh - 50px); /* Adjusted height */
+  height: calc(80vh - 70px); /* Adjusted height */
   width: 100%; /* Increased width */
   max-width: 1000px; /* Increased max-width */
   overflow: hidden;
