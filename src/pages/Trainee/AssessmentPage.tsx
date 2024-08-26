@@ -48,7 +48,10 @@ const NewAssessmentPage: React.FC = () => {
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/v1/assessments/completed/1283')
+    const traineeId = 1283; // Replace this with dynamic traineeId if needed
+
+    // Fetch completed assessments
+    fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`)
       .then((response) => response.json())
       .then((data) => {
         setCompletedAssessments(data);
@@ -56,7 +59,8 @@ const NewAssessmentPage: React.FC = () => {
       })
       .catch((error) => console.error('Error loading completed assessments:', error));
 
-    fetch('http://localhost:8080/api/v1/assessments/pending/1283')
+    // Fetch pending assessments
+    fetch(`http://localhost:8080/api/v1/assessments/pending/${traineeId}`)
       .then((response) => response.json())
       .then((data) => {
         setPendingAssessments(data);
@@ -81,10 +85,11 @@ const NewAssessmentPage: React.FC = () => {
     }
   };
 
-  const handleCardClick = (id: number) => {
-    console.log(`Navigating to assessment with ID: ${id}`);
-    navigate(`/Trainee-Assessments/${id}`);
+  const handleCardClick = (assessmentName: string) => {
+    console.log(`Navigating to assessment with Name: ${assessmentName}`);
+    navigate(`/Trainee-Assessments/assessment?name=${encodeURIComponent(assessmentName)}`);
   };
+  
 
   return (
     <Container>
@@ -106,14 +111,14 @@ const NewAssessmentPage: React.FC = () => {
           <AssessmentList
             assessments={filteredCompletedAssessments}
             isCompleted={true}
-            onCardClick={handleCardClick}
+            onCardClick={handleCardClick} // Correctly pass only assessmentName
           />
         )}
         {selectedCard === 'pending' && (
           <AssessmentList
             assessments={filteredPendingAssessments}
             isCompleted={false}
-            onCardClick={handleCardClick}
+            onCardClick={handleCardClick} // Correctly pass only assessmentName
           />
         )}
       </Content>

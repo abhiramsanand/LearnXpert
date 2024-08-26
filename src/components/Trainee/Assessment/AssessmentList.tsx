@@ -2,18 +2,20 @@ import React from 'react';
 import { Grid, Pagination } from '@mui/material';
 import AssessmentCard from './AssessmentCard';
 
+interface Assessment {
+  assessmentName: string;
+  score?: number;
+  dueDate?: string;
+  traineeId: number;
+  id: number;
+  dateToBeTaken?: string;
+  dateTaken?: string;
+}
+
 interface AssessmentListProps {
-  assessments: {
-    assessmentName: string;
-    score?: number;
-    dueDate?: string;
-    traineeId: number;
-    id: number;
-    dateToBeTaken?: string;
-    dateTaken?: string;
-  }[];
+  assessments: Assessment[];
   isCompleted: boolean;
-  onCardClick: (id: number) => void; // Add this prop
+  onCardClick: (assessmentName: string) => void; // Update here
 }
 
 const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isCompleted, onCardClick }) => {
@@ -37,7 +39,7 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isComplete
               date={isCompleted ? assessment.dateTaken : assessment.dueDate}
               dateLabel={isCompleted ? 'Date of Submission' : 'Due Date'}
               score={assessment.score}
-              onClick={() => onCardClick(assessment.id)} // Use onClick handler
+              onClick={() => onCardClick(assessment.assessmentName)} // Correctly pass assessmentName
             />
           </Grid>
         ))}

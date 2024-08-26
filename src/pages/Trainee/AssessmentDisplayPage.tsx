@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, Button, Box } from '@mui/material';
 import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
@@ -18,7 +18,10 @@ interface Assessment {
 }
 
 const AssessmentDisplayPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Get the ID from the URL params
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const assessmentName = queryParams.get('name') || '';
+
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,9 +30,9 @@ const AssessmentDisplayPage: React.FC = () => {
 
   useEffect(() => {
     const fetchAssessment = async () => {
-      if (id) {
+      if (assessmentName) {
         try {
-          const response = await axios.get<Assessment>(`http://localhost:8080/api/v1/assessments/${id}`);
+          const response = await axios.get<Assessment>(`http://localhost:8080/api/v1/assessments/name/${assessmentName}`);
           setAssessment(response.data);
         } catch (err) {
           setError('Failed to fetch assessment data.');
@@ -40,7 +43,7 @@ const AssessmentDisplayPage: React.FC = () => {
     };
 
     fetchAssessment();
-  }, [id]);
+  }, [assessmentName]);
 
   const handleNextQuestion = () => {
     if (assessment && currentQuestionIndex < assessment.questions.length - 1) {
@@ -63,7 +66,7 @@ const AssessmentDisplayPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       await axios.post('http://localhost:8080/api/v1/assessments/submit', {
-        assessmentId: id,
+        assessmentName,
         responses
       });
       console.log('Assessment submitted successfully');
