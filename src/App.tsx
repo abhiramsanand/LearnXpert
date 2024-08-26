@@ -76,10 +76,8 @@ function App() {
             path="Admin-Assessments"
             element={<AdminAssessmentViewPage />}
           />
-          <Route
-            path="/assignment/:name"
-            element={<AdminAssessmentDetailsPage />}
-          />
+       <Route path="/assignment/:assessmentName" element={<AdminAssessmentDetailsPage />} />
+
           <Route
             path="/Admin-AssessmentCreation"
             element={<AdminAssessmentCreationPage />}
