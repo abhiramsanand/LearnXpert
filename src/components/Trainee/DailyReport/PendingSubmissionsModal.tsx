@@ -14,7 +14,7 @@ import {
   Pagination,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PendingData from "./PendingData.json"; // Import the pending data JSON
+import PendingData from "./PendingData.json"; 
 
 interface PendingSubmissionsModalProps {
   open: boolean;

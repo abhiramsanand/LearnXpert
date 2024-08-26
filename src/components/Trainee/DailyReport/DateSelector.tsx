@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import format from 'date-fns/format';
-
-
-const DateSelector: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
-
+import React from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker} from "@mui/x-date-pickers/DatePicker";
+import { TextField, TextFieldProps } from "@mui/material";
+ 
+interface DateSelectorProps {
+  selectedDate: Date | null;
+  onDateChange: (date: Date | null) => void;
+}
+ 
+const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
         value={selectedDate}
-        onChange={handleDateChange}
-        renderInput={(params) => (
-          <StyledTextField 
-            {...params} 
+        onChange={onDateChange}
+        renderInput={(params: TextFieldProps) => (
+          <TextField
+            {...params}
             variant="outlined"
-            value={selectedDate ? format(selectedDate, 'dd-mm-yyyy') : ''}
+            sx={{
+              '& .MuiInputBase-root': {
+                minWidth: '200px',
+                height: '30px',
+                borderRadius: '20px',
+              },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '20px',
+              },
+            }}
           />
         )}
       />
     </LocalizationProvider>
   );
 };
-
+ 
 export default DateSelector;

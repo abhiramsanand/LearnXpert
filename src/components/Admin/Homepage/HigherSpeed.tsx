@@ -12,13 +12,10 @@ interface HigherSpeedProps {
 const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
     if (selectedBatch) {
       setLoading(true); // Set loading to true when starting to fetch data
-      let interval: NodeJS.Timeout;
-
       fetch(`http://localhost:8080/api/v1/accelerated?batchId=${selectedBatch}`)
         .then((response) => response.json())
         .then((data) => {
@@ -26,25 +23,11 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
           const roundedPercentage = Math.round(data.percentage);
           setSpeedPercentage(roundedPercentage);
           setLoading(false); // Set loading to false once data is fetched
-          setProgress(100); // Ensure progress reaches 100% at the end
-          if (interval) clearInterval(interval);
         })
         .catch((error) => {
           console.error("Error fetching percentage data:", error);
           setLoading(false); // Set loading to false in case of error
-          if (interval) clearInterval(interval);
         });
-
-      // Simulate progress increment for the loader
-      interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev < 100) {
-            return Math.min(prev + 2, 100); // Increment progress
-          }
-          clearInterval(interval);
-          return prev;
-        });
-      }, 30); // Adjust interval time for smoother/faster progress
     }
   }, [selectedBatch]);
 
@@ -53,7 +36,7 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       {
         label: "Percentage",
         data: [speedPercentage, 100 - speedPercentage],
-        backgroundColor: ["#8061C3", "#ffffff"],
+        backgroundColor: ["#8061C3", "#F0EAFD"],
       },
     ],
   };
@@ -81,84 +64,36 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       position="relative"
     >
       {loading ? (
-        <>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+          paddingX="60px"
+        >
           <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100%"
-            paddingX="60px"
-            flexDirection="column"
-          >
-            <Typography
-              sx={{
-                fontSize: "15px",
-                color: "#8061C3",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: "bold",
-                position: "relative",
-              }}
-            >
-              <span className="loading-dots">Loading</span>
-            </Typography>
-            <style>
-              {`
-                .loading-dots::after {
-                  content: '...';
-                  animation: dots 1.5s infinite step-start;
+            sx={{
+              width: "50px",
+              height: "50px",
+              border: "5px solid #8061C3",
+              borderRadius: "50%",
+              borderTopColor: "transparent",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          <style>
+            {`
+              @keyframes spin {
+                0% {
+                  transform: rotate(0deg);
                 }
-                @keyframes dots {
-                  0%, 20% {
-                    opacity: 0;
-                  }
-                  20%, 40% {
-                    opacity: 1;
-                  }
-                  40%, 60% {
-                    opacity: 0;
-                  }
-                  60%, 80% {
-                    opacity: 1;
-                  }
-                  80%, 100% {
-                    opacity: 0;
-                  }
+                100% {
+                  transform: rotate(360deg);
                 }
-              `}
-            </style>
-            <Box
-              width="100%"
-              height="10px"
-              marginTop="10px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "4px",
-                  backgroundColor: "#e0e0e0",
-                  borderRadius: "2px",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: `${progress}%`,
-                    height: "100%",
-                    backgroundColor: "#8061C3",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    transition: "width 0.3s ease",
-                  }}
-                ></Box>
-              </Box>
-            </Box>
-          </Box>
-        </>
+              }
+            `}
+          </style>
+        </Box>
       ) : (
         <>
           <Box width="100%" height="70%">

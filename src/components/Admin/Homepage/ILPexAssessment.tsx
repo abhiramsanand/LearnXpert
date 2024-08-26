@@ -87,7 +87,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       }}
     >
       <Box width="100%" sx={{ pr: 2 }}>
-        <Typography variant="h5">Percipio</Typography>
+        <Typography variant="h5">ILPex</Typography>
         <Typography variant="subtitle1" sx={{ whiteSpace: "nowrap" }}>
           Batch Assessment Score Overview
         </Typography>

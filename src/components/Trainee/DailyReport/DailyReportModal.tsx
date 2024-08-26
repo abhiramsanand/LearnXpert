@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
   Dialog,
@@ -11,13 +12,18 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
+ 
 interface DailyReportModalProps {
   open: boolean;
   handleClose: () => void;
+  courseDetails: any;
+ 
 }
-
-const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }) => {
+ 
+const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, courseDetails }) => {
+  const totalMinutes = courseDetails?.timeTaken || 0; // Assume totalMinutes is a property in courseDetails
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
   return (
     <Dialog
       open={open}
@@ -45,15 +51,15 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
           </Box>
         </DialogTitle>
         <DialogContent sx={{ p: 4 }}>
-          <Box component="form" display="flex"  flexDirection="column" gap={1}>
+          <Box component="form" display="flex" flexDirection="column" gap={1}>
             <TextField
               label="Course"
               placeholder="course name..."
+              value={courseDetails?.courseName || ""} // Use optional chaining
               variant="outlined"
               fullWidth
               InputProps={{
                 sx: {
-                    
                   borderRadius: '10px',
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: '#8061C3',
@@ -76,7 +82,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
               <Grid item xs={3}>
                 <TextField
                   type="number"
-                  defaultValue="01"
+                  value={hours||1}
                   variant="outlined"
                   inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   fullWidth
@@ -99,8 +105,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
               <Grid item xs={3}>
                 <TextField
                   type="number"
-                  defaultValue="00"
-                  variant="outlined"
+                  value={minutes||0}                  variant="outlined"
                   inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   fullWidth
                   InputProps={{
@@ -134,6 +139,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
             <TextField
               label="Key Learnings"
               placeholder="key learnings..."
+              value={courseDetails?.keyLearnings || ""}
               variant="outlined"
               fullWidth
               multiline
@@ -156,6 +162,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
             <TextField
               label="Plan For Tomorrow"
               placeholder="plan for tomorrow..."
+              value={courseDetails?.planForTomorrow || ""}
               variant="outlined"
               fullWidth
               multiline
@@ -197,5 +204,6 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose }
     </Dialog>
   );
 };
-
+ 
+ 
 export default DailyReportModal;
