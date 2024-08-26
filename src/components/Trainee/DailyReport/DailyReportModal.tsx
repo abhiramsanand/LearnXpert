@@ -139,7 +139,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
             <TextField
               label="Key Learnings"
               placeholder="key learnings..."
-              value={courseDetails?.keyLearnings || ""}
+              value={courseDetails?.keylearnings || ""}
               variant="outlined"
               fullWidth
               multiline
@@ -162,7 +162,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
             <TextField
               label="Plan For Tomorrow"
               placeholder="plan for tomorrow..."
-              value={courseDetails?.planForTomorrow || ""}
+              value={courseDetails?.planfortomorrow || ""}
               variant="outlined"
               fullWidth
               multiline
