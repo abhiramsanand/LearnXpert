@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
+import styles from './TraineeAssessmentDetails.module.css';
 
 interface TraineeAssessment {
   traineeName: string;
@@ -51,18 +51,18 @@ const TraineeAssessmentDetails: React.FC = () => {
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Typography className={styles.error}>{error}</Typography>;
   }
 
   return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
-        Trainee Assessments for {assessmentName}
+    <Box className={styles.container}>
+      <Typography variant="h6" className={styles.heading} gutterBottom>
+        {assessmentName}
       </Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className={styles.tableContainer}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow className={styles.tableHead}>
               <TableCell>Trainee Name</TableCell>
               <TableCell>Score</TableCell>
               <TableCell>Status</TableCell>

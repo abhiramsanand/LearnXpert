@@ -27,7 +27,7 @@ const TabsContainer = styled(Box)(({ theme }) => ({
 }));
 
 // Create a styled tab container with background when selected
-const TabContainer = styled(Box)(({ theme, isSelected }: { isSelected: boolean }) => ({
+const TabContainer = styled(Box)(({ isSelected }: { isSelected: boolean }) => ({
   display: 'inline-flex',
   flexDirection: 'column', // Stack the content vertically
   alignItems: 'center',
@@ -36,8 +36,8 @@ const TabContainer = styled(Box)(({ theme, isSelected }: { isSelected: boolean }
   width: '150px', // Fixed width for each tab
   height: '60px', // Increase height to accommodate status
   margin: '4px',
-  backgroundColor: isSelected ? '#8518FF' : theme.palette.background.default,
-  color: isSelected ? 'white' : '#8518FF',
+  backgroundColor: isSelected ? '#8061C3' : 'white', // Selected color is #8061C3, unselected is light grey
+  color: isSelected ? 'white' : '#000000', // White text for selected, black for unselected
   cursor: 'pointer',
   transition: 'background-color 0.3s ease',
   fontWeight: 'bolder',
@@ -79,10 +79,7 @@ const BatchTabs: React.FC<BatchTabsProps> = ({ batches, selectedIndex, onTabChan
 
   return (
     <Box position="relative" width="100%">
-      <ArrowButton
-        style={{ left: 0 }}
-        onClick={() => scroll('left')}
-      >
+      <ArrowButton style={{ left: 0 }} onClick={() => scroll('left')}>
         <ArrowLeftIcon />
       </ArrowButton>
       <TabsContainer ref={containerRef}>
@@ -99,10 +96,7 @@ const BatchTabs: React.FC<BatchTabsProps> = ({ batches, selectedIndex, onTabChan
           </TabContainer>
         ))}
       </TabsContainer>
-      <ArrowButton
-        style={{ right: 0 }}
-        onClick={() => scroll('right')}
-      >
+      <ArrowButton style={{ right: 0 }} onClick={() => scroll('right')}>
         <ArrowRightIcon />
       </ArrowButton>
     </Box>
