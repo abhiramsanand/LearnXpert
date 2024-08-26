@@ -70,7 +70,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
     plugins: {
       legend: {
         display: true,
-        position: "right" as const, 
+        position: "right" as const,
       },
     },
     cutout: "70%",
@@ -81,11 +81,16 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
       display="flex"
       flexDirection="row"
       alignItems="center"
-      boxShadow={3}
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       sx={{
-        maxWidth: "500px",
+        maxWidth: "420px",
         padding: "20px",
         margin: "auto",
+        borderRadius: "5px",
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
       }}
     >
       <Box width="100%" sx={{ pr: 2 }}>
@@ -95,20 +100,20 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
         </Typography>
         <Box>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80%
-            ({scoreData.above80})
+            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80% (
+            {scoreData.above80})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between
-            70% and 80% ({scoreData.between70and80})
+            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 70%
+            and 80% ({scoreData.between70and80})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between
-            60% and 70% ({scoreData.between60and70})
+            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 60%
+            and 70% ({scoreData.between60and70})
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60%
-            ({scoreData.below60})
+            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60% (
+            {scoreData.below60})
           </Typography>
         </Box>
       </Box>

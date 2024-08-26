@@ -26,7 +26,7 @@ const AdminHomePage = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="50vh"
+        height="70vh"
       >
         <Typography
           sx={{
@@ -49,7 +49,11 @@ const AdminHomePage = () => {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
       <BatchSelect
         selectedBatch={selectedBatch}
         onBatchSelect={setSelectedBatch}

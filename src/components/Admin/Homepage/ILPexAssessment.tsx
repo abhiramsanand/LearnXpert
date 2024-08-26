@@ -79,11 +79,16 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       display="flex"
       flexDirection="row"
       alignItems="center"
-      boxShadow={3}
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       sx={{
-        maxWidth: "500px",
+        maxWidth: "420px",
         padding: "20px",
         margin: "auto",
+        borderRadius: '5px',
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
       }}
     >
       <Box width="100%" sx={{ pr: 2 }}>

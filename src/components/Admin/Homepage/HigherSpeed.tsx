@@ -15,18 +15,17 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
 
   useEffect(() => {
     if (selectedBatch) {
-      setLoading(true); // Set loading to true when starting to fetch data
+      setLoading(true);
       fetch(`http://localhost:8080/api/v1/accelerated?batchId=${selectedBatch}`)
         .then((response) => response.json())
         .then((data) => {
-          // Round the percentage value to the nearest integer
           const roundedPercentage = Math.round(data.percentage);
           setSpeedPercentage(roundedPercentage);
-          setLoading(false); // Set loading to false once data is fetched
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching percentage data:", error);
-          setLoading(false); // Set loading to false in case of error
+          setLoading(false);
         });
     }
   }, [selectedBatch]);
@@ -58,10 +57,18 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      boxShadow={3}
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       height="190px"
       width="27%"
       position="relative"
+      sx={{
+        overflow: "hidden",
+        borderRadius: "5px",
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+      }}
     >
       {loading ? (
         <Box
@@ -69,26 +76,26 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
           justifyContent="center"
           alignItems="center"
           height="100%"
-          paddingX="60px"
+          paddingX="100px"
+          sx={{ position: "relative" }}
         >
           <Box
             sx={{
-              width: "50px",
-              height: "50px",
-              border: "5px solid #8061C3",
-              borderRadius: "50%",
-              borderTopColor: "transparent",
-              animation: "spin 1s linear infinite",
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
+              animation: "slide 1.5s infinite",
             }}
           />
           <style>
             {`
-              @keyframes spin {
+              @keyframes slide {
                 0% {
-                  transform: rotate(0deg);
+                  transform: translateX(-100%);
                 }
                 100% {
-                  transform: rotate(360deg);
+                  transform: translateX(100%);
                 }
               }
             `}

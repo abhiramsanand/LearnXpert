@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import { Box, Typography, Button } from '@mui/material';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import React, { useEffect, useState } from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Box, Typography, Button } from "@mui/material";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,17 +10,21 @@ interface HigherSpeedProps {
 }
 
 const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
-  const [speedPercentage, setSpeedPercentage] = useState<number>(70);
+  const [speedPercentage, setSpeedPercentage] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (selectedBatch) {
+      setLoading(true);
       fetch(`http://localhost:8080/api/v1/reports?batchId=${selectedBatch}`)
         .then((response) => response.json())
         .then((data) => {
-          setSpeedPercentage(data.percentage);
+          setSpeedPercentage(Math.round(data.percentage));
+          setLoading(false);
         })
         .catch((error) => {
-          console.error('Error fetching percentage data:', error);
+          console.error("Error fetching percentage data:", error);
+          setLoading(false);
         });
     }
   }, [selectedBatch]);
@@ -48,7 +47,7 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
         display: false,
       },
     },
-    cutout: '70%',
+    cutout: "70%",
   };
 
   return (
@@ -57,45 +56,93 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      boxShadow={3}
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       height="190px"
       width="27%"
       position="relative"
+      sx={{
+        overflow: "hidden",
+        borderRadius: "5px",
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+      }}
     >
-      <Box width="100%" height="70%">
-        <Doughnut data={data} options={options} />
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography sx={{ fontSize: "7px", color: "#000000" }}>
-          Pending Daily Reports
-        </Typography>
-        <Typography sx={{ fontSize: "20px", color: "black" }}>
-          {speedPercentage}%
-        </Typography>
-      </Box>
-      <Box width="100%" height="0%" display="flex" justifyContent="flex-end">
-        <Button
-          variant="text"
-          sx={{
-            color: "#8061C3",
-            fontSize: "10px",
-            textDecoration: "underline",
-            mt: 1
-          }}
+      {loading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+          paddingX="100px"
+          sx={{ position: "relative" }}
         >
-          List Trainees
-        </Button>
-      </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
+              animation: "slide 1.5s infinite",
+            }}
+          />
+          <style>
+            {`
+            @keyframes slide {
+              0% {
+                transform: translateX(-100%);
+              }
+              100% {
+                transform: translateX(100%);
+              }
+            }
+          `}
+          </style>
+        </Box>
+      ) : (
+        <>
+          <Box width="100%" height="70%">
+            <Doughnut data={data} options={options} />
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography sx={{ fontSize: "7px", color: "#000000" }}>
+              Pending Daily Reports
+            </Typography>
+            <Typography sx={{ fontSize: "20px", color: "black" }}>
+              {speedPercentage}%
+            </Typography>
+          </Box>
+          <Box
+            width="100%"
+            height="0%"
+            display="flex"
+            justifyContent="flex-end"
+          >
+            <Button
+              variant="text"
+              sx={{
+                color: "#8061C3",
+                fontSize: "10px",
+                textDecoration: "underline",
+                mt: 1,
+              }}
+            >
+              List Trainees
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
