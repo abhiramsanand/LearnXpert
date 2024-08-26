@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, TextField, Typography, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import axios from "axios";
 
 const BatchForm: React.FC = () => {
@@ -11,6 +11,23 @@ const BatchForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
+  const [programs, setPrograms] = useState<string[]>([]);
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/v1/programs");
+        setPrograms(response.data.map((program: { programName: string }) => program.programName));
+      } catch (error) {
+        console.error("Error fetching programs", error);
+        setMessage("Error fetching programs.");
+        setMessageType('error');
+      }
+    };
+
+    fetchPrograms();
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -19,8 +36,14 @@ const BatchForm: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (selectedProgram === '') {
+      setMessage("Please select a program.");
+      setMessageType('error');
+      return;
+    }
+
     const formData = new FormData();
-    const batchData = JSON.stringify({ batchName, startDate, endDate });
+    const batchData = JSON.stringify({ batchName, startDate, endDate, programName: selectedProgram });
     formData.append("batchData", batchData);
 
     if (file) {
@@ -30,7 +53,7 @@ const BatchForm: React.FC = () => {
       setMessageType('error');
       return;
     }
-
+ 
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/batches/create",
@@ -41,7 +64,8 @@ const BatchForm: React.FC = () => {
           },
         }
       );
-      const batchId = response.data.id; // Assuming the response contains the batch ID
+      const batchId = response.data.batchId; // Correctly access batchId from the response
+      // Assuming the response contains the batch ID
       setMessage("Batch created successfully!");
       setMessageType('success');
       navigate(`/Admin-BatchAdd2/${batchId}`); // Pass batchId to the next page
@@ -49,8 +73,7 @@ const BatchForm: React.FC = () => {
       console.error("There was an error creating the batch!", error);
       setMessage("There was an error creating the batch. Check the console for details.");
       setMessageType('error');
-    }
-  };
+    }};
 
   return (
     <Container>
@@ -84,57 +107,78 @@ const BatchForm: React.FC = () => {
 
         <form>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <TextField
-                label="Batch Name"
-                variant="outlined"
-                placeholder="ILP-2023-B03"
-                value={batchName}
-                onChange={(e) => setBatchName(e.target.value)}
-                InputProps={{
-                  sx: {
+            <Grid container item xs={12} spacing={3} alignItems="center">
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Program</InputLabel>
+                  <Select
+                    value={selectedProgram}
+                    onChange={(e) => setSelectedProgram(e.target.value as string)}
+                    label="Program"
+                  >
+                    {programs.map((program) => (
+                      <MenuItem key={program} value={program}>
+                        {program}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TextField
+                  label="Batch Name"
+                  variant="outlined"
+                  placeholder="ILP-2023-B03"
+                  value={batchName}
+                  onChange={(e) => setBatchName(e.target.value)}
+                  InputProps={{
+                    sx: {
+                      bgcolor: "#FFF",
+                      width: "100%",
+                      borderRadius: "4px",
+                    },
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container item xs={12} spacing={3} mt={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label="Start Date (Tentative)"
+                  variant="outlined"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{
                     bgcolor: "#FFF",
-                    width: "250px",
+                    width: "100%",
                     borderRadius: "4px",
-                  },
-                }}
-              />
-            </Grid>
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={6}>
-              <TextField
-                label="Start Date (Tentative)"
-                variant="outlined"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                sx={{
-                  bgcolor: "#FFF",
-                  width: "250px",
-                  borderRadius: "4px",
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="End Date (Tentative)"
-                variant="outlined"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                sx={{
-                  bgcolor: "#FFF",
-                  width: "250px",
-                  borderRadius: "4px",
-                }}
-              />
+              <Grid item xs={6}>
+                <TextField
+                  label="End Date (Tentative)"
+                  variant="outlined"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{
+                    bgcolor: "#FFF",
+                    width: "100%",
+                    borderRadius: "4px",
+                  }}
+                />
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>

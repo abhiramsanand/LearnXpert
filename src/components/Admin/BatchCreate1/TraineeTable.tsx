@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Pagination } from '@mui/material';
 
 interface Trainee {
-  id: number;
-  name: string;
+  traineeId: number;  // Updated property name
+  userName: string;
   email: string;
   percipioEmail: string;
   password: string;
@@ -25,18 +25,10 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
     setPage(newPage);
   };
 
-  const handleDelete = (traineeId: number | undefined) => {
-    if (typeof traineeId === 'undefined') {
-      console.error("Trainee ID is undefined");
-      return;
-    }
-  
-    console.log("handleDelete called with Trainee ID:", traineeId);
-    console.log("Batch ID:", batchId);
-  
+  const handleDelete = (traineeId: number) => {
     const url = `http://localhost:8080/api/v1/batches/${batchId}/trainees/${traineeId}`;
     console.log("Deleting trainee at URL:", url);
-  
+    
     fetch(url, {
       method: 'DELETE',
     })
@@ -51,7 +43,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
       console.error('There was a problem with the delete operation:', error);
     });
   };
-  
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -66,29 +58,28 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
           </TableRow>
         </TableHead>
         <TableBody>
-  {displayedTrainees.map((trainee, index) => (
-    <TableRow key={trainee.id} sx={{ height: '40px' }}> {/* Ensure trainee.id is unique */}
-      <TableCell sx={{ padding: '8px' }}>{(page - 1) * rowsPerPage + index + 1}</TableCell>
-      <TableCell sx={{ padding: '8px' }}>{trainee.name}</TableCell>
-      <TableCell sx={{ padding: '8px' }}>{trainee.email}</TableCell>
-      <TableCell sx={{ padding: '8px' }}>{trainee.percipioEmail}</TableCell>
-      <TableCell sx={{ padding: '8px' }}>{trainee.password}</TableCell>
-      <TableCell sx={{ padding: '8px' }}>
-        <Button 
-          sx={{ color: "#8061C3" }} 
-          size="small" 
-          onClick={() => {
-            console.log("Delete button clicked for trainee ID:", trainee.id); // Check this
-            handleDelete(trainee.id);
-          }}
-        >
-          Delete
-        </Button>
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
+          {displayedTrainees.map((trainee, index) => (
+            <TableRow key={trainee.traineeId} sx={{ height: '40px' }}> {/* Updated key */}
+              <TableCell sx={{ padding: '8px' }}>{(page - 1) * rowsPerPage + index + 1}</TableCell>
+              <TableCell sx={{ padding: '8px' }}>{trainee.userName}</TableCell>
+              <TableCell sx={{ padding: '8px' }}>{trainee.email}</TableCell>
+              <TableCell sx={{ padding: '8px' }}>{trainee.percipioEmail}</TableCell>
+              <TableCell sx={{ padding: '8px' }}>{trainee.password}</TableCell>
+              <TableCell sx={{ padding: '8px' }}>
+                <Button 
+                  sx={{ color: "#8061C3" }} 
+                  size="small" 
+                  onClick={() => {
+                    console.log("Delete button clicked for trainee ID:", trainee.traineeId);
+                    handleDelete(trainee.traineeId);
+                  }}
+                >
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
       <Pagination
         count={Math.ceil(trainees.length / rowsPerPage)}
@@ -103,7 +94,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
             bgcolor: '#8061C3',
             color: '#ffffff',
             '&.Mui-selected': {
-              bgcolor: '#blue',
+              bgcolor: '#4A00C2',
               color: '#ffffff',
             },
           },

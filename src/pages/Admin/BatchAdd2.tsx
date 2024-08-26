@@ -50,9 +50,13 @@ const BatchAdd2: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // Assuming the API expects a JSON array of trainees
+    if (!batchId) {
+      console.error("Batch ID is missing");
+      return;
+    }
+  
     fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
-      method: 'PUT', // Use POST if creating new entries, PUT for updating existing ones
+      method: 'PUT', // Or 'POST' if creating new entries
       headers: {
         'Content-Type': 'application/json',
       },
@@ -60,7 +64,9 @@ const BatchAdd2: React.FC = () => {
     })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Failed to submit trainee data');
+        return response.text().then(text => { 
+          throw new Error(`Failed to submit trainee data: ${text}`);
+        });
       }
       return response.json();
     })
@@ -70,7 +76,7 @@ const BatchAdd2: React.FC = () => {
     })
     .catch((error) => console.error('There was a problem with the submission:', error));
   };
-
+  
   return (
     <Container>
       <Box
@@ -109,10 +115,10 @@ const BatchAdd2: React.FC = () => {
           </Box>
 
           <TraineeTable
-  trainees={trainees}
-  batchId={batchId} // Ensure this is a valid number
-  onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
-/>
+            trainees={trainees}
+            batchId={Number(batchId)} // Ensure this is a valid number
+            onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
+          />
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
             <Button 
