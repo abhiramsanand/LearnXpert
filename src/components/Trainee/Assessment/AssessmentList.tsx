@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Pagination } from '@mui/material';
 import AssessmentCard from './AssessmentCard';
 
-interface AssessmentListProps {
-  assessments: {
-    assessmentName: string;
-    score?: number;
-    dueDate?: string;
-    traineeId: number;
-    id: number;
-    dateToBeTaken?: string; // Due date for pending assessments
-    dateTaken?: string; // Submission date for completed assessments
-  }[];
-  isCompleted: boolean; // Prop to determine if the assessments are completed or pending
+interface Assessment {
+  assessmentName: string;
+  score?: number;
+  dueDate?: string;
+  traineeId: number;
+  id: number;
+  dateToBeTaken?: string;
+  dateTaken?: string;
 }
 
-const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isCompleted }) => {
-  const [page, setPage] = useState(1);
+interface AssessmentListProps {
+  assessments: Assessment[];
+  isCompleted: boolean;
+  onCardClick: (assessmentName: string) => void; // Update here
+}
+
+const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isCompleted, onCardClick }) => {
+  const [page, setPage] = React.useState(1);
   const itemsPerPage = 3;
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -31,11 +34,12 @@ const AssessmentList: React.FC<AssessmentListProps> = ({ assessments, isComplete
         {paginatedAssessments.map((assessment) => (
           <Grid item xs={12} key={assessment.id}>
             <AssessmentCard
-              title={assessment.assessmentName} // Changed from 'name' to 'assessmentName'
+              title={assessment.assessmentName}
               description={isCompleted ? 'Completed' : 'Pending'}
-              date={isCompleted ? assessment.dateTaken : assessment.dueDate} // Used the appropriate date field
+              date={isCompleted ? assessment.dateTaken : assessment.dueDate}
               dateLabel={isCompleted ? 'Date of Submission' : 'Due Date'}
               score={assessment.score}
+              onClick={() => onCardClick(assessment.assessmentName)} // Correctly pass assessmentName
             />
           </Grid>
         ))}

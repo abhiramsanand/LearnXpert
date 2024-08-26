@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CompletedAssessmentCard from '../../components/Trainee/Assessment/CompletedAssessmentCard';
 import PendingAssessmentCard from '../../components/Trainee/Assessment/PendingAssessmentCard';
 import AssessmentList from '../../components/Trainee/Assessment/AssessmentList';
@@ -11,8 +12,8 @@ interface Assessment {
   dueDate?: string;
   traineeId: number;
   id: number;
-  dateToBeTaken?: string; 
-  dateTaken?: string; 
+  dateToBeTaken?: string;
+  dateTaken?: string;
 }
 
 const Container = styled('div')({
@@ -39,9 +40,10 @@ const SidebarHeader = styled('div')({
 });
 
 const NewAssessmentPage: React.FC = () => {
+  const navigate = useNavigate();
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
-  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending'); // Default to 'pending'
+  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending');
   const [filteredCompletedAssessments, setFilteredCompletedAssessments] = useState<Assessment[]>([]);
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
 
@@ -83,6 +85,12 @@ const NewAssessmentPage: React.FC = () => {
     }
   };
 
+  const handleCardClick = (assessmentName: string) => {
+    console.log(`Navigating to assessment with Name: ${assessmentName}`);
+    navigate(`/Trainee-Assessments/assessment?name=${encodeURIComponent(assessmentName)}`);
+  };
+  
+
   return (
     <Container>
       <Sidebar>
@@ -100,10 +108,18 @@ const NewAssessmentPage: React.FC = () => {
       </Sidebar>
       <Content>
         {selectedCard === 'completed' && (
-          <AssessmentList assessments={filteredCompletedAssessments} isCompleted={true} />
+          <AssessmentList
+            assessments={filteredCompletedAssessments}
+            isCompleted={true}
+            onCardClick={handleCardClick} // Correctly pass only assessmentName
+          />
         )}
         {selectedCard === 'pending' && (
-          <AssessmentList assessments={filteredPendingAssessments} isCompleted={false} />
+          <AssessmentList
+            assessments={filteredPendingAssessments}
+            isCompleted={false}
+            onCardClick={handleCardClick} // Correctly pass only assessmentName
+          />
         )}
       </Content>
     </Container>

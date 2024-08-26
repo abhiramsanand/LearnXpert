@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, Button, Box } from '@mui/material';
 import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
@@ -17,28 +18,32 @@ interface Assessment {
 }
 
 const AssessmentDisplayPage: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const assessmentName = queryParams.get('name') || '';
+
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [responses, setResponses] = useState<string[]>([]);
 
-  const assessmentId = 1; // Replace with the actual ID or use route params
-
   useEffect(() => {
     const fetchAssessment = async () => {
-      try {
-        const response = await axios.get<Assessment>(`http://localhost:8080/api/v1/assessments/${assessmentId}`);
-        setAssessment(response.data);
-      } catch (err) {
-        setError('Failed to fetch assessment data.');
-      } finally {
-        setLoading(false);
+      if (assessmentName) {
+        try {
+          const response = await axios.get<Assessment>(`http://localhost:8080/api/v1/assessments/name/${assessmentName}`);
+          setAssessment(response.data);
+        } catch (err) {
+          setError('Failed to fetch assessment data.');
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
     fetchAssessment();
-  }, [assessmentId]);
+  }, [assessmentName]);
 
   const handleNextQuestion = () => {
     if (assessment && currentQuestionIndex < assessment.questions.length - 1) {
@@ -61,7 +66,7 @@ const AssessmentDisplayPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       await axios.post('http://localhost:8080/api/v1/assessments/submit', {
-        assessmentId,
+        assessmentName,
         responses
       });
       console.log('Assessment submitted successfully');
