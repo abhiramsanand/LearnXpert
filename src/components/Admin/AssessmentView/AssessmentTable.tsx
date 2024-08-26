@@ -9,9 +9,11 @@ import {
   Typography,
   TableContainer,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from './AssessmentsTable.module.css'; // Import the CSS module
 
 interface AssessmentsTableProps {
   batchId: number;
@@ -52,23 +54,28 @@ const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
   };
 
   if (loading) {
-    return <Typography>Loading assessments...</Typography>;
+    return (
+      <Box className={styles.loading}>
+        <CircularProgress />
+        <Typography>Loading assessments...</Typography>
+      </Box>
+    );
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Typography className={styles.error}>{error}</Typography>;
   }
 
   return (
     <Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className={styles.tableContainer}>
         <Table>
-          <TableHead>
+          <TableHead className={styles.tableHead}>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Assessment Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Trainees Attended</TableCell>
+              <TableCell className={styles.tableCell}>#</TableCell>
+              <TableCell className={styles.tableCell}>Assessment Name</TableCell>
+              <TableCell className={styles.tableCell}>Status</TableCell>
+              <TableCell className={styles.tableCell}>Trainees Attended</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -76,7 +83,7 @@ const AssessmentsTable: React.FC<AssessmentsTableProps> = ({ batchId }) => {
               <TableRow
                 key={index}
                 onClick={() => handleRowClick(assessment.assessmentName)}
-                style={{ cursor: 'pointer' }}
+                className={styles.tableRow}
               >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{assessment.assessmentName}</TableCell>

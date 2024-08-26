@@ -4,7 +4,7 @@ import axios from 'axios';
 import BatchTabs from '../../components/Admin/AssessmentView/BatchTabs';
 import AssessmentsTable from '../../components/Admin/AssessmentView/AssessmentTable';
 import AddAssessmentButton from '../../components/Admin/AssessmentView/AddAssessmentButton';
-
+ 
 interface Batch {
   id: number;
   batchName: string;
@@ -12,17 +12,17 @@ interface Batch {
   endDate: string;
   isActive: boolean;
 }
-
+ 
 const AssessmentsPage: React.FC = () => {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [selectedBatchIndex, setSelectedBatchIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+ 
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/ilpex/batches');
+        const response = await axios.get('http://localhost:8080/api/v1/batches');
         setBatches(response.data);
       } catch (error) {
         console.error('Error fetching batches:', error);
@@ -31,22 +31,22 @@ const AssessmentsPage: React.FC = () => {
         setLoading(false);
       }
     };
-
+ 
     fetchBatches();
   }, []);
-
+ 
   const handleTabChange = (newIndex: number) => {
     setSelectedBatchIndex(newIndex);
   };
-
+ 
   if (loading) {
     return <Typography>Loading batches...</Typography>;
   }
-
+ 
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-
+ 
   return (
     <Box sx={{ padding: 2 }}>
       <BatchTabs
@@ -63,5 +63,5 @@ const AssessmentsPage: React.FC = () => {
     </Box>
   );
 };
-
+ 
 export default AssessmentsPage;
