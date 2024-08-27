@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Grid, Card, CardContent, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ReportModalComponent from "./ReportModalComponent";
 import axios from "axios";
+import DailyReportModal from "./DailyReportModal"; // Make sure to import your modal
+import ReportModalComponent from "./ReportModalComponent";
 
 interface CoursesListProps {
   courses: any[];
-  handleOpenReportModal: (courseId: number) => void;
+  handleOpenReportModal: (courseId: number, courseName: string) => void;
 }
 
 const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModal }) => {
@@ -23,15 +24,27 @@ const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModa
     return `${hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ` : ''}${minutes} minute${minutes !== 1 ? 's' : ''}`;
   };
 
-  const handleViewReport = async (courseId: number) => {
+  const handleViewReport = async (dailyReportId: number,courseId:number) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${courseId}`);
-      setSelectedReport(response.data);
+      const response = await axios.get(`http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`);
+      const reportData = response.data;
+  
+      // Debugging log
+      console.log("Fetched report data:", reportData);
+  
+      setSelectedReport({ ...reportData, courseId });
       setOpenModal(true);
     } catch (error) {
       console.error("Error fetching report details:", error);
+  
+      // Further debugging
+      if (error.response) {
+        console.log("Server responded with:", error.response.data);
+      }
     }
   };
+  
+  
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -65,10 +78,10 @@ const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModa
                   </Grid>
 
                   <Grid item xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton onClick={() => handleOpenReportModal(course.id)}>
+                    <IconButton onClick={() => handleOpenReportModal(course.courseId, course.courseName,course.id)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton disabled={!course.timeTaken} onClick={() => handleViewReport(course.id)}>
+                    <IconButton disabled={!course.timeTaken} onClick={() => handleViewReport(course.id,course.courseId)}>
                       <VisibilityIcon />
                     </IconButton>
                   </Grid>
