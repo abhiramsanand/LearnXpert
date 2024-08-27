@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, ListItem, ListItemIcon, ListItemText, IconButton, Typography, Menu, MenuItem } from '@mui/material';
-import PeopleIcon from '@mui/icons-material/People';
+import GroupsIcon from '@mui/icons-material/Groups';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // Import horizontal menu icon
@@ -65,12 +65,16 @@ const BatchList: React.FC = () => {
           padding: { xs: '8px', sm: '10px', md: '16px' },
           width: '100%',
           marginBottom: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          boxShadow: '0 2px 4px rgba(128, 97, 195, 0.2)',
           position: 'relative',
+          transition: 'transform 0.3s ease', // Smooth transition for scaling
+          '&:hover': {
+            transform: 'scale(0.95)', // Scale up the component on hover
+          },
         }}
       >
         <ListItemIcon>
-          <PeopleIcon />
+          <GroupsIcon sx={{color:'rgba(128, 97, 195)'}} />
         </ListItemIcon>
         <ListItemText
           primary= {`ILP 2023 ${batch.batchName}`}
@@ -81,7 +85,7 @@ const BatchList: React.FC = () => {
           }}
           secondaryTypographyProps={{
             variant: 'body2',
-            sx: { fontSize: { xs: '12px', sm: '14px', md: '16px' } }
+            sx: { fontSize: { xs: '12px', sm: '14px', md: '16px', color:'#8061C3' } }
           }}
           sx={{ flex: 1, ml: { xs: 1, sm: 2 } }}
         />
@@ -136,8 +140,9 @@ const BatchList: React.FC = () => {
           right: '10px',
           zIndex: 1000,
           backgroundColor: 'white',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
           borderRadius: '50%',
+          color: "#8061C3",
+          boxShadow: '0 2px 4px rgba(128, 97, 195)'
         }}
       >
         <ArrowUpwardIcon />
@@ -173,8 +178,9 @@ const BatchList: React.FC = () => {
           right: '10px',
           zIndex: 1000,
           backgroundColor: 'white',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+          boxShadow: '0 2px 4px rgba(128, 97, 195)',
           borderRadius: '50%',
+          color: "#8061C3"
         }}
       >
         <ArrowDownwardIcon />

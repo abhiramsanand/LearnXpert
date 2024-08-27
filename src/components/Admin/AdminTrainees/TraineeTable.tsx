@@ -1,28 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TablePagination,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface Trainee {
-  id: number;
-  name: string;
-  batch: string;
-  email: string;
+  traineeId: number;
+  traineeName: string;
 }
 
-interface TraineeTableProps {
-  selectedBatch: number;
-}
-
-const batchNames = ['batch 1', 'batch 2', 'batch 3', 'batch 4'];
-
-const TraineeTable: React.FC<TraineeTableProps> = ({ selectedBatch }) => {
+const TraineeTable: React.FC = () => {
+  const [selectedBatch, setSelectedBatch] = useState<number>(15); // Default batch ID to 15
   const [trainees, setTrainees] = useState<Trainee[]>([]);
+  const [page, setPage] = useState(0); // Current page
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrainees = async () => {
       try {
-        const response = await fetch('/Trainees.json');
+        const response = await fetch(`http://localhost:8080/api/trainees/batch/${selectedBatch}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch trainee data');
+        }
         const data = await response.json();
         setTrainees(data);
       } catch (error) {
@@ -31,45 +39,59 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ selectedBatch }) => {
     };
 
     fetchTrainees();
-  }, []);
+  }, [selectedBatch]);
 
-  const filteredTrainees = trainees.filter(
-    (trainee) => trainee.batch === batchNames[selectedBatch - 1]
-  );
-
-  const handleViewClick = (id: number, name: string, email: string, batch: string) => {
-    navigate(`/trainee/${id}`, { state: { id, name, email, batch } });
+  const handleViewClick = (id: number, name: string) => {
+    navigate(`/trainee/${id}`, { state: { id, name } });
   };
 
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  // Determine the trainees to display based on the current page
+  const traineesPerPage = 4;
+  const displayedTrainees = trainees.slice(page * traineesPerPage, page * traineesPerPage + traineesPerPage);
+
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>ID</TableCell>
-            <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Trainee Name</TableCell>
-            <TableCell align="center" style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredTrainees.map((trainee, index) => (
-            <TableRow key={trainee.id}>
-              <TableCell style={{ fontSize: '12px' }}>{index + 1}</TableCell> {/* Serial number */}
-              <TableCell style={{ fontSize: '12px' }}>{trainee.name}</TableCell>
-              <TableCell align="center" style={{ fontSize: '12px' }}>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: '#8061C3', color: 'white', fontSize: '12px' }}
-                  onClick={() => handleViewClick(trainee.id, trainee.name, trainee.email, trainee.batch)}
-                >
-                  View
-                </Button>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>ID</TableCell>
+              <TableCell style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Trainee Name</TableCell>
+              <TableCell align="center" style={{ backgroundColor: 'rgba(128, 97, 195, 0.1)', color: 'black', fontWeight: 'bolder', fontSize: '14px' }}>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {displayedTrainees.map((trainee, index) => (
+              <TableRow key={trainee.traineeId}>
+                <TableCell style={{ fontSize: '12px' }}>{index + 1 + page * traineesPerPage}</TableCell> {/* Serial number */}
+                <TableCell style={{ fontSize: '12px' }}>{trainee.traineeName}</TableCell>
+                <TableCell align="center" style={{ fontSize: '12px' }}>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: '#8061C3', color: 'white', fontSize: '12px' }}
+                    onClick={() => handleViewClick(trainee.traineeId, trainee.traineeName)}
+                  >
+                    View
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={trainees.length}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={traineesPerPage}
+        rowsPerPageOptions={[]} // Disable custom rows per page options
+      />
+    </>
   );
 };
 
