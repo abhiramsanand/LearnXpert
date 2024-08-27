@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Box, TablePagination } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Button,
+  Box,
+  TablePagination,
+  Typography,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface Trainee {
-  no: number;
-  name: string;
-}
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import { Trainee } from '../ManageBatch/BatchDetails';
+import AddTraineeModal from '../ManageBatch/AddTraineeModal';
+import EditTraineeModal from '../ManageBatch/EditTraineeModal';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 interface TraineeTableProps {
   trainees: Trainee[];
@@ -13,11 +28,45 @@ interface TraineeTableProps {
 }
 
 const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, onAddTrainee }) => {
+  const { batchId } = useParams<{ batchId: string }>();
+  const [traineeList, setTraineeList] = useState<Trainee[]>(trainees);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [currentTrainees, setCurrentTrainees] = useState<Trainee[]>(trainees);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedTrainee, setSelectedTrainee] = useState<Trainee | null>(null);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleOpenAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const handleOpenEditModal = (trainee: Trainee) => {
+    setSelectedTrainee(trainee);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedTrainee(null);
+  };
+
+  const handleAddTrainee = (userName: string, email: string, percipioEmail: string, password: string) => {
+    console.log('New Trainee:', { userName, email, percipioEmail, password });
+    // You might need to refresh the trainees list here or update the state accordingly
+  };
+
+  const handleUpdateTrainee = (userName: string, email: string, percipioEmail: string, password: string) => {
+    if (selectedTrainee) {
+      console.log('Updated Trainee:', { userName, email, percipioEmail, password });
+      // You might need to refresh the trainees list here or update the state accordingly
+    }
+  };
+
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
 
@@ -26,32 +75,43 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, onAddTrainee }) =
     setPage(0);
   };
 
-  const handleDeleteTrainee = (traineeNo: number) => {
-    const updatedTrainees = currentTrainees.filter((trainee) => trainee.no !== traineeNo);
-    setCurrentTrainees(updatedTrainees);
+  const handleDeleteTrainee = async (traineeId: number) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/v1/batches/trainees/${traineeId}`);
+      // Remove the trainee from the UI after successful deletion
+      setTraineeList(prevTrainees => prevTrainees.filter(trainee => trainee.traineeId !== traineeId));
+    } catch (error) {
+      console.error("There was an error deleting the trainee!", error);
+      alert("There was an error deleting the trainee. Check the console for details.");
+    }
   };
 
-  const paginatedTrainees = currentTrainees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
   return (
-    <Box sx={{ mb: 1, mt: 5 }}>
-      <TableContainer component={Paper} sx={{ maxWidth: '100%', maxHeight: '400px' }}>
-        <Table size="small">
+    <Box>
+      <TableContainer component={Paper} sx={{ maxHeight: '200px', overflow: 'auto' }}>
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontSize: '0.8rem', padding: '4px' }}>No</TableCell>
-              <TableCell sx={{ fontSize: '0.8rem', padding: '4px' }}>Name</TableCell>
-              <TableCell sx={{ fontSize: '0.8rem', padding: '4px' }}>Actions</TableCell>
+              <TableCell>SL NO</TableCell>
+              <TableCell>User Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Percipio Email</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedTrainees.map((trainee) => (
-              <TableRow key={trainee.no} sx={{ height: '40px' }}>
-                <TableCell sx={{ fontSize: '0.8rem', padding: '4px' }}>{trainee.no}</TableCell>
-                <TableCell sx={{ fontSize: '0.8rem', padding: '4px' }}>{trainee.name}</TableCell>
-                <TableCell sx={{ padding: '4px' }}>
-                  <IconButton size="small" onClick={() => handleDeleteTrainee(trainee.no)}>
-                    <DeleteIcon fontSize="small" />
+            {traineeList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((trainee, index) => (
+              <TableRow key={trainee.traineeId} sx={{ height: '48px' }}>
+                <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                <TableCell>{trainee.userName}</TableCell>
+                <TableCell>{trainee.email}</TableCell>
+                <TableCell>{trainee.percipioEmail}</TableCell>
+                <TableCell>
+                  <IconButton color="primary" onClick={() => handleOpenEditModal(trainee)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => handleDeleteTrainee(trainee.traineeId)}>
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -60,25 +120,41 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, onAddTrainee }) =
         </Table>
       </TableContainer>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-          <Button variant="contained" size="small" onClick={onAddTrainee}>
-            Add New Trainee
-          </Button>
-        </Box>
-        <Box>
-          <TablePagination
-            rowsPerPageOptions={[3, 5, 10]}
-            component="div"
-            count={currentTrainees.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ height: '40px', fontSize: '0.8rem', overflow: 'hidden' }}
-          />
-        </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+        <Button
+          variant="contained"
+          onClick={handleOpenAddModal}
+          sx={{ color: "#8061C3", borderColor: "#8061C3", borderRadius: "4px" }}
+        >
+          <AddIcon />
+          Add Trainee
+        </Button>
+        <TablePagination
+          rowsPerPageOptions={[3, 10, 25]}
+          component="div"
+          count={traineeList.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Box>
+
+      <AddTraineeModal
+        open={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        onSubmit={handleAddTrainee}
+        batchId={Number(batchId)} // Replace with actual batchId if available
+      />
+
+      {selectedTrainee && (
+        <EditTraineeModal
+          open={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          onSubmit={handleUpdateTrainee}
+          trainee={selectedTrainee}
+        />
+      )}
     </Box>
   );
 };

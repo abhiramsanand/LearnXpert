@@ -38,6 +38,7 @@ import AdminReportPage from "./pages/Admin/AdminReportPage";
 import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
+import CreateCoursePage from "./pages/Admin/CreateCoursePage";
 
 ChartJS.register(
   CategoryScale,
@@ -80,6 +81,10 @@ function App() {
             element={<AdminAssessmentCreationPage />}
           />
           <Route
+            path="/Admin-CourseCreation"
+            element={<CreateCoursePage />}
+          />
+          <Route
             path="/Add-Admin"
             element={
               <CreateAdminPage
@@ -93,7 +98,7 @@ function App() {
             }
           />
           <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
-          <Route path="/Admin-ManageBatch" element={<ManageBatchPage />} />
+          <Route path="/Admin-ManageBatch/:batchId" element={<ManageBatchPage />} />
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
           <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
           <Route path="/Admin-DailyReport" element={<AdminReportPage />} />

@@ -3,24 +3,23 @@ import { Box, ListItem, ListItemIcon, ListItemText, IconButton, Typography, Menu
 import GroupsIcon from '@mui/icons-material/Groups';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // Import horizontal menu icon
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; 
+import { useNavigate } from 'react-router-dom';
 
-// Define the type for the batch data
 interface Batch {
   id: number;
   batchName: string;
-  startDate: string; // Assuming you want to display the date as a string
+  startDate: string;
   endDate: string;
   isActive: boolean;
 }
 
-// BatchList component
 const BatchList: React.FC = () => {
   const [batches, setBatches] = useState<Batch[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Replace this with the actual API URL
     fetch('http://localhost:8080/api/v1/batches')
       .then((response) => response.json())
       .then((data) => setBatches(data))
@@ -29,17 +28,16 @@ const BatchList: React.FC = () => {
 
   const scrollUp = () => {
     if (listRef.current) {
-      listRef.current.scrollTop -= 100; // Adjust the scroll amount as needed
+      listRef.current.scrollTop -= 100;
     }
   };
 
   const scrollDown = () => {
     if (listRef.current) {
-      listRef.current.scrollTop += 100; // Adjust the scroll amount as needed
+      listRef.current.scrollTop += 100;
     }
   };
 
-  // Inner BatchCard component
   const BatchCard: React.FC<{ batch: Batch }> = ({ batch }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -50,6 +48,11 @@ const BatchList: React.FC = () => {
 
     const handleClose = () => {
       setAnchorEl(null);
+    };
+
+    const handleEdit = () => {
+      navigate(`/Admin-ManageBatch/${batch.id}`);
+      handleClose();
     };
 
     return (
@@ -73,7 +76,7 @@ const BatchList: React.FC = () => {
           <GroupsIcon sx={{color:'rgba(128, 97, 195)'}} />
         </ListItemIcon>
         <ListItemText
-          primary= {`ILP 2023 ${batch.batchName}`}
+          primary={`ILP 2023 ${batch.batchName}`}
           secondary={`Start: ${new Date(batch.startDate).toLocaleDateString()} | End: ${new Date(batch.endDate).toLocaleDateString()}`}
           primaryTypographyProps={{
             variant: 'h6',
@@ -101,7 +104,7 @@ const BatchList: React.FC = () => {
               padding: '8px',
             }}
           >
-            <MoreHorizIcon /> {/* Use horizontal menu icon */}
+            <MoreHorizIcon />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -110,7 +113,7 @@ const BatchList: React.FC = () => {
           >
             {batch.isActive ? (
               <>
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
+                <MenuItem onClick={handleEdit}>Edit</MenuItem>
                 <MenuItem onClick={handleClose}>Disable</MenuItem>
               </>
             ) : (
@@ -127,7 +130,6 @@ const BatchList: React.FC = () => {
 
   return (
     <Box sx={{ position: 'relative', width: '100%' }}>
-      {/* Arrow Button for Scrolling Up */}
       <IconButton
         onClick={scrollUp}
         sx={{
@@ -144,20 +146,19 @@ const BatchList: React.FC = () => {
         <ArrowUpwardIcon />
       </IconButton>
 
-      {/* Batch List */}
       <Box
         ref={listRef}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           gap: '1px',
-          width: 'calc(100% - 60px)', // Adjust width to make space for the scroll buttons
+          width: 'calc(100% - 60px)',
           margin: '0 auto',
           paddingTop: 0,
           maxHeight: '350px',
-          overflow: 'hidden', // Hide the default scrollbar
+          overflow: 'hidden',
           position: 'relative',
-          paddingRight: '60px', // Add padding to avoid content being hidden behind the arrow button
+          paddingRight: '60px',
         }}
       >
         {batches.map((batch, index) => (
@@ -165,7 +166,6 @@ const BatchList: React.FC = () => {
         ))}
       </Box>
 
-      {/* Arrow Button for Scrolling Down */}
       <IconButton
         onClick={scrollDown}
         sx={{

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Container, TextField } from '@mui/material';
+import { Box, Button, Typography, Container, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import TraineeTable from '../../components/Admin/BatchCreate1/TraineeTable';
 import AddTraineeModal from '../../components/Admin/BatchCreate1/AddTraineeModal';
@@ -17,6 +17,9 @@ const BatchAdd2: React.FC = () => {
   const { batchId } = useParams<{ batchId: string }>(); // Get batchId from URL params
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,27 +48,42 @@ const BatchAdd2: React.FC = () => {
     setModalOpen(false);
   };
 
+  const handleDeleteTrainee = (id: number) => {
+    setTrainees(trainees.filter((trainee) => trainee.id !== id));
+  };
+
   const handleSubmit = () => {
-    // Assuming the API expects a JSON array of trainees
     fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
-      method: 'PUT', // Use POST if creating new entries, PUT for updating existing ones
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(trainees),
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(trainees),
     })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to submit trainee data');
-      }
-      return response.json();
+        if (!response.ok) {
+            throw new Error('Failed to submit trainee data');
+        }
+        return response.json(); // Parse response as JSON
     })
     .then((data) => {
-      console.log('Trainee data updated successfully:', data);
-      navigate(-1); // Navigate back after successful submission
+        console.log('Trainee data updated successfully:', data);
+        setSuccessMessage(data.message); // Set success message for the modal
+        setSuccessModalOpen(true); // Open success modal
     })
     .catch((error) => console.error('There was a problem with the submission:', error));
   };
+
+  const handleCloseSuccessModal = () => {
+    setSuccessModalOpen(false);
+    navigate(-1); // Navigate back after closing the success modal
+  };
+
+  const filteredTrainees = trainees.filter((trainee) =>
+    trainee.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trainee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trainee.percipioEmail.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Container>
@@ -89,22 +107,28 @@ const BatchAdd2: React.FC = () => {
             >
               CREATE BATCH
             </Typography>
-            <TextField 
-              placeholder="Search" 
-              sx={{ 
-                width: '30%', 
-                marginBottom: 2, 
-                height: '40px', 
+            <TextField
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                width: '30%',
+                marginBottom: 2,
+                height: '40px',
                 '& .MuiInputBase-root': {
                   height: '100%',
-                  border: "5px",
-                  borderColor: "#8061C3",
-                }
-              }} 
+                  border: '5px',
+                  borderColor: '#8061C3',
+                },
+              }}
             />
           </Box>
 
-          <TraineeTable trainees={trainees} />
+          <TraineeTable
+            trainees={filteredTrainees} // Use filtered trainees here
+            batchId={Number(batchId)} // Ensure this is a valid number
+            onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
+          />
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
             <Button 
@@ -123,36 +147,33 @@ const BatchAdd2: React.FC = () => {
               Go Back
             </Button>
             <Button
-              variant="contained"
-              startIcon={<AddIcon />}
               onClick={() => setModalOpen(true)}
-              sx={{
-                bgcolor: "#8061C3",
-                color: "#ffffff",
-                borderRadius: "4px",
+              variant="outlined"
+              sx={{ 
+                color: "#8061C3", 
+                borderColor: "#8061C3", 
+                borderRadius: "4px", 
                 "&:hover": {
-                  bgcolor: "#D0C7FF",
+                  borderColor: "#D0C7FF",
+                  bgcolor: "white",
                 },
               }}
             >
-              ADD TRAINEE
+              <AddIcon />
+              Add Trainee
             </Button>
-          </Box>
-
-          <Box textAlign="center" sx={{ marginTop: 2 }}>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               sx={{
-                bgcolor: "#8061C3",
-                color: "#ffffff",
+                backgroundColor: "#8061C3",
                 borderRadius: "4px",
                 "&:hover": {
-                  bgcolor: "#D0C7FF",
+                  backgroundColor: "#6a4bc3",
                 },
               }}
-              onClick={handleSubmit}
+              onClick={handleSubmit} // Submit data to the backend
             >
-              SUBMIT
+              Submit
             </Button>
           </Box>
         </Box>
@@ -164,6 +185,23 @@ const BatchAdd2: React.FC = () => {
         onSubmit={handleAddTrainee}
         batchId={Number(batchId)} // Ensure batchId is passed as a number
       />
+
+      <Dialog
+        open={successModalOpen}
+        onClose={handleCloseSuccessModal}
+      >
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            {successMessage}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseSuccessModal} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
