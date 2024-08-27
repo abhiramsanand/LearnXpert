@@ -5,19 +5,35 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface HigherSpeedProps {
+interface DailyReportTrackProps {
   selectedBatch: number;
 }
 
-const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
+const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [traineeStatuses, setTraineeStatuses] = useState<{ [key: number]: string }>({});
-  
+
   useEffect(() => {
     if (selectedBatch) {
+      const cacheKey = `dailyReportTrack_${selectedBatch}`;
+      const cachedData = localStorage.getItem(cacheKey);
+      const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+
+      if (cachedData && cachedTimestamp) {
+        const now = new Date().getTime();
+        const fiveMinutes = 5 * 60 * 1000;
+
+        if (now - parseInt(cachedTimestamp) < fiveMinutes) {
+          const { percentage, statuses } = JSON.parse(cachedData);
+          setSpeedPercentage(percentage);
+          setTraineeStatuses(statuses);
+          setLoading(false);
+          return;
+        }
+      }
+
       setLoading(true);
-      
       // Fetch trainee progress data
       fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/Daily-Report-day-number`)
         .then((response) => response.json())
@@ -26,7 +42,7 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
           fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
             .then((response) => response.json())
             .then((batchData) => {
-              const batchDayNumber = batchData.dayNumber-4;
+              const batchDayNumber = batchData.dayNumber - 4;
               const traineeStatusesTemp: { [key: number]: string } = {};
 
               // Determine trainee status
@@ -48,6 +64,10 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
 
               setTraineeStatuses(traineeStatusesTemp);
               setSpeedPercentage(Math.round(percentage));
+
+              // Cache the data
+              localStorage.setItem(cacheKey, JSON.stringify({ percentage: Math.round(percentage), statuses: traineeStatusesTemp }));
+              localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
               setLoading(false);
             })
             .catch((error) => {
@@ -122,15 +142,15 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
           />
           <style>
             {`
-            @keyframes slide {
-              0% {
-                transform: translateX(-100%);
+              @keyframes slide {
+                0% {
+                  transform: translateX(-100%);
+                }
+                100% {
+                  transform: translateX(100%);
+                }
               }
-              100% {
-                transform: translateX(100%);
-              }
-            }
-          `}
+            `}
           </style>
         </Box>
       ) : (

@@ -15,12 +15,29 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
 
   useEffect(() => {
     if (selectedBatch) {
+      const cacheKey = `higherSpeed_${selectedBatch}`;
+      const cachedData = localStorage.getItem(cacheKey);
+      const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+
+      if (cachedData && cachedTimestamp) {
+        const now = new Date().getTime();
+        const fiveMinutes = 5 * 60 * 1000;
+
+        if (now - parseInt(cachedTimestamp) < fiveMinutes) {
+          setSpeedPercentage(parseInt(cachedData));
+          setLoading(false);
+          return;
+        }
+      }
+
       setLoading(true);
       fetch(`http://localhost:8080/api/v1/accelerated?batchId=${selectedBatch}`)
         .then((response) => response.json())
         .then((data) => {
           const roundedPercentage = Math.round(data.percentage);
           setSpeedPercentage(roundedPercentage);
+          localStorage.setItem(cacheKey, roundedPercentage.toString());
+          localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
           setLoading(false);
         })
         .catch((error) => {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-as-const */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -27,42 +26,57 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
   });
 
   useEffect(() => {
-    // Fetch data from the backend
+    // Function to fetch and cache data
     const fetchScoreData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/trainee-scores/average"
-        );
-        const scores: Record<number, number> = response.data;
+      const cacheKey = 'scoreDataCache';
+      const cacheTimeKey = 'scoreDataCacheTime';
+      const cacheDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-        // Initialize counters
-        let above80 = 0;
-        let between70and80 = 0;
-        let between60and70 = 0;
-        let below60 = 0;
+      // Check if the cached data exists and is still valid
+      const cachedData = localStorage.getItem(cacheKey);
+      const cachedTime = localStorage.getItem(cacheTimeKey);
+      const now = new Date().getTime();
 
-        // Categorize each trainee's average score
-        Object.values(scores).forEach((score) => {
-          if (score > 80) {
-            above80++;
-          } else if (score > 70) {
-            between70and80++;
-          } else if (score > 60) {
-            between60and70++;
-          } else {
-            below60++;
-          }
-        });
+      if (cachedData && cachedTime && now - parseInt(cachedTime) < cacheDuration) {
+        // Use cached data
+        setScoreData(JSON.parse(cachedData));
+      } else {
+        // Fetch new data
+        try {
+          const response = await axios.get(
+            "http://localhost:8080/api/v1/trainee-scores/average"
+          );
+          const scores: Record<number, number> = response.data;
 
-        // Update state with categorized data
-        setScoreData({
-          above80,
-          between70and80,
-          between60and70,
-          below60,
-        });
-      } catch (error) {
-        console.error("Error fetching trainee scores:", error);
+          // Initialize counters
+          let above80 = 0;
+          let between70and80 = 0;
+          let between60and70 = 0;
+          let below60 = 0;
+
+          // Categorize each trainee's average score
+          Object.values(scores).forEach((score) => {
+            if (score > 80) {
+              above80++;
+            } else if (score > 70) {
+              between70and80++;
+            } else if (score > 60) {
+              between60and70++;
+            } else {
+              below60++;
+            }
+          });
+
+          // Update state with categorized data
+          const newScoreData = { above80, between70and80, between60and70, below60 };
+          setScoreData(newScoreData);
+
+          // Cache the new data and timestamp
+          localStorage.setItem(cacheKey, JSON.stringify(newScoreData));
+          localStorage.setItem(cacheTimeKey, now.toString());
+        } catch (error) {
+          console.error("Error fetching trainee scores:", error);
+        }
       }
     };
 

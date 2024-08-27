@@ -58,41 +58,53 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
     if (selectedBatch) {
       setLoading(true);
 
-      // Fetch trainee progress data
-      fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/last-accessed-day-number`)
-        .then((response) => response.json())
-        .then((traineeDayNumbers) => {
-          // Fetch batch day number
-          fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
-            .then((response) => response.json())
-            .then((batchData) => {
-              const batchDayNumber = batchData.dayNumber - 3;
-              let behind = 0;
-              let onTrack = 0;
-              let ahead = 0;
+      const localStorageKey = `traineeProgressData_${selectedBatch}`;
+      const cachedData = localStorage.getItem(localStorageKey);
+      const cachedTimestamp = localStorage.getItem(`${localStorageKey}_timestamp`);
+      const isDataValid =
+        cachedData && cachedTimestamp && Date.now() - parseInt(cachedTimestamp) < 5 * 60 * 1000;
 
-              for (const dayNumber of Object.values(traineeDayNumbers)) {
-                if (dayNumber < batchDayNumber) {
-                  behind++;
-                } else if (dayNumber === batchDayNumber) {
-                  onTrack++;
-                } else {
-                  ahead++;
+      if (isDataValid) {
+        setProgressData(JSON.parse(cachedData));
+        setLoading(false);
+      } else {
+        fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/last-accessed-day-number`)
+          .then((response) => response.json())
+          .then((traineeDayNumbers) => {
+            fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
+              .then((response) => response.json())
+              .then((batchData) => {
+                const batchDayNumber = batchData.dayNumber - 3;
+                let behind = 0;
+                let onTrack = 0;
+                let ahead = 0;
+
+                for (const dayNumber of Object.values(traineeDayNumbers)) {
+                  if (dayNumber < batchDayNumber) {
+                    behind++;
+                  } else if (dayNumber === batchDayNumber) {
+                    onTrack++;
+                  } else {
+                    ahead++;
+                  }
                 }
-              }
 
-              setProgressData({ behind, onTrack, ahead });
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching batch data:", error);
-              setLoading(false);
-            });
-        })
-        .catch((error) => {
-          console.error("Error fetching trainee progress data:", error);
-          setLoading(false);
-        });
+                const progress = { behind, onTrack, ahead };
+                setProgressData(progress);
+                localStorage.setItem(localStorageKey, JSON.stringify(progress));
+                localStorage.setItem(`${localStorageKey}_timestamp`, Date.now().toString());
+                setLoading(false);
+              })
+              .catch((error) => {
+                console.error("Error fetching batch data:", error);
+                setLoading(false);
+              });
+          })
+          .catch((error) => {
+            console.error("Error fetching trainee progress data:", error);
+            setLoading(false);
+          });
+      }
     }
   }, [selectedBatch]);
 
