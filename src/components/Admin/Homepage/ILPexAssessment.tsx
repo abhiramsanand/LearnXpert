@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import axios from "axios";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -10,31 +11,62 @@ interface AssessmentScoreProps {
   selectedBatch: number;
 }
 
+interface ScoreData {
+  above80: number;
+  between70and80: number;
+  between60and70: number;
+  below60: number;
+}
+
 const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
-  const [scoreData, setScoreData] = useState({
-    above80: 3,
-    between70and80: 10,
-    between60and70: 19,
-    below60: 6,
+  const [scoreData, setScoreData] = useState<ScoreData>({
+    above80: 0,
+    between70and80: 0,
+    between60and70: 0,
+    below60: 0,
   });
 
   useEffect(() => {
-    const batchData: Record<
-      number,
-      {
-        above80: number;
-        between70and80: number;
-        between60and70: number;
-        below60: number;
+    // Fetch data from the backend
+    const fetchScoreData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/trainee-scores/average"
+        );
+        const scores: Record<number, number> = response.data;
+
+        // Initialize counters
+        let above80 = 0;
+        let between70and80 = 0;
+        let between60and70 = 0;
+        let below60 = 0;
+
+        // Categorize each trainee's average score
+        Object.values(scores).forEach((score) => {
+          if (score > 80) {
+            above80++;
+          } else if (score > 70) {
+            between70and80++;
+          } else if (score > 60) {
+            between60and70++;
+          } else {
+            below60++;
+          }
+        });
+
+        // Update state with categorized data
+        setScoreData({
+          above80,
+          between70and80,
+          between60and70,
+          below60,
+        });
+      } catch (error) {
+        console.error("Error fetching trainee scores:", error);
       }
-    > = {
-      1: { above80: 3, between70and80: 10, between60and70: 19, below60: 6 },
-      2: { above80: 5, between70and80: 8, between60and70: 15, below60: 7 },
-      3: { above80: 4, between70and80: 12, between60and70: 20, below60: 8 },
-      4: { above80: 6, between70and80: 14, between60and70: 18, below60: 5 },
-      5: { above80: 6, between70and80: 14, between60and70: 18, below60: 5 },
     };
-    setScoreData(batchData[selectedBatch] || batchData[1]);
+
+    fetchScoreData();
   }, [selectedBatch]);
 
   const data = {
@@ -68,7 +100,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
     plugins: {
       legend: {
         display: true,
-        position: "right" as "right", 
+        position: "right" as "right",
       },
     },
     cutout: "70%",
