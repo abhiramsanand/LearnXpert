@@ -3,15 +3,19 @@ import { Grid, Card, CardContent, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-import DailyReportModal from "./DailyReportModal"; // Make sure to import your modal
+// import DailyReportModal from "./DailyReportModal"; // Make sure to import your modal
 import ReportModalComponent from "./ReportModalComponent";
 
 interface CoursesListProps {
   courses: any[];
-  handleOpenReportModal: (courseId: number, courseName: string) => void;
+  handleOpenReportModal: (courseId: number, courseName: string, dailyReportId: number) => void;
+  handleOpenReportViewModal: (report: Report) => void;
 }
 
-const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModal }) => {
+const CoursesList: React.FC<CoursesListProps> = ({
+  courses,
+  handleOpenReportModal
+}) =>{
   const [openModal, setOpenModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState<any>(null);
 

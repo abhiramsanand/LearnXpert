@@ -118,6 +118,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
               value={courseName}
               variant="outlined"
               fullWidth
+              sx={{ mt:1 }}
               InputProps={{
                 readOnly: true,
                 sx: {
@@ -128,7 +129,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
                 },
               }}
             />
-            <Grid container spacing={2} alignItems="center">
+            <Grid container spacing={1} alignItems="center">
               <Grid item xs={6}>
                 <Typography variant="body2" textAlign="center" sx={{ fontWeight: 'bold' }}>
                   Hours Of Learning

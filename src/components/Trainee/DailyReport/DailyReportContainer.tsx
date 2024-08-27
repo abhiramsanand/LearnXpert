@@ -8,7 +8,7 @@ import PendingSubmissionsModal from "./PendingSubmissionsModal";
 import ReportModalComponent from "./ReportModalComponent";
 
 const DailyReportContainer: React.FC = () => {
-  const [courses, setCourses] = useState<any[]>([]);
+  const [courses, setCourses] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [openReportModal, setOpenReportModal] = useState(false);
   const [openPendingModal, setOpenPendingModal] = useState(false);
@@ -19,7 +19,7 @@ const DailyReportContainer: React.FC = () => {
   const coursesPerPage = 3;
 
   // State for holding course details for the modal
-  const [courseDetails, setCourseDetails] = useState<any>(null);
+  const [courseDetails, setCourseDetails] = useState<string>(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -38,13 +38,13 @@ const DailyReportContainer: React.FC = () => {
     fetchCourses();
   }, [selectedDate, batchId, traineeId]);
 
-  const handleOpenReportModal = async (courseId: number, courseName: string,dailyReportId:number) => {
+  const handleOpenReportModal = async (courseId: number, courseName: string, dailyReportId: number) => {
     try {
       const response = await fetch(
         `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
       const data = await response.json();
-      console.log("Fetched course details:", data); // Debugging log
+      console.log("Fetched course details:", data);
       setCourseDetails({ ...data, courseId, courseName });
       setOpenReportModal(true);
     } catch (error) {

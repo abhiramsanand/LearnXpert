@@ -22,9 +22,7 @@ interface ReportModalComponentProps {
 const ReportModalComponent: React.FC<ReportModalComponentProps> = ({
   open,
   onClose,
-  report,
-  onPrevious,
-  onNext,
+  report
 }) => {
   return (
     <Modal
