@@ -67,10 +67,6 @@ const BatchList: React.FC = () => {
           marginBottom: '8px',
           boxShadow: '0 2px 4px rgba(128, 97, 195, 0.2)',
           position: 'relative',
-          transition: 'transform 0.3s ease', // Smooth transition for scaling
-          '&:hover': {
-            transform: 'scale(0.95)', // Scale up the component on hover
-          },
         }}
       >
         <ListItemIcon>
