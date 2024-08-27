@@ -1,27 +1,43 @@
 .outerContainer {
-    border: 2px solid #A54BFF;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 19px auto;
-    display: flex;
-    flex-direction: column;
-    height: calc(70vh - 80px);
-    width: 90%;
-    max-width: 700px;
-    overflow: hidden;
-  }
-  
-  .scrollableDaysContainer {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 5px;
-    border-right: 1px solid #ddd;
-  }
-  
-  .courseDetailsContainer {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #F9F9F9;
-  }
-  
+  border: 2px solid #8061C3;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 19px auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(90vh - 100px);
+  width: 100%;
+  max-width: 1000px;
+  overflow: hidden;
+}
+
+.scrollableDaysContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  border-right: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.daySummaryContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.courseDetailsContainer {
+  padding: 12px;
+  background-color: white;
+}
+
+.courseItemContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
