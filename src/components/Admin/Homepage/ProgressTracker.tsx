@@ -10,15 +10,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import TraineeModal from "./TraineeModal";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const options = {
   responsive: true,
@@ -34,23 +28,14 @@ const options = {
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
-      ticks: {
-        display: true,
-      },
+      grid: { display: false },
+      ticks: { display: true },
       barPercentage: 0.6,
       categoryPercentage: 0.8,
     },
     y: {
-      grid: {
-        display: true,
-        color: "#EEE7FF",
-      },
-      ticks: {
-        display: true,
-      },
+      grid: { display: true, color: "#EEE7FF" },
+      ticks: { display: true },
     },
   },
   barThickness: 20,
@@ -67,6 +52,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
     ahead: 0,
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedBatch) {
@@ -80,12 +66,12 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
           fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
             .then((response) => response.json())
             .then((batchData) => {
-              const batchDayNumber = batchData.dayNumber-3; 
+              const batchDayNumber = batchData.dayNumber - 3;
               let behind = 0;
               let onTrack = 0;
               let ahead = 0;
 
-              for (const [traineeId, dayNumber] of Object.entries(traineeDayNumbers)) {
+              for (const dayNumber of Object.values(traineeDayNumbers)) {
                 if (dayNumber < batchDayNumber) {
                   behind++;
                 } else if (dayNumber === batchDayNumber) {
@@ -119,6 +105,8 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
       },
     ],
   };
+
+  const handleCloseModal = () => setOpenModal(false);
 
   return (
     <Box
@@ -180,6 +168,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
           >
             <Button
               variant="text"
+              onClick={() => setOpenModal(true)}
               sx={{
                 color: "#8061C3",
                 fontSize: "10px",
@@ -191,6 +180,13 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
           </Box>
         </>
       )}
+
+      {/* Trainee Modal */}
+      <TraineeModal
+        open={openModal}
+        onClose={handleCloseModal}
+        selectedBatch={selectedBatch}
+      />
     </Box>
   );
 };
