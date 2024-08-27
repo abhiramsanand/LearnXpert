@@ -12,18 +12,51 @@ interface HigherSpeedProps {
 const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [traineeStatuses, setTraineeStatuses] = useState<{ [key: number]: string }>({});
+  
   useEffect(() => {
     if (selectedBatch) {
       setLoading(true);
-      fetch(`http://localhost:8080/api/v1/reports?batchId=${selectedBatch}`)
+      
+      // Fetch trainee progress data
+      fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/Daily-Report-day-number`)
         .then((response) => response.json())
-        .then((data) => {
-          setSpeedPercentage(Math.round(data.percentage));
-          setLoading(false);
+        .then((traineeData) => {
+          // Fetch batch day number
+          fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
+            .then((response) => response.json())
+            .then((batchData) => {
+              const batchDayNumber = batchData.dayNumber-4;
+              const traineeStatusesTemp: { [key: number]: string } = {};
+
+              // Determine trainee status
+              for (const traineeId in traineeData) {
+                const traineeDayNumber = traineeData[traineeId];
+                if (traineeDayNumber < batchDayNumber) {
+                  traineeStatusesTemp[parseInt(traineeId)] = 'Behind';
+                } else if (traineeDayNumber === batchDayNumber) {
+                  traineeStatusesTemp[parseInt(traineeId)] = 'On Track';
+                } else {
+                  traineeStatusesTemp[parseInt(traineeId)] = 'Ahead';
+                }
+              }
+
+              // Calculate percentage of trainees who are behind
+              const totalTrainees = Object.keys(traineeStatusesTemp).length;
+              const behindCount = Object.values(traineeStatusesTemp).filter(status => status === 'Behind').length;
+              const percentage = (behindCount / totalTrainees) * 100;
+
+              setTraineeStatuses(traineeStatusesTemp);
+              setSpeedPercentage(Math.round(percentage));
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching batch data:", error);
+              setLoading(false);
+            });
         })
         .catch((error) => {
-          console.error("Error fetching percentage data:", error);
+          console.error("Error fetching trainee data:", error);
           setLoading(false);
         });
     }
@@ -32,7 +65,7 @@ const DailyReportTrack: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
   const data = {
     datasets: [
       {
-        label: "Percentage",
+        label: "Percentage of Trainees Behind",
         data: [speedPercentage, 100 - speedPercentage],
         backgroundColor: ["#8061C3", "#F0EAFD"],
       },

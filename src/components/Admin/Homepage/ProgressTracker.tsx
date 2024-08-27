@@ -71,23 +71,47 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
   useEffect(() => {
     if (selectedBatch) {
       setLoading(true);
-      fetch(
-        `http://localhost:8080/api/v1/ilpex/traineeprogress/status?batchId=${selectedBatch}`
-      )
+
+      // Fetch trainee progress data
+      fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/last-accessed-day-number`)
         .then((response) => response.json())
-        .then((data) => {
-          setProgressData(data);
-          setLoading(false);
+        .then((traineeDayNumbers) => {
+          // Fetch batch day number
+          fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
+            .then((response) => response.json())
+            .then((batchData) => {
+              const batchDayNumber = batchData.dayNumber-3; 
+              let behind = 0;
+              let onTrack = 0;
+              let ahead = 0;
+
+              for (const [traineeId, dayNumber] of Object.entries(traineeDayNumbers)) {
+                if (dayNumber < batchDayNumber) {
+                  behind++;
+                } else if (dayNumber === batchDayNumber) {
+                  onTrack++;
+                } else {
+                  ahead++;
+                }
+              }
+
+              setProgressData({ behind, onTrack, ahead });
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching batch data:", error);
+              setLoading(false);
+            });
         })
         .catch((error) => {
-          console.error("Error fetching progress data:", error);
+          console.error("Error fetching trainee progress data:", error);
           setLoading(false);
         });
     }
   }, [selectedBatch]);
 
   const data = {
-    labels: ["Behind", "Ontrack", "Ahead"],
+    labels: ["Behind", "On Track", "Ahead"],
     datasets: [
       {
         data: [progressData.behind, progressData.onTrack, progressData.ahead],
@@ -117,13 +141,13 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
           justifyContent="center"
           alignItems="center"
           height="100%"
-          paddingX="60px"
+          paddingX="200px"
           sx={{ position: "relative" }}
         >
           <Box
             sx={{
               position: "absolute",
-              width: "100%",
+              width: "35%",
               height: "100%",
               background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
               animation: "slide 1.5s infinite",
