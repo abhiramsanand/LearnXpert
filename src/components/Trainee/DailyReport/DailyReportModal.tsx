@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,18 +11,80 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
- 
+
 interface DailyReportModalProps {
   open: boolean;
   handleClose: () => void;
+  courseName: string;
   courseDetails: any;
- 
+  setCourseDetails: (newDetails: any) => void;
+  traineeId: number;
+  courseId: number;
 }
- 
-const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, courseDetails }) => {
-  const totalMinutes = courseDetails?.timeTaken || 0; // Assume totalMinutes is a property in courseDetails
+
+const DailyReportModal: React.FC<DailyReportModalProps> = ({
+  open,
+  handleClose,
+  courseName,
+  courseDetails,
+  setCourseDetails,
+  traineeId,
+  courseId,
+}) => {
+  const totalMinutes = courseDetails?.timeTaken || 0;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+
+  const handleFieldChange = (field: string, value: any) => {
+    setCourseDetails((prevDetails: any) => ({
+      ...prevDetails,
+      [field]: value,
+    }));
+  };
+
+  const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newHours = parseInt(event.target.value, 10);
+    if (!isNaN(newHours)) {
+      const updatedTotalMinutes = newHours * 60 + minutes;
+      handleFieldChange('timeTaken', updatedTotalMinutes);
+    }
+  };
+
+  const handleMinutesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newMinutes = parseInt(event.target.value, 10);
+    if (!isNaN(newMinutes)) {
+      const updatedTotalMinutes = hours * 60 + newMinutes;
+      handleFieldChange('timeTaken', updatedTotalMinutes);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/v1/dailyreport/updateDetails?traineeId=${traineeId}&courseId=${courseId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            timeTaken: courseDetails.timeTaken,
+            keyLearnings: courseDetails.keylearnings,
+            planForTomorrow: courseDetails.planfortomorrow,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update the report');
+      }
+
+      handleClose();
+    } catch (error) {
+      console.error('Error submitting report:', error);
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -54,20 +115,14 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
           <Box component="form" display="flex" flexDirection="column" gap={1}>
             <TextField
               label="Course"
-              placeholder="course name..."
-              value={courseDetails?.courseName || ""} // Use optional chaining
+              value={courseName}
               variant="outlined"
               fullWidth
               InputProps={{
+                readOnly: true,
                 sx: {
                   borderRadius: '10px',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#8061C3',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#8061C3',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                     borderColor: '#8061C3',
                   },
                 },
@@ -82,7 +137,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
               <Grid item xs={3}>
                 <TextField
                   type="number"
-                  value={hours||1}
+                  value={hours}
                   variant="outlined"
                   inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   fullWidth
@@ -92,20 +147,16 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
                       '& .MuiOutlinedInput-notchedOutline': {
                         borderColor: '#8061C3',
                       },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#8061C3',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#8061C3',
-                      },
                     },
                   }}
+                  onChange={handleHoursChange}
                 />
               </Grid>
               <Grid item xs={3}>
                 <TextField
                   type="number"
-                  value={minutes||0}                  variant="outlined"
+                  value={minutes}
+                  variant="outlined"
                   inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   fullWidth
                   InputProps={{
@@ -114,14 +165,9 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
                       '& .MuiOutlinedInput-notchedOutline': {
                         borderColor: '#8061C3',
                       },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#8061C3',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#8061C3',
-                      },
                     },
                   }}
+                  onChange={handleMinutesChange}
                 />
               </Grid>
               <Grid item xs={6}></Grid>
@@ -139,7 +185,8 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
             <TextField
               label="Key Learnings"
               placeholder="key learnings..."
-              value={courseDetails?.keylearnings || ""}
+              value={courseDetails?.keylearnings || ''}
+              onChange={(e) => handleFieldChange('keylearnings', e.target.value)}
               variant="outlined"
               fullWidth
               multiline
@@ -148,12 +195,6 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
                 sx: {
                   borderRadius: '10px',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#3A3AFF',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#3A3AFF',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                     borderColor: '#3A3AFF',
                   },
                 },
@@ -162,7 +203,8 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
             <TextField
               label="Plan For Tomorrow"
               placeholder="plan for tomorrow..."
-              value={courseDetails?.planfortomorrow || ""}
+              value={courseDetails?.planfortomorrow || ''}
+              onChange={(e) => handleFieldChange('planfortomorrow', e.target.value)}
               variant="outlined"
               fullWidth
               multiline
@@ -171,12 +213,6 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
                 sx: {
                   borderRadius: '10px',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#3A3AFF',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#3A3AFF',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                     borderColor: '#3A3AFF',
                   },
                 },
@@ -195,6 +231,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
                 fontWeight: 'bold',
                 mt: 1,
               }}
+              onClick={handleSubmit}
             >
               SUBMIT
             </Button>
@@ -204,6 +241,5 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({ open, handleClose, 
     </Dialog>
   );
 };
- 
- 
+
 export default DailyReportModal;

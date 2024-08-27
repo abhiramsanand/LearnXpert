@@ -38,18 +38,21 @@ const DailyReportContainer: React.FC = () => {
     fetchCourses();
   }, [selectedDate, batchId, traineeId]);
 
-  const handleOpenReportModal = async (ReportId: number) => {
+  const handleOpenReportModal = async (courseId: number, courseName: string,dailyReportId:number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${ReportId}`
+        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
       const data = await response.json();
-      setCourseDetails(data);
+      console.log("Fetched course details:", data); // Debugging log
+      setCourseDetails({ ...data, courseId, courseName });
       setOpenReportModal(true);
     } catch (error) {
       console.error("Error fetching course details:", error);
     }
   };
+  
+  
 
   const handleCloseReportModal = () => {
     setOpenReportModal(false);
@@ -63,7 +66,10 @@ const DailyReportContainer: React.FC = () => {
     setSelectedDate(date);
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     setPage(value);
   };
 
@@ -96,8 +102,15 @@ const DailyReportContainer: React.FC = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <Container sx={{ overflowY: 'auto', maxHeight: '80vh' }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
+    >
+      <Container sx={{ overflowY: "auto", maxHeight: "80vh" }}>
         <HeaderSection
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -107,23 +120,40 @@ const DailyReportContainer: React.FC = () => {
         />
         <Paper
           sx={{
-            backgroundColor: '#f2eff9',
+            backgroundColor: "#f2eff9",
             padding: 2,
             borderRadius: 2,
             mt: 2,
           }}
         >
-          <CoursesList 
-            courses={currentCourses} 
-            handleOpenReportModal={handleOpenReportModal} 
+          <CoursesList
+            courses={currentCourses}
+            handleOpenReportModal={handleOpenReportModal}
             handleOpenReportViewModal={handleOpenReportViewModal} // Pass down the function
           />
-          <PaginationControl page={page} totalPages={totalPages} handlePageChange={handlePageChange} />
+          <PaginationControl
+            page={page}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </Paper>
       </Container>
 
-      <DailyReportModal open={openReportModal} handleClose={handleCloseReportModal} courseDetails={courseDetails} />
-      <PendingSubmissionsModal open={openPendingModal} handleClose={handleClosePendingModal} />
+      <DailyReportModal
+  open={openReportModal}
+  handleClose={handleCloseReportModal}
+  courseName={courseDetails?.courseName || ''}
+  courseDetails={courseDetails}
+  setCourseDetails={setCourseDetails} 
+  traineeId={traineeId} 
+  courseId={courseDetails?.courseId || 0}
+/>
+
+
+      <PendingSubmissionsModal
+        open={openPendingModal}
+        handleClose={handleClosePendingModal}
+      />
 
       {/* ReportModalComponent */}
       {currentReport && (
@@ -145,8 +175,8 @@ function formatDateToApiFormat(date: Date | null) {
   if (!date) return null;
 
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}T00:00:00`;
 }
