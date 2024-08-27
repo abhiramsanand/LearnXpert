@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import TraineeModal from "./TraineeModal";
+import TraineeModal from "./ProgressModal";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 

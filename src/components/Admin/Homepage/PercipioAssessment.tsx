@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from "axios";
+import TraineeModal from "./PercipioModal";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -11,9 +11,7 @@ interface AssessmentScoreProps {
   selectedBatch: number;
 }
 
-const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
-  selectedBatch,
-}) => {
+const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
   const [scoreData, setScoreData] = useState({
     below80: 0,
     between80and90: 0,
@@ -21,32 +19,51 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
     exactly100: 0,
   });
 
+  const [traineeData, setTraineeData] = useState({
+    below80: [] as string[],
+    between80and90: [] as string[],
+    between90and99: [] as string[],
+    exactly100: [] as string[],
+  });
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<{ [traineeId: number]: number }>(
-          "http://localhost:8080/api/v1/assessments/average"
+        const response = await axios.get<{ [traineeName: string]: number }>(
+          "http://localhost:8080/api/v1/assessments/averageScore"
         );
         const scores = response.data;
 
-        let below80 = 0;
-        let between80and90 = 0;
-        let between90and99 = 0;
-        let exactly100 = 0;
+        let below80: string[] = [];
+        let between80and90: string[] = [];
+        let between90and99: string[] = [];
+        let exactly100: string[] = [];
 
-        Object.values(scores).forEach((score) => {
+        Object.entries(scores).forEach(([traineeName, score]) => {
           if (score < 80) {
-            below80++;
+            below80.push(traineeName);
           } else if (score >= 80 && score < 90) {
-            between80and90++;
+            between80and90.push(traineeName);
           } else if (score >= 90 && score < 100) {
-            between90and99++;
+            between90and99.push(traineeName);
           } else if (score === 100) {
-            exactly100++;
+            exactly100.push(traineeName);
           }
         });
 
         setScoreData({
+          below80: below80.length,
+          between80and90: between80and90.length,
+          between90and99: between90and99.length,
+          exactly100: exactly100.length,
+        });
+
+        setTraineeData({
           below80,
           between80and90,
           between90and99,
@@ -109,10 +126,12 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
         margin: "auto",
         borderRadius: "5px",
         transition: "transform 0.3s ease-in-out",
+        cursor: "pointer",
         "&:hover": {
           transform: "scale(1.05)",
         },
       }}
+      onClick={handleOpenModal}
     >
       <Box width="100%" sx={{ pr: 2 }}>
         <Typography variant="h5">Percipio</Typography>
@@ -141,6 +160,11 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({
       <Box width="35%">
         <Doughnut data={data} options={options} />
       </Box>
+      <TraineeModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        traineeData={traineeData}
+      />
     </Box>
   );
 };
