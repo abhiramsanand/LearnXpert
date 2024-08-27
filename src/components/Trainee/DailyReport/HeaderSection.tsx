@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, TextField, Button, Badge } from "@mui/material";
 import DateSelector from "./DateSelector";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 interface HeaderSectionProps {
   searchTerm: string;
@@ -17,6 +18,12 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   onDateChange,
   handleOpenPendingModal,
 }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleViewWholeReport = () => {
+    navigate("../Trainee-Wholereport"); // Redirect to WholeReport page
+  };
+
   return (
     <>
       <Box
@@ -67,6 +74,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
             height: "40px",
             borderRadius: "20px",
           }}
+          onClick={handleViewWholeReport} // Attach the click handler
         >
           View Whole Report
         </Button>

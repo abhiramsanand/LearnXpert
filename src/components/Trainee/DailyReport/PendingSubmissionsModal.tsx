@@ -49,7 +49,7 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
           transform: "translate(-50%, -50%)",
           width: "90%",
           maxWidth: "800px",
-          bgcolor: "#f3e8ff", // Background color similar to the screenshot
+          bgcolor: "#f2eff9", // Background color similar to the screenshot
           borderRadius: 3,
           boxShadow: 24,
           p: 4,
@@ -88,7 +88,6 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
                 <TableCell sx={{ fontWeight: "bold", color: "#5f4b8b", backgroundColor: "#e0c3fc", borderTopLeftRadius: "8px", borderBottomLeftRadius: "8px", textAlign: "center" }}>Course</TableCell>
                 <TableCell sx={{ fontWeight: "bold", color: "#5f4b8b", backgroundColor: "#e0c3fc", borderTopRightRadius: "8px", borderBottomRightRadius: "8px", textAlign: "center" }}>
                   Day
-                  <span style={{ marginLeft: "5px", color: "#5f4b8b" }}>🔄</span> {/* Added icon next to "Day" column header */}
                 </TableCell>
               </TableRow>
             </TableHead>
