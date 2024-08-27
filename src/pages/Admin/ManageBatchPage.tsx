@@ -4,6 +4,8 @@ import ProgramStatusForm from '../../components/Admin/ManageBatch/ProgramStatusF
 import TraineeTable from '../../components/Admin/ManageBatch/TraineeTable';
 import AddTraineeModal from '../../components/Admin/ManageBatch/AddTraineeModal';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import SuccessModal from '../../components/Admin/ManageBatch/SuccessModal';
 
 interface BatchDetails {
   batchId: number;
@@ -28,6 +30,7 @@ const ManageBatchPage: React.FC = () => {
   const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -60,43 +63,67 @@ const ManageBatchPage: React.FC = () => {
   }, [batchId]);
 
   const handleAddTrainee = (userName: string, email: string, percipioEmail: string, password: string) => {
-    // Update the list of trainees locally or fetch the updated list from the server
-    // For this example, we'll just log the new trainee data
     console.log('New Trainee:', { userName, email, percipioEmail, password });
   };
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const handleUpdateBatchDetails = async () => {
+    if (batchDetails) {
+      try {
+        const response = await axios.put(`http://localhost:8080/api/v1/batches/${batchId}`, {
+          batchName: batchDetails.batchName,
+          startDate: new Date(batchDetails.startDate).toISOString(),
+          endDate: new Date(batchDetails.endDate).toISOString(),
+        });
+  
+        if (response.status === 200) {
+          console.log('Batch details updated successfully');
+          setIsSuccessModalOpen(true);
+        } else {
+          console.error('Failed to update batch details');
+        }
+      } catch (error) {
+        console.error('Error updating batch details:', error);
+      }
+    }
+  };
+  
+
   if (!batchDetails) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Box sx={{ padding: '8px', display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '80vh' }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
         <ProgramStatusForm batchDetails={batchDetails} />
-        
+
         <Box sx={{ marginTop: '16px' }}>
           <TraineeTable trainees={trainees} onAddTrainee={handleOpenModal} />
-          <Button variant="outlined" color="secondary" size="small" onClick={() => console.log('Cancel')}>
-          Cancel
-        </Button>
-        <Button variant="contained" color="primary" size="small" onClick={() => console.log('Update Trainee')}>
-          Update Trainee
-        </Button>
+          <Box sx={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
+            <Button variant="outlined" color="secondary" size="small" onClick={() => console.log('Cancel')}>
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary" size="small" onClick={handleUpdateBatchDetails}>
+              Update Batch
+            </Button>
+          </Box>
         </Box>
-      </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 1, marginTop: '16px', padding: '8px' }}>
-       
       </Box>
 
       <AddTraineeModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleAddTrainee}
-        batchId={Number(batchId)} // Pass the batchId as a number
+        batchId={Number(batchId)}
+      />
+
+      <SuccessModal
+        open={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        message="Batch details updated successfully!"
       />
     </Box>
   );

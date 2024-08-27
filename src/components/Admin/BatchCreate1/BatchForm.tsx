@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, Grid, TextField, Typography, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import { Box, Button, Container, Grid, TextField, Typography, MenuItem, Select, InputLabel, FormControl, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import axios from "axios";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
@@ -9,10 +10,11 @@ const BatchForm: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
+  const [fileSelected, setFileSelected] = useState<boolean>(false); // State for file selection
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -21,8 +23,7 @@ const BatchForm: React.FC = () => {
         setPrograms(response.data.map((program: { programName: string }) => program.programName));
       } catch (error) {
         console.error("Error fetching programs", error);
-        setMessage("Error fetching programs.");
-        setMessageType('error');
+        alert("Error fetching programs.");
       }
     };
 
@@ -32,13 +33,13 @@ const BatchForm: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setFile(event.target.files[0]);
+      setFileSelected(true); // Update state when file is selected
     }
   };
 
   const handleSubmit = async () => {
     if (selectedProgram === '') {
-      setMessage("Please select a program.");
-      setMessageType('error');
+      alert("Please select a program.");
       return;
     }
 
@@ -49,11 +50,10 @@ const BatchForm: React.FC = () => {
     if (file) {
       formData.append("file", file);
     } else {
-      setMessage("Please upload a file.");
-      setMessageType('error');
+      alert("Please upload a file.");
       return;
     }
- 
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/batches/create",
@@ -65,21 +65,24 @@ const BatchForm: React.FC = () => {
         }
       );
       const batchId = response.data.batchId; // Correctly access batchId from the response
-      // Assuming the response contains the batch ID
-      setMessage("Batch created successfully!");
-      setMessageType('success');
+      setSuccessMessage("Batch created successfully!");
+      setSuccessModalOpen(true); // Open success modal
       navigate(`/Admin-BatchAdd2/${batchId}`); // Pass batchId to the next page
     } catch (error) {
       console.error("There was an error creating the batch!", error);
-      setMessage("There was an error creating the batch. Check the console for details.");
-      setMessageType('error');
-    }};
+      alert("There was an error creating the batch. Check the console for details.");
+    }
+  };
+
+  const handleCloseSuccessModal = () => {
+    setSuccessModalOpen(false);
+  };
 
   return (
     <Container>
       <Box
         sx={{
-          mt: 2,
+          mt: 1,
           p: 4,
           bgcolor: "#ffffff",
           borderRadius: "15px",
@@ -89,21 +92,6 @@ const BatchForm: React.FC = () => {
         <Typography variant="h4" fontFamily={"Montserrat, sans-serif"}>
           CREATE BATCH
         </Typography>
-
-        {message && (
-          <Box
-            sx={{
-              mb: 2,
-              p: 2,
-              bgcolor: messageType === 'success' ? '#d4edda' : '#f8d7da',
-              color: messageType === 'success' ? '#155724' : '#721c24',
-              border: `1px solid ${messageType === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
-              borderRadius: '4px',
-            }}
-          >
-            <Typography variant="body2">{message}</Typography>
-          </Box>
-        )}
 
         <form>
           <Grid container spacing={3}>
@@ -187,7 +175,7 @@ const BatchForm: React.FC = () => {
               </Typography>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} display="flex" alignItems="center">
               <Button
                 variant="contained"
                 component="label"
@@ -214,9 +202,19 @@ const BatchForm: React.FC = () => {
                 />
               </Button>
 
-              <Typography variant="caption" color="textSecondary">
+              {fileSelected && (
+                <CheckCircleIcon
+                  sx={{
+                    color: "#4caf50", // Green color
+                    ml: 1,
+                    fontSize: "24px",
+                  }}
+                />
+              )}
+
+              <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
-                <a href="#" style={{ color: "#6C63FF" }}>
+                <a href="/BatchCreationTemplate.xlsx" download style={{ color: "#6C63FF" }}>
                   here
                 </a>
               </Typography>
@@ -258,14 +256,36 @@ const BatchForm: React.FC = () => {
                 }}
                 onClick={handleSubmit}
               >
-                NEXT
+                submit
               </Button>
             </Grid>
           </Grid>
         </form>
       </Box>
+
+      <SuccessModal 
+        open={successModalOpen} 
+        onClose={handleCloseSuccessModal} 
+        message={successMessage || "Batch created successfully!"} 
+      />
     </Container>
   );
+};
+
+const SuccessModal: React.FC<{ open: boolean; onClose: () => void; message: string }> = ({ open, onClose, message }) => {
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Success</DialogTitle>
+            <DialogContent>
+                <Typography variant="body1">{message}</Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    OK
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 };
 
 export default BatchForm;

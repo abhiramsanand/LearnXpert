@@ -38,6 +38,7 @@ import AdminReportPage from "./pages/Admin/AdminReportPage";
 import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
+import CreateCoursePage from "./pages/Admin/CreateCoursePage";
 
 
 ChartJS.register(
@@ -83,6 +84,10 @@ function App() {
           <Route
             path="/Admin-AssessmentCreation"
             element={<AdminAssessmentCreationPage />}
+          />
+          <Route
+            path="/Admin-CourseCreation"
+            element={<CreateCoursePage />}
           />
           <Route
             path="/Add-Admin"

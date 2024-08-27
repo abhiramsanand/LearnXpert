@@ -10,7 +10,8 @@ import {
   IconButton,
   Button,
   Box,
-  TablePagination
+  TablePagination,
+  Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -74,9 +75,15 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, onAddTrainee }) =
     setPage(0);
   };
 
-  const handleDeleteTrainee = (traineeId: number) => {
-    // Remove the trainee from the UI without calling the API
-    setTraineeList(prevTrainees => prevTrainees.filter(trainee => trainee.traineeId !== traineeId));
+  const handleDeleteTrainee = async (traineeId: number) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/v1/batches/trainees/${traineeId}`);
+      // Remove the trainee from the UI after successful deletion
+      setTraineeList(prevTrainees => prevTrainees.filter(trainee => trainee.traineeId !== traineeId));
+    } catch (error) {
+      console.error("There was an error deleting the trainee!", error);
+      alert("There was an error deleting the trainee. Check the console for details.");
+    }
   };
 
   return (

@@ -20,7 +20,7 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
           userName: username,
           email,
           password,
-          rolesId: roleId // Include roleId in the API request
+          rolesId:1 // Include roleId in the API request
         });
         // Clear form fields and notify parent component
         setUsername('');
@@ -88,16 +88,7 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
           />
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
-        <TextField
-          label="Role ID"
-          variant="outlined"
-          value={roleId}
-          onChange={(e) => setRoleId(e.target.value)}
-          fullWidth
-          sx={{ height: '40px', '& input': { padding: '8px' } }}
-        />
-      </Box>
+     
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Button
           variant="contained"
