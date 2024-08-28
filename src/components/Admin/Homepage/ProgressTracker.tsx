@@ -74,7 +74,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
             fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
               .then((response) => response.json())
               .then((batchData) => {
-                const batchDayNumber = batchData.dayNumber - 3;
+                const batchDayNumber = batchData.dayNumber - 4;
                 let behind = 0;
                 let onTrack = 0;
                 let ahead = 0;

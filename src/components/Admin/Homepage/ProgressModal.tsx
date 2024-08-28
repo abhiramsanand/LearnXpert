@@ -1,10 +1,10 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
-  Button,
   Table,
   TableHead,
   TableRow,
@@ -14,8 +14,11 @@ import {
   IconButton,
   Typography,
   Pagination,
+  PaginationItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 interface TraineeModalProps {
   open: boolean;
@@ -67,7 +70,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
       const traineeProgress = await traineeResponse.json();
       setTraineeData(traineeProgress);
 
-      const batchDayNumber = batch.dayNumber - 3;
+      const batchDayNumber = batch.dayNumber - 4;
       let ahead: string[] = [];
       let onTrack: string[] = [];
       let behind: string[] = [];
@@ -140,7 +143,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle
-        sx={{ backgroundColor: "#1976d2", color: "white", padding: "10px" }}
+        sx={{ backgroundColor: "#EAE5F5", color: "black", padding: "10px" }}
       >
         <Typography variant="h6">Trainees Progress</Typography>
         <IconButton
@@ -150,7 +153,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
             position: "absolute",
             right: 8,
             top: 8,
-            color: "white",
+            color: "red",
           }}
         >
           <CloseIcon />
@@ -208,7 +211,30 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
                 )}
                 page={currentPage}
                 onChange={handlePageChange}
-                color="primary"
+                renderItem={(item) => (
+                  <PaginationItem
+                    components={{
+                      previous: ArrowBackIosNewIcon,
+                      next: ArrowForwardIosIcon,
+                    }}
+                    {...item}
+                    sx={{
+                      minWidth: 36,
+                      color: item.selected ? "#fff" : "rgba(128, 97, 195)", // Text color
+                      bgcolor: item.selected ? "rgba(128, 97, 195)" : "#f5f5f5", // Background color
+                      "&.Mui-selected": {
+                        color: "#fff",
+                        bgcolor: "rgba(128, 97, 195)",
+                      },
+                      "&:hover": {
+                        bgcolor: item.selected
+                          ? "rgba(128, 97, 195, 0.5)"
+                          : "#ddd",
+                      },
+                      borderRadius: "50%",
+                    }}
+                  />
+                )}
               />
             </Box>
           </Box>

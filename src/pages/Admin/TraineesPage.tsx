@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import BatchSelect from "../../shared components/Admin/BatchSelect";
 import TraineeTable from "../../components/Admin/AdminTrainees/TraineeTable";
 import { Box, Container, Typography } from "@mui/material";
 
 const TraineesPage: React.FC = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,10 +13,6 @@ const TraineesPage: React.FC = () => {
 
     return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
   }, []);
-
-  const handleBatchSelect = (batchId: number) => {
-    setSelectedBatch(batchId);
-  };
 
   if (loading) {
     return (
@@ -51,12 +45,8 @@ const TraineesPage: React.FC = () => {
   return (
     <Container>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 4, mt: 2 }}>
-        <BatchSelect
-          selectedBatch={selectedBatch}
-          onBatchSelect={handleBatchSelect}
-        />
       </Box>
-      <TraineeTable selectedBatch={selectedBatch} />
+      <TraineeTable />
     </Container>
   );
 };

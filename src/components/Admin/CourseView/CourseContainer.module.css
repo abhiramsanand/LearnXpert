@@ -1,23 +1,22 @@
-/* CourseContainer.module.css */
 .outerContainer {
-  border: 2px solid #A54BFF;
   border-radius: 8px;
-  padding: 15px;
-  margin: 19px auto;
+  padding: 20px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
-  height: calc(80vh - 70px); /* Adjusted height */
-  width: 100%; /* Increased width */
-  max-width: 1000px; /* Increased max-width */
+  height: calc(80vh - 70px);
+  width: 100%;
+  max-width: 1200px;
   overflow: hidden;
+  background-color: #FFFFFF;
 }
 
 .scrollableDaysContainer {
   flex: 1;
   overflow-y: auto;
-  padding-right: 5px;
-  border-right: 1px solid #ddd;
-  height: 100%; /* Ensure it takes up the remaining space */
+  padding-right: 8px;
+  border-right: 1px solid #E0E0E0;
+  height: 100%;
 }
 
 .scrollableDaysContainer::-webkit-scrollbar {
@@ -25,39 +24,15 @@
 }
 
 .scrollableDaysContainer::-webkit-scrollbar-track {
-  background: #F9F9F9;
+  background: #F1F1F1;
   border-radius: 8px;
 }
 
 .scrollableDaysContainer::-webkit-scrollbar-thumb {
-  background: #A54BFF;
+  background: #8061C3;
   border-radius: 8px;
 }
 
 .scrollableDaysContainer::-webkit-scrollbar-thumb:hover {
-  background: #8e3aab;
-}
-
-.selectBatch {
-  .MuiSelect-root {
-    padding: 10px 14px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    background-color: #F9F9F9;
-    font-size: 16px;
-    color: #333;
-  }
-
-  .MuiSelect-icon {
-    color: #A54BFF;
-  }
-
-  .MuiMenuItem-root {
-    font-size: 16px;
-    color: #333;
-  }
-
-  .MuiMenuItem-root:hover {
-    background-color: #E6E6FA;
-  }
+  background: #8061C3;
 }

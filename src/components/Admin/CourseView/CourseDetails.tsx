@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent } from '@mui/material';
 
 interface Course {
   title: string;
@@ -11,14 +11,16 @@ interface CourseDetailsProps {
 
 const CourseDetails: React.FC<CourseDetailsProps> = ({ courses }) => {
   return (
-    <Box sx={{ padding: '12px', backgroundColor: 'white' }}>
-      <Typography variant="h6">Courses</Typography>
+    <Box sx={{ padding: '16px', backgroundColor: '#FAFAFA' }}>
+      <Typography variant="h6" sx={{ marginBottom: '12px', fontWeight: '600' }}>Courses</Typography>
       <Grid container spacing={2}>
         {courses.map((course, index) => (
           <Grid item xs={12} key={index}>
-            <Box sx={{ border: '1px solid #ddd', borderRadius: '8px', padding: '12px', backgroundColor: '#E6E6FA', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 'bold' }}>{course.title}</Typography>
-            </Box>
+            <Card sx={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', borderRadius: '8px', backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: '500' }}>{course.title}</Typography>
+              </CardContent>
+            </Card>
           </Grid>
         ))}
       </Grid>

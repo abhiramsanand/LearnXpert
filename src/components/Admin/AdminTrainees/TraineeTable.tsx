@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
   Table,
@@ -10,8 +9,10 @@ import {
   Paper,
   Button,
   TablePagination,
+  Box,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import BatchSelect from '../../../shared components/Admin/BatchSelect';
 
 interface Trainee {
   traineeId: number;
@@ -49,12 +50,28 @@ const TraineeTable: React.FC = () => {
     setPage(newPage);
   };
 
+  const handleBatchSelect = (batchId: number) => {
+    setSelectedBatch(batchId);
+    setPage(0); // Reset the page when the batch changes
+  };
+
   // Determine the trainees to display based on the current page
   const traineesPerPage = 4;
   const displayedTrainees = trainees.slice(page * traineesPerPage, page * traineesPerPage + traineesPerPage);
 
   return (
     <>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 2, // Add some space below the BatchSelect
+          marginTop: '-20px'
+        }}
+      >
+        <BatchSelect selectedBatch={selectedBatch} onBatchSelect={handleBatchSelect} />
+      </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
