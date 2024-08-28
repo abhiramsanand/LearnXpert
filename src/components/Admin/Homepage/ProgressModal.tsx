@@ -11,7 +11,11 @@ import {
   TableCell,
   TableBody,
   Box,
+  IconButton,
+  Typography,
+  Pagination,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface TraineeModalProps {
   open: boolean;
@@ -45,6 +49,9 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
     onTrack: [] as string[],
     behind: [] as string[],
   });
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
 
   const fetchTraineeData = async () => {
     try {
@@ -119,50 +126,94 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
     }
   }, [selectedBatch, open]);
 
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value);
+  };
+
+  const paginate = (array: string[], page: number) => {
+    return array.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  };
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>Trainees Progress</DialogTitle>
+      <DialogTitle
+        sx={{ backgroundColor: "#1976d2", color: "white", padding: "10px" }}
+      >
+        <Typography variant="h6">Trainees Progress</Typography>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: "white",
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center">
             Loading...
           </Box>
         ) : (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Ahead</TableCell>
-                <TableCell>On Track</TableCell>
-                <TableCell>Behind</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>
-                  {traineesByCategory.ahead.map((trainee) => (
-                    <div key={trainee}>{trainee}</div>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {traineesByCategory.onTrack.map((trainee) => (
-                    <div key={trainee}>{trainee}</div>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {traineesByCategory.behind.map((trainee) => (
-                    <div key={trainee}>{trainee}</div>
-                  ))}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <Box>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Ahead</TableCell>
+                  <TableCell>On Track</TableCell>
+                  <TableCell>Behind</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    {paginate(traineesByCategory.ahead, currentPage).map(
+                      (trainee) => (
+                        <div key={trainee}>{trainee}</div>
+                      )
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {paginate(traineesByCategory.onTrack, currentPage).map(
+                      (trainee) => (
+                        <div key={trainee}>{trainee}</div>
+                      )
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {paginate(traineesByCategory.behind, currentPage).map(
+                      (trainee) => (
+                        <div key={trainee}>{trainee}</div>
+                      )
+                    )}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <Box display="flex" justifyContent="center" padding="20px">
+              <Pagination
+                count={Math.ceil(
+                  Math.max(
+                    traineesByCategory.ahead.length,
+                    traineesByCategory.onTrack.length,
+                    traineesByCategory.behind.length
+                  ) / itemsPerPage
+                )}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          </Box>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
