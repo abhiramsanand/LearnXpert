@@ -30,14 +30,13 @@ import {
 import AdminLayout from "./AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
 import CreateAdminPage from "./pages/Admin/CreateAdminPage";
-import AdminBatchListPage from "./pages/Admin/AdminBatchListPage";
 import ManageBatchPage from "./pages/Admin/ManageBatchPage";
 import LoginPage from "./pages/Login/LoginPage";
 import BatchAdd2 from "./pages/Admin/BatchAdd2";
 import BatchForm from "./components/Admin/BatchCreate1/BatchForm";
 import AdminReportPage from "./pages/Admin/AdminReportPage";
 import TraineesPage from "./pages/Admin/TraineesPage";
-import TraineeReport from "./pages/Admin/TraineeReportPage";
+import TraineeReport from "./pages/Admin/TraineeCourseReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
 import CreateCoursePage from "./pages/Admin/CreateCoursePage";
 
@@ -98,7 +97,7 @@ function App() {
               />
             }
           />
-          <Route path="/Admin-Batches" element={<AdminBatchListPage />} />
+          <Route path="/Admin-Batches" element={<TraineeCourseReportPage />} />
           <Route path="/Admin-ManageBatch/:batchId" element={<ManageBatchPage />} />
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
           <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
@@ -106,7 +105,6 @@ function App() {
           <Route path="/Admin-Trainees" element={<TraineesPage />} />
           <Route path="/trainee/:id" element={<TraineeReport />} />
           <Route path="/Admin-Courses" element={<AdminCoursePage />} />
-          <Route path="/Trainee-CourseReport" element={<TraineeCourseReportPage />} />
         </Route>
       </Routes>
     </Router>
