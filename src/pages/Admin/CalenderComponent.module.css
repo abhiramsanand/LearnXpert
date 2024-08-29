@@ -1,0 +1,95 @@
+/* CalendarComponent.module.css */
+
+/* Container for the entire calendar */
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  /* Style for the day content, including the day number */
+  .calendar-day-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+  /* Style for the day number */
+  .day-number {
+    font-weight: bold;
+    color: #007bff; /* Blue color for day numbers */
+  }
+  
+  /* Style for tiles that have a day number */
+  .calendar-day-with-day-number {
+    background-color: #e0f7fa; /* Light cyan background */
+    border-radius: 50%;
+    padding: 10px;
+  }
+  
+  /* Style for active tile (when a date is clicked) */
+  .react-calendar__tile--active {
+    background: #007bff; /* Blue background for selected date */
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+  
+  /* Style for today's date */
+  .react-calendar__tile--now {
+    background: #ffeb3b; /* Yellow background for today */
+    color: black;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+  
+  /* General tile styling */
+  .react-calendar__tile {
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for tiles */
+  .react-calendar__tile:hover {
+    background-color: #b3e5fc; /* Light blue on hover */
+  }
+  
+  /* Style for disabled tiles (dates outside of the current month) */
+  .react-calendar__tile--disabled {
+    color: #ccc;
+  }
+  
+  /* Style for holiday-marked days */
+  .holiday-marked {
+    background-color: #ff7043; /* Orange background for holidays */
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+  }
+  .calendarDayWithDayNumber {
+    background-color: #e6f7ff; /* Example background for days with numbers */
+  }
+  
+  .holiday {
+    background-color: #ffcccc; /* Light red background for holidays */
+    color: red; /* Red text for holidays */
+  }
+
+
+.calendarDayContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.dayNumber {
+  font-weight: bold;
+}

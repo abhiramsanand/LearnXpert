@@ -64,7 +64,7 @@ const BatchForm: React.FC = () => {
           },
         }
       );
-      const batchId = response.data.batchId; // Correctly access batchId from the response
+      const batchId = response.data; // Correctly access batchId from the response
       setSuccessMessage("Batch created successfully!");
       setSuccessModalOpen(true); // Open success modal
       navigate(`/Admin-BatchAdd2/${batchId}`); // Pass batchId to the next page

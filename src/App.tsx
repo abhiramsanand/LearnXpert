@@ -39,6 +39,8 @@ import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
 import CreateCoursePage from "./pages/Admin/CreateCoursePage";
+import CourseCalendar from "./pages/Admin/CourseCalendar";
+import CalendarComponent from "./pages/Admin/CalenderComponent";
 
 
 ChartJS.register(
@@ -73,6 +75,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-Calendar" element={<CalendarComponent />} />
           <Route
             path="Admin-Assessments"
             element={<AdminAssessmentViewPage />}
