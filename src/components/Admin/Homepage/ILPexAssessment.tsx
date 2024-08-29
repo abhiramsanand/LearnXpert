@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -117,7 +118,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
         position: "right" as "right",
       },
     },
-    cutout: "70%",
+    cutout: "40%",
   };
 
   return (
@@ -125,7 +126,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       display="flex"
       flexDirection="row"
       alignItems="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       sx={{
         width: "480px",
         padding: "20px",

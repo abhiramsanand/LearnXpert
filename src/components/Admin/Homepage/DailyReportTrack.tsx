@@ -50,7 +50,10 @@ const DailyReportTrack: React.FC = () => {
           cacheKey,
           JSON.stringify({ percentage: Math.round(percentage) })
         );
-        localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
+        localStorage.setItem(
+          `${cacheKey}_timestamp`,
+          new Date().getTime().toString()
+        );
         setLoading(false);
       })
       .catch((error) => {
@@ -64,7 +67,7 @@ const DailyReportTrack: React.FC = () => {
       {
         label: "Percentage of Trainees Behind",
         data: [speedPercentage, 100 - speedPercentage],
-        backgroundColor: ["#8061C3", "#F0EAFD"],
+        backgroundColor: ["#5B8C5A", "#EDF3ED"],
       },
     ],
   };
@@ -86,10 +89,11 @@ const DailyReportTrack: React.FC = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       height="190px"
       width="40%"
       position="relative"
+      gap="15px"
       sx={{
         overflow: "hidden",
         borderRadius: "5px",
@@ -132,13 +136,16 @@ const DailyReportTrack: React.FC = () => {
         </Box>
       ) : (
         <>
+          <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
+            Pending Daily Reports
+          </Typography>
           <Box width="250px" height="70%">
             <Doughnut data={data} options={options} />
           </Box>
           <Box
             sx={{
               position: "absolute",
-              top: "50%",
+              top: "60%",
               left: "50%",
               transform: "translate(-50%, -50%)",
               display: "flex",
@@ -146,9 +153,6 @@ const DailyReportTrack: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: "7px", color: "#000000" }}>
-              Pending Daily Reports
-            </Typography>
             <Typography sx={{ fontSize: "20px", color: "black" }}>
               {speedPercentage}%
             </Typography>

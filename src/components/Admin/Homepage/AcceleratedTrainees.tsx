@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -32,7 +32,9 @@ const AcceleratedTraineesTrack: React.FC = () => {
 
     setLoading(true);
 
-    fetch("/AcceleratedTrainees.json")
+    fetch(
+      "http://localhost:8080/api/v1/ilpex/traineeprogress/duration?batchId=15"
+    )
       .then((response) => response.json())
       .then((traineeData) => {
         const speedCounts = {
@@ -43,13 +45,15 @@ const AcceleratedTraineesTrack: React.FC = () => {
         };
 
         traineeData.forEach((trainee: any) => {
-          const { totalCourseDuration, traineeWatchTime } = trainee;
-          const watchTimeRatio = totalCourseDuration / traineeWatchTime;
+          const { totalDuration, totalEstimatedDuration } = trainee;
+          const watchTimeRatio = totalEstimatedDuration / totalDuration;
 
-          if (watchTimeRatio >= 1 && watchTimeRatio < 1.2) speedCounts["1x"] += 1;
-          else if (watchTimeRatio >= 1.2 && watchTimeRatio < 1.35) speedCounts["1.25x"] += 1;
-          else if (watchTimeRatio >= 1.35 && watchTimeRatio < 1.75) speedCounts["1.5x"] += 1;
-          else if (watchTimeRatio >= 1.75) speedCounts["2x"] += 1;
+          if (watchTimeRatio <= 1.2) speedCounts["1x"] += 1;
+          else if (watchTimeRatio > 1.2 && watchTimeRatio < 1.35)
+            speedCounts["1.25x"] += 1;
+          else if (watchTimeRatio >= 1.35 && watchTimeRatio < 1.75)
+            speedCounts["1.5x"] += 1;
+          else if (watchTimeRatio > 1.75) speedCounts["2x"] += 1;
         });
 
         const totalTrainees = traineeData.length;
@@ -63,7 +67,10 @@ const AcceleratedTraineesTrack: React.FC = () => {
 
         // Cache the data
         localStorage.setItem(cacheKey, JSON.stringify(speedData));
-        localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
+        localStorage.setItem(
+          `${cacheKey}_timestamp`,
+          new Date().getTime().toString()
+        );
         setLoading(false);
       })
       .catch((error) => {
@@ -78,7 +85,9 @@ const AcceleratedTraineesTrack: React.FC = () => {
       {
         label: "Percentage of Trainees by Speed",
         data: Object.values(speedData),
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        backgroundColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
+        borderColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
+        borderWidth: 2,
       },
     ],
   };
@@ -91,25 +100,25 @@ const AcceleratedTraineesTrack: React.FC = () => {
         display: false,
       },
     },
-    cutout: "70%",
+    cutout: "40%", // Adjust the cutout percentage for a more filled appearance
   };
 
   const colorLabels = [
-    { label: "1x", color: "#FF6384" },
-    { label: "1.25x", color: "#36A2EB" },
-    { label: "1.5x", color: "#FFCE56" },
-    { label: "2x", color: "#4BC0C0" },
+    { label: "1x", color: "#5B8C5A" },
+    { label: "1.25x", color: "#F4E4BA" },
+    { label: "1.5x", color: "#E5A9A9" },
+    { label: "2x", color: "#DB5461" },
   ];
 
   return (
     <Box
       display="flex"
-      flexDirection="row"
+      flexDirection="column"
       alignItems="center"
-      justifyContent="space-between"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
+      justifyContent="center"
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       height="190px"
-      width="80%" // Adjusted width here
+      width="80%"
       position="relative"
       sx={{
         overflow: "hidden",
@@ -152,63 +161,66 @@ const AcceleratedTraineesTrack: React.FC = () => {
           </style>
         </Box>
       ) : (
-        <>
-          <Box
-            width="40%"
-            height="100%"
+        <><Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
+            Accelerated Trainees
+          </Typography><Box
             display="flex"
-            flexDirection="column"
-            justifyContent="center"
+            flexDirection="row"
             alignItems="center"
-            textAlign="center"
+            justifyContent="space-between"
+            width="100%"
           >
-            <Typography sx={{ fontSize: "7px", color: "#000000" }}>
-              Trainees Watching at Accelerated Speeds
-            </Typography>
-            <Typography sx={{ fontSize: "15px", color: "black" }}>
-              {Math.round(speedData["1x"])}% - 1x
-              <br />
-              {Math.round(speedData["1.25x"])}% - 1.25x
-              <br />
-              {Math.round(speedData["1.5x"])}% - 1.5x
-              <br />
-              {Math.round(speedData["2x"])}% - 2x
-            </Typography>
-          </Box>
-          <Box
-            width="30%"
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Doughnut data={data} options={options} />
-          </Box>
-          <Box
-            width="30%"
-            height="100%"
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-end"
-            justifyContent="center"
-            paddingRight="10px"
-          >
-            {colorLabels.map(({ label, color }) => (
-              <Box key={label} display="flex" alignItems="center" mb={1}>
-                <Box
-                  width="15px"
-                  height="15px"
-                  bgcolor={color}
-                  borderRadius="50%"
-                  mr={1}
-                />
-                <Typography sx={{ fontSize: "12px", color: "#000000" }}>
-                  {label}
+              <Box
+                width="40%"
+                height="100%"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                ml={4}
+              >
+                <Typography sx={{ fontSize: "15px", color: "black" }}>
+                  1x - {Math.round(speedData["1x"])}%
+                  <br />
+                  1.25x - {Math.round(speedData["1.25x"])}%
+                  <br />
+                  1.5x - {Math.round(speedData["1.5x"])}%
+                  <br />
+                  2x - {Math.round(speedData["2x"])}%
                 </Typography>
               </Box>
-            ))}
-          </Box>
-        </>
+              <Box
+                width="30%"
+                height="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                mr={4}
+              >
+                <Doughnut data={data} options={options} />
+              </Box>
+              <Box
+                width="30%"
+                height="100%"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                paddingRight="10px"
+              >
+                {colorLabels.map(({ label, color }) => (
+                  <Box key={label} display="flex" mb={1} alignItems="center">
+                    <Box
+                      width="15px"
+                      height="15px"
+                      bgcolor={color}
+                      borderRadius="50%"
+                      mr={1} />
+                    <Typography sx={{ fontSize: "12px", color: "#000000" }}>
+                      {label}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box></>
       )}
     </Box>
   );

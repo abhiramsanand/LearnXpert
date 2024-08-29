@@ -80,9 +80,9 @@ const AdminHomePage = () => {
       >
         {batchDetails ? (
           <>
-            <Typography sx={{ mr: 3 }}>{batchDetails.batchName}</Typography>
-            <Typography sx={{ mr: 3 }}>Current Day: {batchDetails.dayNumber}</Typography>
-            <Typography>Number of Trainees: {batchDetails.totalTrainees}</Typography>
+            <Typography sx={{ mr: 3, fontWeight: "bold", color: "#8061C3" }}>{batchDetails.batchName}</Typography>
+            <Typography sx={{ mr: 3, fontWeight: "bold", color: "#8061C3" }}>Current Day: {batchDetails.dayNumber}</Typography>
+            <Typography sx={{fontWeight: "bold", color: "#8061C3"}}>Number of Trainees: {batchDetails.totalTrainees}</Typography>
           </>
         ) : (
           <Typography>No batch details available.</Typography>

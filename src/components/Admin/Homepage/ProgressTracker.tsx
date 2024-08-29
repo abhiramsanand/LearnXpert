@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,7 +12,14 @@ import {
 } from "chart.js";
 import TraineeModal from "./ProgressModal";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const options = {
   responsive: true,
@@ -20,10 +27,6 @@ const options = {
   plugins: {
     legend: {
       display: false,
-    },
-    title: {
-      display: true,
-      text: "Trainees Progress Tracker",
     },
   },
   scales: {
@@ -53,7 +56,9 @@ const ProgressTracker: React.FC = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetch("http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number")
+    fetch(
+      "http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number"
+    )
       .then((response) => response.json())
       .then((trainees) => {
         if (trainees.length === 0) {
@@ -62,9 +67,8 @@ const ProgressTracker: React.FC = () => {
           return;
         }
 
-        // Assume the batchDayNumber is consistent across all trainees
         const batchDayNumber = trainees[0].batchDayNumber;
-        
+
         let behind = 0;
         let onTrack = 0;
         let ahead = 0;
@@ -96,7 +100,7 @@ const ProgressTracker: React.FC = () => {
     datasets: [
       {
         data: [progressData.behind, progressData.onTrack, progressData.ahead],
-        backgroundColor: "#8061C3",
+        backgroundColor: ["#DB5461", "#F4E4BA", "#5B8C5A"], 
       },
     ],
   };
@@ -107,7 +111,7 @@ const ProgressTracker: React.FC = () => {
     <Box
       display="flex"
       flexDirection="column"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       height="190px"
       alignContent="center"
       sx={{
@@ -151,6 +155,9 @@ const ProgressTracker: React.FC = () => {
         </Box>
       ) : (
         <>
+          <Typography sx={{ color: "#8061C3", fontSize: "12px", textAlign: "center", mt: 2 }}>
+            Trainee Progress Tracker
+          </Typography>
           <Box width="100%" height="90%" sx={{ px: "45px" }}>
             <Bar options={options} data={data} />
           </Box>
@@ -160,8 +167,7 @@ const ProgressTracker: React.FC = () => {
             display="flex"
             justifyContent="flex-end"
             alignItems="flex-end"
-          >
-          </Box>
+          ></Box>
         </>
       )}
 
@@ -169,7 +175,7 @@ const ProgressTracker: React.FC = () => {
       <TraineeModal
         open={openModal}
         onClose={handleCloseModal}
-        selectedBatch={0}      
+        selectedBatch={0}
       />
     </Box>
   );

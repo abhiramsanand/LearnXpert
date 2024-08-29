@@ -132,14 +132,14 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
     ],
   };
 
-  const options: any = {
+  const options = {
     plugins: {
       legend: {
         display: true,
         position: "right" as const,
       },
     },
-    cutout: "70%",
+    cutout: "40%", // Adjusted to fill the entire chart
   };
 
   return (
@@ -147,7 +147,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
       display="flex"
       flexDirection="row"
       alignItems="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
+      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       sx={{
         width: "480px",
         padding: "20px",
