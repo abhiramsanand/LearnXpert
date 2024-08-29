@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -17,7 +17,7 @@ const DailyReportTrack: React.FC = () => {
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 0 * 60 * 1000;
+      const oneHour = 0 * 60 * 60 * 1000; // 0 hours for testing, change to 1 hour if needed
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
         const { percentage } = JSON.parse(cachedData);
@@ -29,20 +29,19 @@ const DailyReportTrack: React.FC = () => {
 
     setLoading(true);
 
-    fetch("/DailyReport.json") 
+    fetch("/DailyReport.json")
       .then((response) => response.json())
       .then((traineeData) => {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayString = yesterday.toISOString().split("T")[0];
-
-        const notSubmittedCount = traineeData.filter((trainee: any) => {
-          return trainee.lastSubmittedDate !== yesterdayString;
-        }).length;
-
         const totalTrainees = traineeData.length;
+        let laggingCount = 0;
 
-        const percentage = (notSubmittedCount / totalTrainees) * 100;
+        traineeData.forEach((trainee: any) => {
+          if (trainee.totalSubmitCount < trainee.totalReportCount) {
+            laggingCount += 1;
+          }
+        });
+
+        const percentage = (laggingCount / totalTrainees) * 100;
 
         setSpeedPercentage(Math.round(percentage));
 
@@ -153,13 +152,6 @@ const DailyReportTrack: React.FC = () => {
             <Typography sx={{ fontSize: "20px", color: "black" }}>
               {speedPercentage}%
             </Typography>
-          </Box>
-          <Box
-            width="100%"
-            height="0%"
-            display="flex"
-            justifyContent="flex-end"
-          >
           </Box>
         </>
       )}

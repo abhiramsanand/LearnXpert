@@ -1,188 +1,224 @@
 [
-    {
-      "traineeName": "John Doe",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Jane Smith",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Alice Johnson",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Michael Brown",
-      "lastSubmittedDate": "2024-08-18",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Emily Davis",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "William Wilson",
-      "lastSubmittedDate": "2024-08-17",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Sophia Taylor",
-      "lastSubmittedDate": "2024-08-22",
-      "batchId": 15
-    },
-    {
-      "traineeName": "James Anderson",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Olivia Thomas",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Benjamin Martinez",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Mia Hernandez",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Lucas Moore",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Amelia Garcia",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Henry Martin",
-      "lastSubmittedDate": "2024-08-18",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Isabella Lee",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Elijah Perez",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Charlotte White",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Daniel Harris",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Ava Clark",
-      "lastSubmittedDate": "2024-08-22",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Matthew Robinson",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Harper Lewis",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Jack Walker",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Evelyn Hall",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Alexander Allen",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Ella Young",
-      "lastSubmittedDate": "2024-08-18",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Sebastian King",
-      "lastSubmittedDate": "2024-08-22",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Grace Scott",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Jackson Green",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Scarlett Baker",
-      "lastSubmittedDate": "2024-08-19",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Aiden Adams",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Sofia Nelson",
-      "lastSubmittedDate": "2024-08-18",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Mason Carter",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Lily Mitchell",
-      "lastSubmittedDate": "2024-08-21",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Logan Roberts",
-      "lastSubmittedDate": "2024-08-20",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Zoe Turner",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Ethan Phillips",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    },
-    {
-      "traineeName": "Aria Campbell",
-      "lastSubmittedDate": "2024-08-28",
-      "batchId": 15
-    }
-  ]
-  
+  {
+    "traineeName": "John Doe",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Jane Smith",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Alice Johnson",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Michael Brown",
+    "totalReportCount": 10,
+    "totalSubmitCount": 7,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Emily Davis",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "William Wilson",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Sophia Taylor",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "James Anderson",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Olivia Thomas",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Benjamin Martinez",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Mia Hernandez",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Lucas Moore",
+    "totalReportCount": 10,
+    "totalSubmitCount": 7,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Amelia Garcia",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Henry Martin",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Isabella Lee",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Elijah Perez",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Charlotte White",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Daniel Harris",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Ava Clark",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Matthew Robinson",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Harper Lewis",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Jack Walker",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Evelyn Hall",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Alexander Allen",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Ella Young",
+    "totalReportCount": 10,
+    "totalSubmitCount": 7,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Sebastian King",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Grace Scott",
+    "totalReportCount": 10,
+    "totalSubmitCount": 9,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Jackson Green",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Scarlett Baker",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Aiden Adams",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Sofia Nelson",
+    "totalReportCount": 10,
+    "totalSubmitCount": 7,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Mason Carter",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Lily Mitchell",
+    "totalReportCount": 10,
+    "totalSubmitCount": 8,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Logan Roberts",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Zoe Turner",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Ethan Phillips",
+    "totalReportCount": 10,
+    "totalSubmitCount": 6,
+    "batchId": 15
+  },
+  {
+    "traineeName": "Aria Campbell",
+    "totalReportCount": 10,
+    "totalSubmitCount": 10,
+    "batchId": 15
+  }
+]
