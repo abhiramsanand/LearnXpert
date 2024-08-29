@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import AcceleratedTraineesModal from "./Modals/AcceleratedModal"; // Import the modal component
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,6 +14,8 @@ const AcceleratedTraineesTrack: React.FC = () => {
     "2x": 0,
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [traineeDetails, setTraineeDetails] = useState<Trainee[]>([]);
 
   useEffect(() => {
     const cacheKey = `acceleratedTraineesTrack_allBatches`;
@@ -46,29 +47,34 @@ const AcceleratedTraineesTrack: React.FC = () => {
           "2x": 0,
         };
 
-        traineeData.forEach((trainee: any) => {
-          const { totalDuration, totalEstimatedDuration } = trainee;
+        const details: Trainee[] = traineeData.map((trainee: any) => {
+          const { username, totalDuration, totalEstimatedDuration } = trainee;
           const watchTimeRatio = totalEstimatedDuration / totalDuration;
 
-          if (watchTimeRatio <= 1.2) speedCounts["1x"] += 1;
-          else if (watchTimeRatio > 1.2 && watchTimeRatio < 1.35)
+          let speed = "";
+          if (watchTimeRatio <= 1.2) {
+            speedCounts["1x"] += 1;
+            speed = "1x";
+          } else if (watchTimeRatio > 1.2 && watchTimeRatio < 1.35) {
             speedCounts["1.25x"] += 1;
-          else if (watchTimeRatio >= 1.35 && watchTimeRatio < 1.75)
+            speed = "1.25x";
+          } else if (watchTimeRatio >= 1.35 && watchTimeRatio < 1.75) {
             speedCounts["1.5x"] += 1;
-          else if (watchTimeRatio > 1.75) speedCounts["2x"] += 1;
+            speed = "1.5x";
+          } else if (watchTimeRatio > 1.75) {
+            speedCounts["2x"] += 1;
+            speed = "2x";
+          }
+
+          return { username, speed };
         });
 
-        const totalTrainees = traineeData.length;
+        setTraineeDetails(details);
 
-        setSpeedData({
-          "1x": (speedCounts["1x"] / totalTrainees) * 100,
-          "1.25x": (speedCounts["1.25x"] / totalTrainees) * 100,
-          "1.5x": (speedCounts["1.5x"] / totalTrainees) * 100,
-          "2x": (speedCounts["2x"] / totalTrainees) * 100,
-        });
+        setSpeedData(speedCounts); // Set counts instead of percentages
 
         // Cache the data
-        localStorage.setItem(cacheKey, JSON.stringify(speedData));
+        localStorage.setItem(cacheKey, JSON.stringify(speedCounts));
         localStorage.setItem(
           `${cacheKey}_timestamp`,
           new Date().getTime().toString()
@@ -81,11 +87,19 @@ const AcceleratedTraineesTrack: React.FC = () => {
       });
   }, []);
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   const data = {
     labels: ["1x", "1.25x", "1.5x", "2x"],
     datasets: [
       {
-        label: "Percentage of Trainees by Speed",
+        label: "Number of Trainees by Speed",
         data: Object.values(speedData),
         backgroundColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
         borderColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
@@ -113,44 +127,47 @@ const AcceleratedTraineesTrack: React.FC = () => {
   ];
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
-      height="190px"
-      width="80%"
-      position="relative"
-      sx={{
-        overflow: "hidden",
-        borderRadius: "5px",
-        transition: "transform 0.3s ease-in-out",
-        "&:hover": {
-          transform: "scale(1.05)",
-        },
-      }}
-    >
-      {loading ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
-          width="100%"
-          sx={{ position: "relative" }}
-        >
+    <>
+      <Box
+        onClick={handleOpenModal} // Handle click to open modal
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
+        height="190px"
+        width="80%"
+        position="relative"
+        sx={{
+          overflow: "hidden",
+          borderRadius: "5px",
+          transition: "transform 0.3s ease-in-out",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+      >
+        {loading ? (
           <Box
-            sx={{
-              position: "absolute",
-              width: "100px",
-              height: "100%",
-              background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
-              animation: "slide 1.5s infinite",
-            }}
-          />
-          <style>
-            {`
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            width="100%"
+            sx={{ position: "relative" }}
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                width: "100px",
+                height: "100%",
+                background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
+                animation: "slide 1.5s infinite",
+              }}
+            />
+            <style>
+              {`
               @keyframes slide {
                 0% {
                   transform: translateX(-100%);
@@ -160,18 +177,20 @@ const AcceleratedTraineesTrack: React.FC = () => {
                 }
               }
             `}
-          </style>
-        </Box>
-      ) : (
-        <><Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
-            Accelerated Trainees
-          </Typography><Box
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-            width="100%"
-          >
+            </style>
+          </Box>
+        ) : (
+          <>
+            <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
+              Accelerated Trainees
+            </Typography>
+            <Box
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+            >
               <Box
                 width="40%"
                 height="100%"
@@ -181,13 +200,13 @@ const AcceleratedTraineesTrack: React.FC = () => {
                 textAlign="center"
               >
                 <Typography sx={{ fontSize: "13px", color: "#8061C3" }}>
-                  1x - {Math.round(speedData["1x"])}%
+                  1x - ({speedData["1x"]})
                   <br />
-                  1.25x - {Math.round(speedData["1.25x"])}%
+                  1.25x - ({speedData["1.25x"]})
                   <br />
-                  1.5x - {Math.round(speedData["1.5x"])}%
+                  1.5x - ({speedData["1.5x"]})
                   <br />
-                  2x - {Math.round(speedData["2x"])}%
+                  2x - ({speedData["2x"]})
                 </Typography>
               </Box>
               <Box
@@ -222,9 +241,17 @@ const AcceleratedTraineesTrack: React.FC = () => {
                   </Box>
                 ))}
               </Box>
-            </Box></>
-      )}
-    </Box>
+            </Box>
+          </>
+        )}
+      </Box>
+
+      <AcceleratedTraineesModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        traineeDetails={traineeDetails}
+      />
+    </>
   );
 };
 

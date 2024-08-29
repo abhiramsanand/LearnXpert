@@ -146,7 +146,7 @@ const PercipioAssessment: React.FC = () => {
       alignItems="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       sx={{
-        width: "465px",
+        width: "460px",
         padding: "20px",
         margin: "auto",
         borderRadius: "5px",
