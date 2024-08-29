@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -7,11 +8,7 @@ import TraineeModal from "./PercipioModal";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface AssessmentScoreProps {
-  selectedBatch: number;
-}
-
-const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
+const PercipioAssessment: React.FC = () => {
   const [scoreData, setScoreData] = useState({
     below80: 0,
     between80and90: 0,
@@ -33,7 +30,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
 
   useEffect(() => {
     const fetchData = async () => {
-      const cacheKey = `assessmentData-${selectedBatch}`;
+      const cacheKey = `assessmentData`;
       const cachedData = localStorage.getItem(cacheKey);
 
       if (cachedData) {
@@ -103,7 +100,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
     };
 
     fetchData();
-  }, [selectedBatch]);
+  }, []);
 
   const data = {
     datasets: [
@@ -149,7 +146,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
       alignItems="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       sx={{
-        width: "480px",
+        width: "465px",
         padding: "20px",
         margin: "auto",
         borderRadius: "5px",

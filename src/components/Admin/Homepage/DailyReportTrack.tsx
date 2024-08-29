@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -17,7 +16,7 @@ const DailyReportTrack: React.FC = () => {
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 0 * 60 * 60 * 1000; // 0 hours for testing, change to 1 hour if needed
+      const oneHour = 0 * 60 * 60 * 1000; // Change to 1 hour as needed
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
         const { percentage } = JSON.parse(cachedData);
@@ -29,20 +28,19 @@ const DailyReportTrack: React.FC = () => {
 
     setLoading(true);
 
-    fetch("/DailyReport.json")
+    fetch("http://localhost:8080/api/trainees/reports?batchId=15")
       .then((response) => response.json())
       .then((traineeData) => {
         const totalTrainees = traineeData.length;
         let laggingCount = 0;
 
         traineeData.forEach((trainee: any) => {
-          if (trainee.totalSubmitCount < trainee.totalReportCount) {
+          if (trainee.totalDailyReports < trainee.totalCourses) {
             laggingCount += 1;
           }
         });
 
         const percentage = (laggingCount / totalTrainees) * 100;
-
         setSpeedPercentage(Math.round(percentage));
 
         // Cache the data

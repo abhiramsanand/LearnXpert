@@ -7,10 +7,6 @@ import axios from "axios";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface AssessmentScoreProps {
-  selectedBatch: number;
-}
-
 interface ScoreData {
   above80: number;
   between70and80: number;
@@ -18,7 +14,7 @@ interface ScoreData {
   below60: number;
 }
 
-const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
+const ILPexAssessment: React.FC = () => {
   const [scoreData, setScoreData] = useState<ScoreData>({
     above80: 0,
     between70and80: 0,
@@ -27,35 +23,29 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
   });
 
   useEffect(() => {
-    // Function to fetch and cache data
     const fetchScoreData = async () => {
       const cacheKey = 'scoreDataCache';
       const cacheTimeKey = 'scoreDataCacheTime';
       const cacheDuration = 60 * 60 * 1000; // 5 minutes in milliseconds
 
-      // Check if the cached data exists and is still valid
       const cachedData = localStorage.getItem(cacheKey);
       const cachedTime = localStorage.getItem(cacheTimeKey);
       const now = new Date().getTime();
 
       if (cachedData && cachedTime && now - parseInt(cachedTime) < cacheDuration) {
-        // Use cached data
         setScoreData(JSON.parse(cachedData));
       } else {
-        // Fetch new data
         try {
           const response = await axios.get(
             "http://localhost:8080/api/v1/trainee-scores/average"
           );
           const scores: Record<number, number> = response.data;
 
-          // Initialize counters
           let above80 = 0;
           let between70and80 = 0;
           let between60and70 = 0;
           let below60 = 0;
 
-          // Categorize each trainee's average score
           Object.values(scores).forEach((score) => {
             if (score > 80) {
               above80++;
@@ -68,11 +58,9 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
             }
           });
 
-          // Update state with categorized data
           const newScoreData = { above80, between70and80, between60and70, below60 };
           setScoreData(newScoreData);
 
-          // Cache the new data and timestamp
           localStorage.setItem(cacheKey, JSON.stringify(newScoreData));
           localStorage.setItem(cacheTimeKey, now.toString());
         } catch (error) {
@@ -82,7 +70,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
     };
 
     fetchScoreData();
-  }, [selectedBatch]);
+  }, []);
 
   const data = {
     datasets: [
@@ -128,7 +116,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       alignItems="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
       sx={{
-        width: "480px",
+        width: "465px",
         padding: "20px",
         margin: "auto",
         borderRadius: '5px',

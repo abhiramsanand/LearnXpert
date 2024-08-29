@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -176,9 +178,9 @@ const AcceleratedTraineesTrack: React.FC = () => {
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
-                ml={4}
+                textAlign="center"
               >
-                <Typography sx={{ fontSize: "15px", color: "black" }}>
+                <Typography sx={{ fontSize: "13px", color: "#8061C3" }}>
                   1x - {Math.round(speedData["1x"])}%
                   <br />
                   1.25x - {Math.round(speedData["1.25x"])}%

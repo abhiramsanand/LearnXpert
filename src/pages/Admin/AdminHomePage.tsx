@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings"; // Import Settings Icon
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
@@ -20,8 +21,6 @@ const AdminHomePage = () => {
       try {
         const response = await fetch(BATCH_DETAILS_URL);
         const data = await response.json();
-
-        // Assuming you want to display the first batch from the data
         const batch = data[0]; // Adjust this if you want to fetch a specific batch
 
         setBatchDetails(batch);
@@ -65,11 +64,10 @@ const AdminHomePage = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" position="relative">
-      {/* Batch Details Box */}
       <Box
         position="absolute"
         top="0px"
-        left="0px"
+        left="20px"
         sx={{
           borderRadius: "5px",
           zIndex: 10,
@@ -94,7 +92,7 @@ const AdminHomePage = () => {
         <Box
           position="absolute"
           top="0px"
-          right="0px"
+          right="20px"
           display="flex"
           alignItems="center"
           zIndex={10}
@@ -130,10 +128,10 @@ const AdminHomePage = () => {
           flexDirection="row"
           alignItems="center"
           marginTop="10px"
-          gap="30px"
+          gap="20px"
         >
-          <PercipioAssessment selectedBatch={null} />
-          <ILPexAssessment selectedBatch={null} />
+          <PercipioAssessment />
+          <ILPexAssessment />
         </Box>
       </Box>
     </Box>
