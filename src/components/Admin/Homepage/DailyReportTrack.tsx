@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
+import ReportModal from "./Modals/DailyReportModal"; // Import the modal component
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -8,19 +9,22 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const DailyReportTrack: React.FC = () => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [traineesData, setTraineesData] = useState<any[]>([]);
 
   useEffect(() => {
-    const cacheKey = `dailyReportTrack_allBatches`;
+    const cacheKey = "dailyReportTrack_allBatches";
     const cachedData = localStorage.getItem(cacheKey);
     const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 0 * 60 * 60 * 1000; // Change to 1 hour as needed
+      const oneHour = 0 * 60 * 60 * 1000; // 1 hour
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
-        const { percentage } = JSON.parse(cachedData);
+        const { percentage, data } = JSON.parse(cachedData);
         setSpeedPercentage(percentage);
+        setTraineesData(data);
         setLoading(false);
         return;
       }
@@ -42,11 +46,12 @@ const DailyReportTrack: React.FC = () => {
 
         const percentage = (laggingCount / totalTrainees) * 100;
         setSpeedPercentage(Math.round(percentage));
+        setTraineesData(traineeData);
 
         // Cache the data
         localStorage.setItem(
           cacheKey,
-          JSON.stringify({ percentage: Math.round(percentage) })
+          JSON.stringify({ percentage: Math.round(percentage), data: traineeData })
         );
         localStorage.setItem(
           `${cacheKey}_timestamp`,
@@ -59,6 +64,9 @@ const DailyReportTrack: React.FC = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
 
   const data = {
     datasets: [
@@ -82,82 +90,85 @@ const DailyReportTrack: React.FC = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
-      height="190px"
-      width="40%"
-      position="relative"
-      gap="15px"
-      sx={{
-        overflow: "hidden",
-        borderRadius: "5px",
-        transition: "transform 0.3s ease-in-out",
-        "&:hover": {
-          transform: "scale(1.05)",
-        },
-      }}
-    >
-      {loading ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
-          paddingX="100px"
-          sx={{ position: "relative" }}
-        >
+    <>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
+        height="190px"
+        width="40%"
+        position="relative"
+        gap="15px"
+        sx={{
+          overflow: "hidden",
+          borderRadius: "5px",
+          transition: "transform 0.3s ease-in-out",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+        onClick={handleModalOpen} // Open modal on click
+      >
+        {loading ? (
           <Box
-            sx={{
-              position: "absolute",
-              width: "200px",
-              height: "100%",
-              background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
-              animation: "slide 1.5s infinite",
-            }}
-          />
-          <style>
-            {`
-              @keyframes slide {
-                0% {
-                  transform: translateX(-100%);
-                }
-                100% {
-                  transform: translateX(100%);
-                }
-              }
-            `}
-          </style>
-        </Box>
-      ) : (
-        <>
-          <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
-            Pending Daily Reports
-          </Typography>
-          <Box width="250px" height="70%">
-            <Doughnut data={data} options={options} />
-          </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "60%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            paddingX="100px"
+            sx={{ position: "relative" }}
           >
-            <Typography sx={{ fontSize: "20px", color: "black" }}>
-              {speedPercentage}%
-            </Typography>
+            <Box
+              sx={{
+                position: "absolute",
+                width: "200px",
+                height: "100%",
+                background: "linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)",
+                animation: "slide 1.5s infinite",
+              }}
+            />
+            <style>
+              {`
+              @keyframes slide {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+              }
+              `}
+            </style>
           </Box>
-        </>
-      )}
-    </Box>
+        ) : (
+          <>
+            <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
+              Pending Daily Reports
+            </Typography>
+            <Box width="250px" height="70%">
+              <Doughnut data={data} options={options} />
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "60%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography sx={{ fontSize: "20px", color: "black" }}>
+                {speedPercentage}%
+              </Typography>
+            </Box>
+          </>
+        )}
+      </Box>
+
+      {/* Render the modal */}
+      <ReportModal open={modalOpen} handleClose={handleModalClose} trainees={traineesData} />
+    </>
   );
 };
 

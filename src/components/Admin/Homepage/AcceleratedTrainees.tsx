@@ -182,7 +182,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
         ) : (
           <>
             <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
-              Accelerated Trainees
+              Course Viewing Speeds
             </Typography>
             <Box
               display="flex"

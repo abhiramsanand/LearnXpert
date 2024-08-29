@@ -4,7 +4,6 @@ import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from "axios";
-import TraineeModal from "./PercipioModal";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -185,11 +184,6 @@ const PercipioAssessment: React.FC = () => {
       <Box width="35%">
         <Doughnut data={data} options={options} />
       </Box>
-      <TraineeModal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        traineeData={traineeData}
-      />
     </Box>
   );
 };

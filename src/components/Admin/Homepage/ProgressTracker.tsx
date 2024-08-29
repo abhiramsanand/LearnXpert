@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import TraineeModal from "./ProgressModal";
 
 ChartJS.register(
   CategoryScale,
@@ -170,13 +169,6 @@ const ProgressTracker: React.FC = () => {
           ></Box>
         </>
       )}
-
-      {/* Trainee Modal */}
-      <TraineeModal
-        open={openModal}
-        onClose={handleCloseModal}
-        selectedBatch={0}
-      />
     </Box>
   );
 };
