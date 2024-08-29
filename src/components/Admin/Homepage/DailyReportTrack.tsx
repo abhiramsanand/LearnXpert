@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography, Button } from "@mui/material";
@@ -5,82 +6,59 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface DailyReportTrackProps {
-  selectedBatch: number;
-}
-
-const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) => {
+const DailyReportTrack: React.FC = () => {
   const [speedPercentage, setSpeedPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [traineeStatuses, setTraineeStatuses] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
-    if (selectedBatch) {
-      const cacheKey = `dailyReportTrack_${selectedBatch}`;
-      const cachedData = localStorage.getItem(cacheKey);
-      const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+    const cacheKey = `dailyReportTrack_allBatches`;
+    const cachedData = localStorage.getItem(cacheKey);
+    const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
 
-      if (cachedData && cachedTimestamp) {
-        const now = new Date().getTime();
-        const fiveMinutes = 5 * 60 * 1000;
+    if (cachedData && cachedTimestamp) {
+      const now = new Date().getTime();
+      const oneHour = 0 * 60 * 1000;
 
-        if (now - parseInt(cachedTimestamp) < fiveMinutes) {
-          const { percentage, statuses } = JSON.parse(cachedData);
-          setSpeedPercentage(percentage);
-          setTraineeStatuses(statuses);
-          setLoading(false);
-          return;
-        }
+      if (now - parseInt(cachedTimestamp) < oneHour) {
+        const { percentage } = JSON.parse(cachedData);
+        setSpeedPercentage(percentage);
+        setLoading(false);
+        return;
       }
-
-      setLoading(true);
-      // Fetch trainee progress data
-      fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/Daily-Report-day-number`)
-        .then((response) => response.json())
-        .then((traineeData) => {
-          // Fetch batch day number
-          fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
-            .then((response) => response.json())
-            .then((batchData) => {
-              const batchDayNumber = batchData.dayNumber - 4;
-              const traineeStatusesTemp: { [key: number]: string } = {};
-
-              // Determine trainee status
-              for (const traineeId in traineeData) {
-                const traineeDayNumber = traineeData[traineeId];
-                if (traineeDayNumber < batchDayNumber) {
-                  traineeStatusesTemp[parseInt(traineeId)] = 'Behind';
-                } else if (traineeDayNumber === batchDayNumber) {
-                  traineeStatusesTemp[parseInt(traineeId)] = 'On Track';
-                } else {
-                  traineeStatusesTemp[parseInt(traineeId)] = 'Ahead';
-                }
-              }
-
-              // Calculate percentage of trainees who are behind
-              const totalTrainees = Object.keys(traineeStatusesTemp).length;
-              const behindCount = Object.values(traineeStatusesTemp).filter(status => status === 'Behind').length;
-              const percentage = (behindCount / totalTrainees) * 100;
-
-              setTraineeStatuses(traineeStatusesTemp);
-              setSpeedPercentage(Math.round(percentage));
-
-              // Cache the data
-              localStorage.setItem(cacheKey, JSON.stringify({ percentage: Math.round(percentage), statuses: traineeStatusesTemp }));
-              localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching batch data:", error);
-              setLoading(false);
-            });
-        })
-        .catch((error) => {
-          console.error("Error fetching trainee data:", error);
-          setLoading(false);
-        });
     }
-  }, [selectedBatch]);
+
+    setLoading(true);
+
+    fetch("/DailyReport.json") 
+      .then((response) => response.json())
+      .then((traineeData) => {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayString = yesterday.toISOString().split("T")[0];
+
+        const notSubmittedCount = traineeData.filter((trainee: any) => {
+          return trainee.lastSubmittedDate !== yesterdayString;
+        }).length;
+
+        const totalTrainees = traineeData.length;
+
+        const percentage = (notSubmittedCount / totalTrainees) * 100;
+
+        setSpeedPercentage(Math.round(percentage));
+
+        // Cache the data
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({ percentage: Math.round(percentage) })
+        );
+        localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching trainee data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   const data = {
     datasets: [
@@ -111,7 +89,7 @@ const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) =>
       justifyContent="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       height="190px"
-      width="27%"
+      width="40%"
       position="relative"
       sx={{
         overflow: "hidden",
@@ -134,7 +112,7 @@ const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) =>
           <Box
             sx={{
               position: "absolute",
-              width: "100%",
+              width: "200px",
               height: "100%",
               background: `linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)`,
               animation: "slide 1.5s infinite",
@@ -155,7 +133,7 @@ const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) =>
         </Box>
       ) : (
         <>
-          <Box width="100%" height="70%">
+          <Box width="250px" height="70%">
             <Doughnut data={data} options={options} />
           </Box>
           <Box
@@ -182,17 +160,6 @@ const DailyReportTrack: React.FC<DailyReportTrackProps> = ({ selectedBatch }) =>
             display="flex"
             justifyContent="flex-end"
           >
-            <Button
-              variant="text"
-              sx={{
-                color: "#8061C3",
-                fontSize: "10px",
-                textDecoration: "underline",
-                mt: 1,
-              }}
-            >
-              List Trainees
-            </Button>
           </Box>
         </>
       )}

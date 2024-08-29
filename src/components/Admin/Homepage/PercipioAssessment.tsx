@@ -35,60 +35,70 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
     const fetchData = async () => {
       const cacheKey = `assessmentData-${selectedBatch}`;
       const cachedData = localStorage.getItem(cacheKey);
-      
+
       if (cachedData) {
-        const { scoreData, traineeData } = JSON.parse(cachedData);
-        setScoreData(scoreData);
-        setTraineeData(traineeData);
-      } else {
-        try {
-          const response = await axios.get<{ [traineeName: string]: number }>(
-            "http://localhost:8080/api/v1/assessments/averageScore"
-          );
-          const scores = response.data;
+        const { scoreData, traineeData, timestamp } = JSON.parse(cachedData);
+        const currentTime = new Date().getTime();
 
-          let below80: string[] = [];
-          let between80and90: string[] = [];
-          let between90and99: string[] = [];
-          let exactly100: string[] = [];
+        // Check if cached data is older than 5 minutes (300000 ms)
+        if (currentTime - timestamp < 300000) {
+          setScoreData(scoreData);
+          setTraineeData(traineeData);
+          return;
+        }
+      }
 
-          Object.entries(scores).forEach(([traineeName, score]) => {
-            if (score < 80) {
-              below80.push(traineeName);
-            } else if (score >= 80 && score < 90) {
-              between80and90.push(traineeName);
-            } else if (score >= 90 && score < 100) {
-              between90and99.push(traineeName);
-            } else if (score === 100) {
-              exactly100.push(traineeName);
-            }
-          });
+      try {
+        const response = await axios.get<{ [traineeName: string]: number }>(
+          "http://localhost:8080/api/v1/assessments/averageScore"
+        );
+        const scores = response.data;
 
-          const newScoreData = {
-            below80: below80.length,
-            between80and90: between80and90.length,
-            between90and99: between90and99.length,
-            exactly100: exactly100.length,
-          };
+        let below80: string[] = [];
+        let between80and90: string[] = [];
+        let between90and99: string[] = [];
+        let exactly100: string[] = [];
 
-          const newTraineeData = {
-            below80,
-            between80and90,
-            between90and99,
-            exactly100,
-          };
+        Object.entries(scores).forEach(([traineeName, score]) => {
+          if (score < 80) {
+            below80.push(traineeName);
+          } else if (score >= 80 && score < 90) {
+            between80and90.push(traineeName);
+          } else if (score >= 90 && score < 100) {
+            between90and99.push(traineeName);
+          } else if (score === 100) {
+            exactly100.push(traineeName);
+          }
+        });
 
-          setScoreData(newScoreData);
-          setTraineeData(newTraineeData);
+        const newScoreData = {
+          below80: below80.length,
+          between80and90: between80and90.length,
+          between90and99: between90and99.length,
+          exactly100: exactly100.length,
+        };
 
-          // Cache the data
-          localStorage.setItem(cacheKey, JSON.stringify({
+        const newTraineeData = {
+          below80,
+          between80and90,
+          between90and99,
+          exactly100,
+        };
+
+        setScoreData(newScoreData);
+        setTraineeData(newTraineeData);
+
+        // Cache the data with the current timestamp
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({
             scoreData: newScoreData,
             traineeData: newTraineeData,
-          }));
-        } catch (error) {
-          console.error("Error fetching assessment scores:", error);
-        }
+            timestamp: new Date().getTime(),
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching assessment scores:", error);
       }
     };
 
@@ -139,7 +149,7 @@ const PercipioAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) =
       alignItems="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       sx={{
-        maxWidth: "420px",
+        width: "480px",
         padding: "20px",
         margin: "auto",
         borderRadius: "5px",

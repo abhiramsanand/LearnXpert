@@ -109,7 +109,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
   useEffect(() => {
     if (selectedBatch && open) {
       const storedData = localStorage.getItem("traineeData");
-      const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+      const fiveMinutes = 60 * 60 * 1000; // 5 minutes in milliseconds
 
       if (storedData) {
         const parsedData = JSON.parse(storedData);

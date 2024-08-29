@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,11 +41,7 @@ const options = {
   barThickness: 20,
 };
 
-interface ProgressTrackerProps {
-  selectedBatch: number;
-}
-
-const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
+const ProgressTracker: React.FC = () => {
   const [progressData, setProgressData] = useState({
     behind: 0,
     onTrack: 0,
@@ -55,58 +51,47 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (selectedBatch) {
-      setLoading(true);
+    setLoading(true);
 
-      const localStorageKey = `traineeProgressData_${selectedBatch}`;
-      const cachedData = localStorage.getItem(localStorageKey);
-      const cachedTimestamp = localStorage.getItem(`${localStorageKey}_timestamp`);
-      const isDataValid =
-        cachedData && cachedTimestamp && Date.now() - parseInt(cachedTimestamp) < 5 * 60 * 1000;
+    fetch("/ProgressData.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const trainees = data; // data should be an array of trainee objects
 
-      if (isDataValid) {
-        setProgressData(JSON.parse(cachedData));
+        if (trainees.length === 0) {
+          console.error("No trainee data available");
+          setLoading(false);
+          return;
+        }
+
+        // Use the batchDayNumber from the first trainee
+        const batchDayNumber = trainees[0].batchDayNumber; 
+        
+        let behind = 0;
+        let onTrack = 0;
+        let ahead = 0;
+
+        for (const trainee of trainees) {
+          const { traineeDayNumber } = trainee;
+
+          if (traineeDayNumber < batchDayNumber) {
+            behind++;
+          } else if (traineeDayNumber === batchDayNumber) {
+            onTrack++;
+          } else {
+            ahead++;
+          }
+        }
+
+        const progress = { behind, onTrack, ahead };
+        setProgressData(progress);
         setLoading(false);
-      } else {
-        fetch(`http://localhost:8080/api/v1/ilpex/traineeprogress/last-accessed-day-number`)
-          .then((response) => response.json())
-          .then((traineeDayNumbers) => {
-            fetch(`http://localhost:8080/api/v1/batches/${selectedBatch}/dayNumber`)
-              .then((response) => response.json())
-              .then((batchData) => {
-                const batchDayNumber = batchData.dayNumber - 4;
-                let behind = 0;
-                let onTrack = 0;
-                let ahead = 0;
-
-                for (const dayNumber of Object.values(traineeDayNumbers)) {
-                  if (dayNumber < batchDayNumber) {
-                    behind++;
-                  } else if (dayNumber === batchDayNumber) {
-                    onTrack++;
-                  } else {
-                    ahead++;
-                  }
-                }
-
-                const progress = { behind, onTrack, ahead };
-                setProgressData(progress);
-                localStorage.setItem(localStorageKey, JSON.stringify(progress));
-                localStorage.setItem(`${localStorageKey}_timestamp`, Date.now().toString());
-                setLoading(false);
-              })
-              .catch((error) => {
-                console.error("Error fetching batch data:", error);
-                setLoading(false);
-              });
-          })
-          .catch((error) => {
-            console.error("Error fetching trainee progress data:", error);
-            setLoading(false);
-          });
-      }
-    }
-  }, [selectedBatch]);
+      })
+      .catch((error) => {
+        console.error("Error fetching dummy data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   const data = {
     labels: ["Behind", "On Track", "Ahead"],
@@ -178,17 +163,6 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
-            <Button
-              variant="text"
-              onClick={() => setOpenModal(true)}
-              sx={{
-                color: "#8061C3",
-                fontSize: "10px",
-                textDecoration: "underline",
-              }}
-            >
-              List Trainees
-            </Button>
           </Box>
         </>
       )}
@@ -197,7 +171,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ selectedBatch }) => {
       <TraineeModal
         open={openModal}
         onClose={handleCloseModal}
-        selectedBatch={selectedBatch}
+        selectedBatch={0}      
       />
     </Box>
   );

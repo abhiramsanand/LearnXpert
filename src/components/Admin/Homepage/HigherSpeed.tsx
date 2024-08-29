@@ -21,7 +21,7 @@ const HigherSpeed: React.FC<HigherSpeedProps> = ({ selectedBatch }) => {
 
       if (cachedData && cachedTimestamp) {
         const now = new Date().getTime();
-        const fiveMinutes = 5 * 60 * 1000;
+        const fiveMinutes = 60 * 60 * 1000;
 
         if (now - parseInt(cachedTimestamp) < fiveMinutes) {
           setSpeedPercentage(parseInt(cachedData));

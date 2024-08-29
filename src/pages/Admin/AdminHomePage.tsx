@@ -1,23 +1,38 @@
-import { Box, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
-import BatchSelect from "../../shared components/Admin/BatchSelect";
+import React, { useEffect, useState } from "react";
+import { Box, Typography, IconButton } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings"; // Import Settings Icon
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import ProgressTracker from "../../components/Admin/Homepage/ProgressTracker";
-import HigherSpeed from "../../components/Admin/Homepage/HigherSpeed";
 import DailyReportTrack from "../../components/Admin/Homepage/DailyReportTrack";
 import PercipioAssessment from "../../components/Admin/Homepage/PercipioAssessment";
 import ILPexAssessment from "../../components/Admin/Homepage/ILPexAssessment";
+import AcceleratedTraineesTrack from "../../components/Admin/Homepage/AcceleratedTrainees";
+
+// Assuming batch details are stored in JSON at this URL
+const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
 
 const AdminHomePage = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(15);
+  const [batchDetails, setBatchDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time (e.g., waiting for API requests)
-    const timer = setTimeout(() => {
-      setLoading(false); // Set loading to false when the page is ready
-    }, 2000); // Adjust the duration as needed
+    const fetchBatchDetails = async () => {
+      try {
+        const response = await fetch(BATCH_DETAILS_URL);
+        const data = await response.json();
 
-    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+        // Assuming you want to display the first batch from the data
+        const batch = data[0]; // Adjust this if you want to fetch a specific batch
+
+        setBatchDetails(batch);
+      } catch (error) {
+        console.error("Error fetching batch details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBatchDetails();
   }, []);
 
   if (loading) {
@@ -49,35 +64,77 @@ const AdminHomePage = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-    >
-      <BatchSelect
-        selectedBatch={selectedBatch}
-        onBatchSelect={setSelectedBatch}
-      />
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative">
+      {/* Batch Details Box */}
       <Box
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        gap="20px"
-        marginTop="20px"
+        position="absolute"
+        top="0px"
+        left="0px"
+        sx={{
+          borderRadius: "5px",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "row",
+          gap: "10px",
+        }}
       >
-        <ProgressTracker selectedBatch={selectedBatch} />
-        <HigherSpeed selectedBatch={selectedBatch} />
-        <DailyReportTrack selectedBatch={selectedBatch} />
+        {batchDetails ? (
+          <>
+            <Typography sx={{ mr: 3 }}>{batchDetails.batchName}</Typography>
+            <Typography sx={{ mr: 3 }}>Current Day: {batchDetails.dayNumber}</Typography>
+            <Typography>Number of Trainees: {batchDetails.totalTrainees}</Typography>
+          </>
+        ) : (
+          <Typography>No batch details available.</Typography>
+        )}
       </Box>
+
+      {/* Settings Icon with Label */}
+      <Link to="/Admin-ManageBatch/15" style={{ textDecoration: "none" }}>
+        <Box
+          position="absolute"
+          top="0px"
+          right="0px"
+          display="flex"
+          alignItems="center"
+          zIndex={10}
+        >
+          <IconButton aria-label="Manage Batch" sx={{ marginRight: "5px", color: "#8061C3" }}>
+            <SettingsIcon />
+          </IconButton>
+          <Typography sx={{ color: "#8061C3", fontWeight: "bold" }}>Manage Batch</Typography>
+        </Box>
+      </Link>
+
+      {/* Main Content */}
       <Box
         display="flex"
-        flexDirection="row"
+        flexDirection="column"
         alignItems="center"
-        gap="20px"
-        marginTop="10px"
+        width="100%"
+        mt="30px"
       >
-        <PercipioAssessment selectedBatch={selectedBatch} />
-        <ILPexAssessment selectedBatch={selectedBatch} />
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="20px"
+          marginTop="20px"
+        >
+          <ProgressTracker />
+          <DailyReportTrack />
+          <AcceleratedTraineesTrack />
+        </Box>
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          marginTop="10px"
+          gap="30px"
+        >
+          <PercipioAssessment selectedBatch={null} />
+          <ILPexAssessment selectedBatch={null} />
+        </Box>
       </Box>
     </Box>
   );

@@ -30,7 +30,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
     const fetchScoreData = async () => {
       const cacheKey = 'scoreDataCache';
       const cacheTimeKey = 'scoreDataCacheTime';
-      const cacheDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
+      const cacheDuration = 60 * 60 * 1000; // 5 minutes in milliseconds
 
       // Check if the cached data exists and is still valid
       const cachedData = localStorage.getItem(cacheKey);
@@ -127,7 +127,7 @@ const ILPexAssessment: React.FC<AssessmentScoreProps> = ({ selectedBatch }) => {
       alignItems="center"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.2)"
       sx={{
-        maxWidth: "420px",
+        width: "480px",
         padding: "20px",
         margin: "auto",
         borderRadius: '5px',
