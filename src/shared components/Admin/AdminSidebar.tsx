@@ -92,11 +92,6 @@ const Sidebar: React.FC = () => {
             to: "/Admin-Batches",
           },
           {
-            text: "Trainees",
-            icon: <Person2Icon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-Trainees",
-          },
-          {
             text: "Assessments",
             icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
             to: "/Admin-Assessments",
