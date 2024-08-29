@@ -1,0 +1,31 @@
+[
+    {
+      "courseName": "Course A",
+      "estimatedDuration": "30 hours",
+      "trainees": [
+        {
+          "name": "Trainee 1",
+          "actualDuration": "28 hours"
+        },
+        {
+          "name": "Trainee 2",
+          "actualDuration": "32 hours"
+        }
+      ]
+    },
+    {
+      "courseName": "Course B",
+      "estimatedDuration": "40 hours",
+      "trainees": [
+        {
+          "name": "Trainee 1",
+          "actualDuration": "42 hours"
+        },
+        {
+          "name": "Trainee 2",
+          "actualDuration": "38 hours"
+        }
+      ]
+    }
+  ]
+  
