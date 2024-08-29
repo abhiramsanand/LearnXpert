@@ -11,7 +11,6 @@ import DailyReport from "./pages/Trainee/DailyReportPage";
 import WholeReportPage from "./pages/Trainee/WholeReportPage";
 import EnquiryPage from "./pages/Trainee/EnquiryPage";
 import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
-import AdminAssessmentViewPage from "./pages/Admin/AdminAssessmentViewPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
 import AdminCoursePage from "./pages/Admin/AdminCoursePage";
@@ -70,11 +69,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
-          <Route
-            path="Admin-Assessments"
-            element={<AdminAssessmentViewPage />}
-          />
-       <Route path="/assignment/:assessmentName" element={<AdminAssessmentDetailsPage />} />
+       <Route path="/Admin-Assessments" element={<AdminAssessmentDetailsPage />} />
 
           <Route
             path="/Admin-AssessmentCreation"

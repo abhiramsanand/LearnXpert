@@ -53,19 +53,17 @@ const ProgressTracker: React.FC = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetch("/ProgressData.json")
+    fetch("http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number")
       .then((response) => response.json())
-      .then((data) => {
-        const trainees = data; // data should be an array of trainee objects
-
+      .then((trainees) => {
         if (trainees.length === 0) {
           console.error("No trainee data available");
           setLoading(false);
           return;
         }
 
-        // Use the batchDayNumber from the first trainee
-        const batchDayNumber = trainees[0].batchDayNumber; 
+        // Assume the batchDayNumber is consistent across all trainees
+        const batchDayNumber = trainees[0].batchDayNumber;
         
         let behind = 0;
         let onTrack = 0;
@@ -88,7 +86,7 @@ const ProgressTracker: React.FC = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching dummy data:", error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
