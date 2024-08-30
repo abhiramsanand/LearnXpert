@@ -16,7 +16,9 @@ const PercipioAssessment: React.FC = () => {
     exactly100: 0,
   });
 
-  const [traineeData, setTraineeData] = useState<{ [traineeName: string]: number }>({});
+  const [traineeData, setTraineeData] = useState<{
+    [traineeName: string]: number;
+  }>({});
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -101,17 +103,12 @@ const PercipioAssessment: React.FC = () => {
           scoreData.exactly100,
         ],
         backgroundColor: [
-          "rgba(217, 85, 85)", // Red for below 80
-          "rgba(247, 143, 84)", // Orange for between 80 and 90
-          "rgba(217, 196, 85)", // Yellow for between 90 and 99
-          "rgba(85, 217, 130)", // Green for exactly 100
+          "#DB5461", // Red for below 80
+          "#E5A9A9", // Orange for between 80 and 90
+          "#F4E4BA", // Yellow for between 90 and 99
+          "#5B8C5A", // Green for exactly 100
         ],
-        borderColor: [
-          "rgba(217, 85, 85)",
-          "rgba(247, 143, 84)",
-          "rgba(217, 196, 85)",
-          "rgba(85, 217, 130)",
-        ],
+        borderColor: ["#DB5461", "#E5A9A9", "#F4E4BA", "#5B8C5A"],
         borderWidth: 1,
       },
     ],
@@ -154,20 +151,20 @@ const PercipioAssessment: React.FC = () => {
           </Typography>
           <Box>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 80% (
-              {scoreData.below80})
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 80%
-              and 90% ({scoreData.between80and90})
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 90%
-              and 99% ({scoreData.between90and99})
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(85, 217, 130)" }}>●</span> 100% (
+              <span style={{ color: "#5B8C5A" }}>●</span> 100% (
               {scoreData.exactly100})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "#F4E4BA" }}>●</span> Between 90% and 99% (
+              {scoreData.between90and99})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "#E5A9A9" }}>●</span> Between 80% and 90% (
+              {scoreData.between80and90})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "#DB5461" }}>●</span> Below 80% (
+              {scoreData.below80})
             </Typography>
           </Box>
         </Box>

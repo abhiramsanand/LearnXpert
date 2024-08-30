@@ -116,16 +116,16 @@ const ILPexAssessment: React.FC = () => {
           scoreData.below60,
         ],
         backgroundColor: [
-          "rgba(85, 217, 130)",
-          "rgba(217, 196, 85)",
-          "rgba(247, 143, 84)",
-          "rgba(217, 85, 85)",
+          "#5B8C5A",
+          "#F4E4BA",
+          "#E5A9A9",
+          "#DB5461",
         ],
         borderColor: [
-          "rgba(85, 217, 130)",
-          "rgba(217, 196, 85)",
-          "rgba(247, 143, 84)",
-          "rgba(217, 85, 85)",
+          "#5B8C5A",
+          "#F4E4BA",
+          "#E5A9A9",
+          "#DB5461",
         ],
         borderWidth: 1,
       },
@@ -169,19 +169,19 @@ const ILPexAssessment: React.FC = () => {
           </Typography>
           <Box>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80% (
+              <span style={{ color: "#5B8C5A" }}>●</span> Above 80% (
               {scoreData.above80})
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 70%
+              <span style={{ color: "#F4E4BA" }}>●</span> Between 70%
               and 80% ({scoreData.between70and80})
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 60%
+              <span style={{ color: "#E5A9A9" }}>●</span> Between 60%
               and 70% ({scoreData.between60and70})
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60% (
+              <span style={{ color: "#DB5461" }}>●</span> Below 60% (
               {scoreData.below60})
             </Typography>
           </Box>
