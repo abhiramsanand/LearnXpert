@@ -37,7 +37,7 @@ const ILPexAssessment: React.FC = () => {
       } else {
         try {
           const response = await axios.get(
-            "http://localhost:8080/api/v1/trainee-scores/average"
+            "http://localhost:8080/api/v1/trainee-scores/average/name"
           );
           const scores: Record<number, number> = response.data;
 
