@@ -1,11 +1,11 @@
 .tableContainer {
     margin-top: 20px;
     border-radius: 8px;
-    box-shadow: none; /* Remove box shadow */
+    box-shadow: none; 
   }
   
   .tableHead {
-    background-color: rgba(128, 97, 195, 0.1); /* 10% of #8061C3 */
+    background-color: rgba(128, 97, 195, 0.1);
     font-weight: bold;
     color: black;
   }
@@ -21,7 +21,7 @@
   
   .tableCell {
     font-weight: bold;
-    color: black; /* Set text color to black */
+    color: black;
   }
   
   .loading {

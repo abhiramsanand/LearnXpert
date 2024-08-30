@@ -59,7 +59,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
   }, [batchId]);
 
   const fetchTraineeAssessments = async (assessmentName: string) => {
-    setLoading(true); // Set loading to true only when fetching new trainee assessments
+    setLoading(true); 
     try {
       const response = await axios.get('http://localhost:8080/api/v1/ilpex/trainee-assessments');
       const filteredData = response.data.data.filter(

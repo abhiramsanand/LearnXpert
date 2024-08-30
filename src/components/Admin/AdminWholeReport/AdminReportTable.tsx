@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import Filters from './Filters'; // Import the Filters component
+import Filters from './Filters'; 
 import { SelectChangeEvent } from '@mui/material';
 
 interface Report {

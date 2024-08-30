@@ -19,7 +19,7 @@ const AddAssessmentButton: React.FC = () => {
         borderRadius: '50%',
         padding: 10,
         color: 'rgba(128, 97, 195, 1)',
-        marginLeft: 16, // Adjust margin if needed
+        marginLeft: 16, 
       }}
     >
       <AddIcon />

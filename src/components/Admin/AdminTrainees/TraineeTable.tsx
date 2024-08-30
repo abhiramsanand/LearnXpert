@@ -20,9 +20,9 @@ interface Trainee {
 }
 
 const TraineeTable: React.FC = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(15); // Default batch ID to 15
+  const [selectedBatch, setSelectedBatch] = useState<number>(15); 
   const [trainees, setTrainees] = useState<Trainee[]>([]);
-  const [page, setPage] = useState(0); // Current page
+  const [page, setPage] = useState(0); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,10 +52,9 @@ const TraineeTable: React.FC = () => {
 
   const handleBatchSelect = (batchId: number) => {
     setSelectedBatch(batchId);
-    setPage(0); // Reset the page when the batch changes
+    setPage(0);
   };
 
-  // Determine the trainees to display based on the current page
   const traineesPerPage = 4;
   const displayedTrainees = trainees.slice(page * traineesPerPage, page * traineesPerPage + traineesPerPage);
 
@@ -66,7 +65,7 @@ const TraineeTable: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 2, // Add some space below the BatchSelect
+          marginBottom: 2, 
           marginTop: '-20px'
         }}
       >
@@ -106,7 +105,7 @@ const TraineeTable: React.FC = () => {
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={traineesPerPage}
-        rowsPerPageOptions={[]} // Disable custom rows per page options
+        rowsPerPageOptions={[]}
       />
     </>
   );

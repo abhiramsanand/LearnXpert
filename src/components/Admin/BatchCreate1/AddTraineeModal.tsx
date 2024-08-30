@@ -44,7 +44,7 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
         setEmail('');
         setPercipioEmail('');
         setPassword('');
-        onClose(); // Close the modal after successful submission
+        onClose(); 
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
@@ -91,15 +91,6 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
           variant="outlined"
           margin="normal"
         />
-        {/* <TextField
-          fullWidth
-          label="Role"
-          placeholder="Enter trainee's name..."
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          variant="outlined"
-          margin="normal"
-        /> */}
         <TextField
           fullWidth
           label="Email"

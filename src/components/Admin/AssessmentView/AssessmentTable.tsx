@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import styles from './AssessmentsTable.module.css'; // Import the CSS module
+import styles from './AssessmentsTable.module.css';
 
 interface AssessmentsTableProps {
   batchId: number;

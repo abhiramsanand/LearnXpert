@@ -30,7 +30,7 @@ interface Batch {
 
 const AssessmentCreation: React.FC = () => {
   const [title, setTitle] = useState<string>("");
-  const [batch, setBatch] = useState<number | string>(""); // Updated type
+  const [batch, setBatch] = useState<number | string>(""); 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -77,9 +77,9 @@ const AssessmentCreation: React.FC = () => {
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("batchId", batch.toString()); // Ensure batchId is a string
-    formData.append("startDate", startDate ? startDate.toISOString().split('T')[0] : ''); // Format as yyyy-mm-dd
-    formData.append("endDate", endDate ? endDate.toISOString().split('T')[0] : ''); // Format as yyyy-mm-dd
+    formData.append("batchId", batch.toString()); 
+    formData.append("startDate", startDate ? startDate.toISOString().split('T')[0] : ''); 
+    formData.append("endDate", endDate ? endDate.toISOString().split('T')[0] : ''); 
     if (file) {
       formData.append("file", file);
     }
@@ -93,7 +93,7 @@ const AssessmentCreation: React.FC = () => {
       if (response.ok) {
         showModal("Success", "Assessment created successfully!");
       } else {
-        const errorData = await response.text(); // Read error as text
+        const errorData = await response.text(); 
         showModal("Error", errorData || "An error occurred.");
       }
     } catch (error) {

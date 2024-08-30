@@ -12,7 +12,7 @@ const BatchForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [fileSelected, setFileSelected] = useState<boolean>(false); // State for file selection
+  const [fileSelected, setFileSelected] = useState<boolean>(false); 
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -33,7 +33,7 @@ const BatchForm: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setFile(event.target.files[0]);
-      setFileSelected(true); // Update state when file is selected
+      setFileSelected(true); 
     }
   };
 
@@ -64,10 +64,10 @@ const BatchForm: React.FC = () => {
           },
         }
       );
-      const batchId = response.data.batchId; // Correctly access batchId from the response
+      const batchId = response.data.batchId; 
       setSuccessMessage("Batch created successfully!");
-      setSuccessModalOpen(true); // Open success modal
-      navigate(`/Admin-BatchAdd2/${batchId}`); // Pass batchId to the next page
+      setSuccessModalOpen(true); 
+      navigate(`/Admin-BatchAdd2/${batchId}`); 
     } catch (error) {
       console.error("There was an error creating the batch!", error);
       alert("There was an error creating the batch. Check the console for details.");
@@ -205,7 +205,7 @@ const BatchForm: React.FC = () => {
               {fileSelected && (
                 <CheckCircleIcon
                   sx={{
-                    color: "#4caf50", // Green color
+                    color: "#4caf50", 
                     ml: 1,
                     fontSize: "24px",
                   }}
@@ -236,7 +236,7 @@ const BatchForm: React.FC = () => {
                     bgcolor: "white",
                   },
                 }}
-                onClick={() => navigate(-1)} // Navigate back
+                onClick={() => navigate(-1)} 
               >
                 CANCEL
               </Button>
