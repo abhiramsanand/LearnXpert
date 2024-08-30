@@ -14,7 +14,7 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   },
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
-    maxHeight: 'calc(100vh - 200px)', // Limit height for scrollable content
+    maxHeight: 'calc(100vh - 200px)', 
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: '8px',
@@ -104,7 +104,7 @@ const AcceleratedTraineesModal: React.FC<AcceleratedTraineesModalProps> = ({ ope
         <IconButton
           aria-label="close"
           onClick={onClose}
-          sx={{ color: "#DB5461" }}
+          sx={{ color: "white" }}
         >
           <CloseIcon />
         </IconButton>

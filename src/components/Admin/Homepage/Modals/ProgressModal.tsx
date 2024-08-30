@@ -111,7 +111,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
             e.stopPropagation();
             onClose(); 
           }}
-          sx={{ color: "#DB5461" }}
+          sx={{ color: "white" }}
         >
           <CloseIcon />
         </IconButton>

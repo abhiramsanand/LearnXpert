@@ -104,7 +104,7 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
         <IconButton
           aria-label="close"
           onClick={onClose}
-          sx={{ color: "#DB5461" }}
+          sx={{ color: "white" }}
         >
           <CloseIcon />
         </IconButton>

@@ -111,7 +111,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
         <IconButton
           aria-label="close"
           onClick={handleClose}
-          sx={{ color: "#DB5461" }}
+          sx={{ color: "white" }}
         >
           <CloseIcon />
         </IconButton>
