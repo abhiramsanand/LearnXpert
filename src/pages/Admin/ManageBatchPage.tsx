@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import ProgramStatusForm from '../../components/Admin/ManageBatch/ProgramStatusForm';
 import TraineeTable from '../../components/Admin/ManageBatch/TraineeTable';
 import AddTraineeModal from '../../components/Admin/ManageBatch/AddTraineeModal';
@@ -31,6 +31,7 @@ const ManageBatchPage: React.FC = () => {
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -54,6 +55,8 @@ const ManageBatchPage: React.FC = () => {
         setTrainees(data.trainees);
       } catch (error) {
         console.error('Error fetching batch details:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -90,26 +93,58 @@ const ManageBatchPage: React.FC = () => {
     }
   };
   
-
-  if (!batchDetails) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '80vh' }}>
-      <Box sx={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '80vh', overflowY: 'hidden' }}>
+      <Box sx={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '16px',
+        '&::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: '#E8DEFF',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#8061C3',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          backgroundColor: '#8061C3',
+        }
+      }}>
         <ProgramStatusForm batchDetails={batchDetails} />
 
         <Box sx={{ marginTop: '16px' }}>
           <TraineeTable trainees={trainees} onAddTrainee={handleOpenModal} />
-          <Box sx={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-            <Button variant="outlined" color="secondary" size="small" onClick={() => console.log('Cancel')}>
-              Cancel
-            </Button>
-            <Button variant="contained" color="primary" size="small" onClick={handleUpdateBatchDetails}>
-              Update Batch
-            </Button>
-          </Box>
         </Box>
       </Box>
 
@@ -123,7 +158,7 @@ const ManageBatchPage: React.FC = () => {
       <SuccessModal
         open={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        message="Batch details updated successfully!"
+        message="Batch details updated successfully"
       />
     </Box>
   );

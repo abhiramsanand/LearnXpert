@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
-import { Box, Grid, TextField, Typography } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { BatchDetails } from '../ManageBatch/BatchDetails';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { BatchDetails } from "../ManageBatch/BatchDetails";
+import { Link } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface BatchDetailsDisplayProps {
   batchDetails: BatchDetails;
   onUpdate: (updatedDetails: BatchDetails) => void;
 }
 
-const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({ batchDetails, onUpdate }) => {
-  const [editableBatchDetails, setEditableBatchDetails] = useState<BatchDetails>(batchDetails);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setEditableBatchDetails({
-      ...editableBatchDetails,
-      [name]: value
-    });
-  };
+const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
+  batchDetails,
+  onUpdate,
+}) => {
+  const [editableBatchDetails, setEditableBatchDetails] =
+    useState<BatchDetails>(batchDetails);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setEditableBatchDetails({
       ...editableBatchDetails,
-      [name]: new Date(value)
+      [name]: new Date(value),
     });
   };
 
@@ -33,75 +37,121 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({ batchDetails,
   };
 
   return (
-    <Box sx={{ padding: '10px', maxHeight: '100vh', overflow: 'auto', marginTop: '2px' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Program Name"
-            name="programName"
-            value={editableBatchDetails.programName}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputProps={{ readOnly: true }} // Make the field read-only
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Batch Name"
-            name="batchName"
-            value={editableBatchDetails.batchName}
-            onChange={handleChange}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            onBlur={handleBlur}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Start Date"
-            name="startDate"
-            type="date"
-            value={new Date(editableBatchDetails.startDate).toISOString().split('T')[0]}
-            onChange={handleDateChange}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            onBlur={handleBlur}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="End Date"
-            name="endDate"
-            type="date"
-            value={new Date(editableBatchDetails.endDate).toISOString().split('T')[0]}
-            onChange={handleDateChange}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            onBlur={handleBlur}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="body1">
-            <strong>Active:</strong>
-            {editableBatchDetails.active ? (
-              <CheckCircleIcon sx={{ color: 'green', fontSize: 24, marginLeft: '8px' }} />
-            ) : (
-              <CancelIcon sx={{ color: 'red', fontSize: 24, marginLeft: '8px' }} />
+    <Box sx={{ mt: -3 }}>
+      <Link to="/admin-home">
+        <IconButton
+          sx={{
+            color: "#8061C3",
+            transition: "transform 0.3s ease-in-out",
+            "&:hover": {
+              transform: "scale(0.9)",
+            },
+          }}
+        >
+          <ArrowBackIcon fontSize="medium" />
+        </IconButton>
+      </Link>
+      <Typography
+        align="center"
+        sx={{
+          color: "#8061C3",
+          mb: 2,
+          mt: "-35px",
+          ml: "-3",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        MANAGE BATCH
+      </Typography>
+      <Box
+        sx={{
+          padding: 2,
+          border: "1px solid #ccc",
+          borderRadius: "8px",
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={8}>
+            {batchDetails && (
+              <>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    color: "#8061C3",
+                  }}
+                >
+                  {batchDetails.batchName}
+                </Typography>
+                <Typography sx={{ fontSize: "10px", color: "#A281EA" }}>
+                  {batchDetails.programName} Batch
+                </Typography>
+                <Typography sx={{ fontSize: "10px", color: "#A281EA" }}>
+                  Start Date:{" "}
+                  {new Date(batchDetails.startDate).toISOString().split("T")[0]}
+                </Typography>
+              </>
             )}
-          </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <TextField
+                label="End Date"
+                name="endDate"
+                type="date"
+                value={
+                  new Date(editableBatchDetails.endDate)
+                    .toISOString()
+                    .split("T")[0]
+                }
+                onChange={handleDateChange}
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{ shrink: true }}
+                onBlur={handleBlur}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    padding: "4px 8px",
+                    width: "100%",
+                    height: "30px",
+                    backgroundColor: "#f0f0f0", 
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#8061C3", 
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#A281EA", 
+                    "&.Mui-focused": {
+                      color: "#8061C3", 
+                    },
+                  },
+                }}
+              />
+              <Button
+                sx={{
+                  backgroundColor: "#8061C3",
+                  color: "white",
+                  ml: "20px",
+                  fontSize: "10px",
+                  width: "250px",
+                  mt: 1,
+                }}
+              >
+                Configure calendar
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="body1">
-            <strong>Number of Trainees:</strong> {editableBatchDetails.numberOfTrainees}
-          </Typography>
-        </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 };
