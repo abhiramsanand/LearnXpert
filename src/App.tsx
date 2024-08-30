@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "@fontsource/montserrat";
-import TraineeLayout from "./TraineeLayout";
+import TraineeLayout from "./shared components/TraineeLayout";
 import CoursePage from "./pages/Trainee/CoursePage";
 import AssessmentPage from "./pages/Trainee/AssessmentPage";
 import DailyReport from "./pages/Trainee/DailyReportPage";
@@ -26,7 +26,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import AdminLayout from "./AdminLayout";
+import AdminLayout from "./shared components/AdminLayout";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
 import CreateAdminPage from "./pages/Admin/CreateAdminPage";
 import ManageBatchPage from "./pages/Admin/ManageBatchPage";
