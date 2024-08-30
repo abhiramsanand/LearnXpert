@@ -4,6 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from "axios";
+import TraineeScoresModal from "./Modals/ILPexScoresModal"; // Adjust the import path as needed
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -22,17 +23,26 @@ const ILPexAssessment: React.FC = () => {
     below60: 0,
   });
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [traineeScores, setTraineeScores] = useState<Record<string, number>>(
+    {}
+  );
+
   useEffect(() => {
     const fetchScoreData = async () => {
-      const cacheKey = 'scoreDataCache';
-      const cacheTimeKey = 'scoreDataCacheTime';
-      const cacheDuration = 60 * 60 * 1000; // 5 minutes in milliseconds
+      const cacheKey = "scoreDataCache";
+      const cacheTimeKey = "scoreDataCacheTime";
+      const cacheDuration = 0 * 60 * 1000; // 5 minutes in milliseconds
 
       const cachedData = localStorage.getItem(cacheKey);
       const cachedTime = localStorage.getItem(cacheTimeKey);
       const now = new Date().getTime();
 
-      if (cachedData && cachedTime && now - parseInt(cachedTime) < cacheDuration) {
+      if (
+        cachedData &&
+        cachedTime &&
+        now - parseInt(cachedTime) < cacheDuration
+      ) {
         setScoreData(JSON.parse(cachedData));
       } else {
         try {
@@ -58,7 +68,12 @@ const ILPexAssessment: React.FC = () => {
             }
           });
 
-          const newScoreData = { above80, between70and80, between60and70, below60 };
+          const newScoreData = {
+            above80,
+            between70and80,
+            between60and70,
+            below60,
+          };
           setScoreData(newScoreData);
 
           localStorage.setItem(cacheKey, JSON.stringify(newScoreData));
@@ -71,6 +86,24 @@ const ILPexAssessment: React.FC = () => {
 
     fetchScoreData();
   }, []);
+
+  const fetchTraineeScores = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/trainee-scores/average/name"
+      );
+      setTraineeScores(response.data);
+    } catch (error) {
+      console.error("Error fetching trainee scores:", error);
+    }
+  };
+
+  const handleOpenModal = () => {
+    fetchTraineeScores();
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => setModalOpen(false);
 
   const data = {
     datasets: [
@@ -110,46 +143,60 @@ const ILPexAssessment: React.FC = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
-      sx={{
-        width: "460px",
-        padding: "20px",
-        margin: "auto",
-        borderRadius: '5px',
-        transition: "transform 0.3s ease-in-out",
-        "&:hover": {
-          transform: "scale(1.05)",
-        },
-      }}
-    >
-      <Box width="100%" sx={{ pr: 2 }}>
-        <Typography variant="h5">ILPex</Typography>
-        <Typography variant="subtitle1" sx={{ whiteSpace: "nowrap" }}>
-          Batch Assessment Score Overview
-        </Typography>
-        <Box>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80% ({scoreData.above80})
+    <>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
+        sx={{
+          width: "460px",
+          padding: "20px",
+          margin: "auto",
+          borderRadius: "5px",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+          cursor: "pointer", // Make the component appear clickable
+        }}
+        onClick={handleOpenModal} // Handle click to open modal
+      >
+        <Box width="100%" sx={{ pr: 2 }}>
+          <Typography variant="h5">ILPex</Typography>
+          <Typography variant="subtitle1" sx={{ whiteSpace: "nowrap" }}>
+            Batch Assessment Score Overview
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 70% and 80% ({scoreData.between70and80})
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 60% and 70% ({scoreData.between60and70})
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60% ({scoreData.below60})
-          </Typography>
+          <Box>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(85, 217, 130)" }}>●</span> Above 80% (
+              {scoreData.above80})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 70%
+              and 80% ({scoreData.between70and80})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 60%
+              and 70% ({scoreData.between60and70})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 60% (
+              {scoreData.below60})
+            </Typography>
+          </Box>
+        </Box>
+        <Box width="35%">
+          <Doughnut data={data} options={options} />
         </Box>
       </Box>
-      <Box width="35%">
-        <Doughnut data={data} options={options} />
-      </Box>
-    </Box>
+
+      <TraineeScoresModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        traineeScores={traineeScores}
+      />
+    </>
   );
 };
 

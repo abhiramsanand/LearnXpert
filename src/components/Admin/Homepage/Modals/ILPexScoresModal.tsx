@@ -18,10 +18,9 @@ import { styled } from "@mui/material/styles";
 interface TraineeScoreModalProps {
   open: boolean;
   onClose: () => void;
-  traineeData: { [traineeName: string]: number };
+  traineeScores: Record<string, number>;
 }
 
-// Custom styles for the dialog
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogTitle-root": {
     backgroundColor: "#8061C3",
@@ -74,18 +73,18 @@ const StyledTableRow = styled(TableRow)(({}) => ({
 const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
   open,
   onClose,
-  traineeData,
+  traineeScores,
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<keyof typeof traineeData>("name");
+  const [orderBy, setOrderBy] = useState<keyof { name: string; score: number }>("name");
 
-  const handleRequestSort = (property: keyof typeof traineeData) => {
+  const handleRequestSort = (property: keyof { name: string; score: number }) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const sortedTrainees = Object.entries(traineeData)
+  const sortedTrainees = Object.entries(traineeScores)
     .map(([name, score]) => ({ name, score }))
     .sort((a, b) => {
       if (a[orderBy] < b[orderBy]) {
