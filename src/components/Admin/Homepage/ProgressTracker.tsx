@@ -10,15 +10,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import TraineeModal from "./Modals/ProgressModal"; // Import the modal component
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const options = {
   responsive: true,
@@ -49,8 +43,12 @@ const ProgressTracker: React.FC = () => {
     onTrack: 0,
     ahead: 0,
   });
+  const [traineesBehind, setTraineesBehind] = useState<
+    Array<{ traineeName: string; traineeDayNumber: number }>
+  >([]);
+  const [batchDayNumber, setBatchDayNumber] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -67,16 +65,19 @@ const ProgressTracker: React.FC = () => {
         }
 
         const batchDayNumber = trainees[0].batchDayNumber;
+        setBatchDayNumber(batchDayNumber);
 
         let behind = 0;
         let onTrack = 0;
         let ahead = 0;
+        const behindTrainees = [];
 
         for (const trainee of trainees) {
-          const { traineeDayNumber } = trainee;
+          const { traineeDayNumber, traineeName } = trainee;
 
           if (traineeDayNumber < batchDayNumber) {
             behind++;
+            behindTrainees.push({ traineeName, traineeDayNumber });
           } else if (traineeDayNumber === batchDayNumber) {
             onTrack++;
           } else {
@@ -86,6 +87,7 @@ const ProgressTracker: React.FC = () => {
 
         const progress = { behind, onTrack, ahead };
         setProgressData(progress);
+        setTraineesBehind(behindTrainees);
         setLoading(false);
       })
       .catch((error) => {
@@ -99,15 +101,14 @@ const ProgressTracker: React.FC = () => {
     datasets: [
       {
         data: [progressData.behind, progressData.onTrack, progressData.ahead],
-        backgroundColor: ["#DB5461", "#F4E4BA", "#5B8C5A"], 
+        backgroundColor: ["#DB5461", "#F4E4BA", "#5B8C5A"],
       },
     ],
   };
 
-  const handleCloseModal = () => setOpenModal(false);
-
   return (
     <Box
+      onClick={() => setModalOpen(true)}
       display="flex"
       flexDirection="column"
       boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
@@ -118,6 +119,7 @@ const ProgressTracker: React.FC = () => {
         transition: "transform 0.3s ease-in-out",
         "&:hover": {
           transform: "scale(1.05)",
+          cursor: "pointer",
         },
       }}
     >
@@ -169,6 +171,12 @@ const ProgressTracker: React.FC = () => {
           ></Box>
         </>
       )}
+      <TraineeModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        batchDayNumber={batchDayNumber}
+        traineesBehind={traineesBehind}
+      />
     </Box>
   );
 };
