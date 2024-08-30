@@ -20,12 +20,12 @@ import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Trainee } from "../ManageBatch/BatchDetails";
 import AddTraineeModal from "../ManageBatch/AddTraineeModal";
 import ConfirmationModal from "./ConfirmationModal"; // Import the confirmation modal component
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 interface TraineeTableProps {
   trainees: Trainee[];
@@ -43,9 +43,8 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingTrainee, setEditingTrainee] = useState<Trainee | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [sortField, setSortField] = useState<string>("userName"); // Track the column being sorted
   const [traineeToDelete, setTraineeToDelete] = useState<number | null>(null); // Track which trainee is being deleted
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const handleOpenAddModal = () => setIsAddModalOpen(true);
   const handleCloseAddModal = () => setIsAddModalOpen(false);
@@ -130,27 +129,27 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
     }
   };
 
-  const handleSort = (field: string) => {
-    setSortField(field);
+  const handleSort = () => {
+    const sortedTrainees = [...traineeList].sort((a, b) => {
+      const userNameA = a.userName.toLowerCase();
+      const userNameB = b.userName.toLowerCase();
+      if (userNameA < userNameB) return sortOrder === "asc" ? -1 : 1;
+      if (userNameA > userNameB) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+    setTraineeList(sortedTrainees);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  const sortedTrainees = useMemo(() => {
-    return [...traineeList].sort((a, b) => {
-      const comparison = a[sortField].localeCompare(b[sortField]);
-      return sortOrder === "asc" ? comparison : -comparison;
-    });
-  }, [traineeList, sortOrder, sortField]);
-
   const filteredTrainees = useMemo(
     () =>
-      sortedTrainees.filter(
+      traineeList.filter(
         (trainee) =>
           trainee.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           trainee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
           trainee.percipioEmail.toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [searchTerm, sortedTrainees]
+    [searchTerm, traineeList]
   );
 
   return (
@@ -174,13 +173,24 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{
-              marginRight: "8px",
               "& .MuiInputBase-root": {
                 padding: "4px 8px",
                 width: "100%",
                 height: "30px",
-                fontSize: "12px",
+                backgroundColor: "#f0f0f0",
               },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#A281EA",
+                "&.Mui-focused": {
+                  color: "#8061C3",
+                },
+              },
+              mr: 2
             }}
             InputProps={{
               startAdornment: (
@@ -200,6 +210,9 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
               fontSize: "12px",
               height: "30px",
               padding: "0 10px",
+              "&:hover": {
+                backgroundColor: "#5b3f9f", 
+              },
             }}
           >
             <AddIcon fontSize="small" />
@@ -233,18 +246,22 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
                       fontWeight: "bold",
                       backgroundColor: "#F1EDEE",
                       fontSize: "14px",
-                      cursor: "pointer",
                     }}
-                    onClick={() => handleSort(field)}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {field === "userName"
-                        ? "Username"
-                        : field.charAt(0).toUpperCase() + field.slice(1)}
-                      <IconButton size="small" sx={{ marginLeft: "8px" }}>
-                        <SwapVertIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
+                    {field === "userName" ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={handleSort}
+                      >
+                        Username <SwapVertIcon fontSize="small" />
+                      </Box>
+                    ) : (
+                      field.charAt(0).toUpperCase() + field.slice(1)
+                    )}
                   </TableCell>
                 )
               )}
@@ -264,7 +281,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
               <TableRow
                 key={trainee.traineeId}
                 sx={{
-                  backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9", // Alternating row colors
+                  backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
                 }}
               >
                 {["userName", "email", "percipioEmail", "password"].map(
@@ -273,7 +290,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
                       key={field}
                       sx={{
                         fontSize: "13px",
-                        backgroundColor: "inherit", 
+                        backgroundColor: "inherit",
                       }}
                     >
                       {editingIndex === index && editingTrainee ? (
@@ -289,9 +306,9 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
                                 : null
                             )
                           }
+                          variant="standard" // Use standard variant for underline effect
                           sx={{
                             "& .MuiInputBase-root": {
-                              padding: "4px 8px",
                               fontSize: "13px",
                             },
                           }}
@@ -302,52 +319,40 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
                     </TableCell>
                   )
                 )}
-                <TableCell>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    {editingIndex === index ? (
-                      <>
-                        <IconButton
-                          color="primary"
-                          size="small"
-                          onClick={handleSaveTrainee}
-                        >
-                          <SaveIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          color="secondary"
-                          size="small"
-                          onClick={handleCancelEdit}
-                        >
-                          <CancelIcon fontSize="small" />
-                        </IconButton>
-                      </>
-                    ) : (
-                      <>
-                        <IconButton
-                          color="success"
-                          size="small"
-                          onClick={() => handleEditTrainee(index)}
-                          sx={{ color: "#8061C3" }}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          color="error"
-                          size="small"
-                          onClick={() =>
-                            handleOpenConfirmationModal(trainee.traineeId)
-                          }
-                          sx={{ color: "#D22B2B" }}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </>
-                    )}
-                  </Box>
+                <TableCell
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "8px",
+                  }}
+                >
+                  {editingIndex === index ? (
+                    <>
+                      <IconButton color="primary" onClick={handleSaveTrainee}>
+                        <SaveIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton color="secondary" onClick={handleCancelEdit}>
+                        <CancelIcon fontSize="small" />
+                      </IconButton>
+                    </>
+                  ) : (
+                    <>
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEditTrainee(index)}
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() =>
+                          handleOpenConfirmationModal(trainee.traineeId)
+                        }
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -355,16 +360,20 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
         </Table>
       </TableContainer>
 
+      {/* Add Trainee Modal */}
       <AddTraineeModal
         open={isAddModalOpen}
         onClose={handleCloseAddModal}
         onAddTrainee={handleAddTrainee}
       />
 
+      {/* Confirmation Modal */}
       <ConfirmationModal
         open={isConfirmationModalOpen}
         onClose={handleCloseConfirmationModal}
         onConfirm={handleDeleteTrainee}
+        title="Delete Trainee"
+        message="Are you sure you want to delete this trainee?"
       />
     </Box>
   );

@@ -4,8 +4,6 @@ import ProgramStatusForm from '../../components/Admin/ManageBatch/ProgramStatusF
 import TraineeTable from '../../components/Admin/ManageBatch/TraineeTable';
 import AddTraineeModal from '../../components/Admin/ManageBatch/AddTraineeModal';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import SuccessModal from '../../components/Admin/ManageBatch/SuccessModal';
 
 interface BatchDetails {
   batchId: number;
@@ -30,7 +28,6 @@ const ManageBatchPage: React.FC = () => {
   const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,27 +68,6 @@ const ManageBatchPage: React.FC = () => {
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleUpdateBatchDetails = async () => {
-    if (batchDetails) {
-      try {
-        const response = await axios.put(`http://localhost:8080/api/v1/batches/${batchId}`, {
-          batchName: batchDetails.batchName,
-          startDate: new Date(batchDetails.startDate).toISOString(),
-          endDate: new Date(batchDetails.endDate).toISOString(),
-        });
-  
-        if (response.status === 200) {
-          console.log('Batch details updated successfully');
-          setIsSuccessModalOpen(true);
-        } else {
-          console.error('Failed to update batch details');
-        }
-      } catch (error) {
-        console.error('Error updating batch details:', error);
-      }
-    }
-  };
   
   if (loading) {
     return (
@@ -142,23 +118,15 @@ const ManageBatchPage: React.FC = () => {
         }
       }}>
         <ProgramStatusForm batchDetails={batchDetails} />
-
         <Box sx={{ marginTop: '16px' }}>
           <TraineeTable trainees={trainees} onAddTrainee={handleOpenModal} />
         </Box>
       </Box>
-
       <AddTraineeModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleAddTrainee}
         batchId={Number(batchId)}
-      />
-
-      <SuccessModal
-        open={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        message="Batch details updated successfully"
       />
     </Box>
   );
