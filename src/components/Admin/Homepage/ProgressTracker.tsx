@@ -102,6 +102,8 @@ const ProgressTracker: React.FC = () => {
       {
         data: [progressData.behind, progressData.onTrack, progressData.ahead],
         backgroundColor: ["#DB5461", "#F4E4BA", "#5B8C5A"],
+        borderColor: ["rgba(128, 97, 195, 0.3)"],
+        borderWidth: 1,
       },
     ],
   };

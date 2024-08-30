@@ -63,11 +63,16 @@ const AdminHomePage = () => {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      position="relative"
+    >
       <Box
         position="absolute"
         top="0px"
-        left="20px"
+        left="30px"
         sx={{
           borderRadius: "5px",
           zIndex: 10,
@@ -78,9 +83,47 @@ const AdminHomePage = () => {
       >
         {batchDetails ? (
           <>
-            <Typography sx={{ mr: 3, fontWeight: "bold", color: "#8061C3" }}>{batchDetails.batchName}</Typography>
-            <Typography sx={{ mr: 3, fontWeight: "bold", color: "#8061C3" }}>Current Day: {batchDetails.dayNumber}</Typography>
-            <Typography sx={{fontWeight: "bold", color: "#8061C3"}}>Number of Trainees: {batchDetails.totalTrainees}</Typography>
+            <Typography
+              sx={{
+                mr: 3,
+                fontWeight: "bold",
+                color: "#8061C3",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+                cursor: "pointer",
+              }}
+            >
+              {batchDetails.batchName}
+            </Typography>
+            <Typography
+              sx={{
+                mr: 3,
+                fontWeight: "bold",
+                color: "#8061C3",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+                cursor: "pointer",
+              }}
+            >
+              Current Day: {batchDetails.dayNumber}
+            </Typography>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                color: "#8061C3",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+                cursor: "pointer",
+              }}
+            >
+              Number of Trainees: {batchDetails.totalTrainees}
+            </Typography>
           </>
         ) : (
           <Typography>No batch details available.</Typography>
@@ -92,15 +135,26 @@ const AdminHomePage = () => {
         <Box
           position="absolute"
           top="0px"
-          right="20px"
+          right="30px"
           display="flex"
           alignItems="center"
           zIndex={10}
+          sx={{
+            transition: "transform 0.3s ease-in-out",
+            "&:hover": {
+              transform: "scale(1.05)",
+            },
+          }}
         >
-          <IconButton aria-label="Manage Batch" sx={{ marginRight: "5px", color: "#8061C3" }}>
+          <IconButton
+            aria-label="Manage Batch"
+            sx={{ marginRight: "5px", color: "#8061C3" }}
+          >
             <SettingsIcon />
           </IconButton>
-          <Typography sx={{ color: "#8061C3", fontWeight: "bold" }}>Manage Batch</Typography>
+          <Typography sx={{ color: "#8061C3", fontWeight: "bold" }}>
+            Manage Batch
+          </Typography>
         </Box>
       </Link>
 

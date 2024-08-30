@@ -115,18 +115,8 @@ const ILPexAssessment: React.FC = () => {
           scoreData.between60and70,
           scoreData.below60,
         ],
-        backgroundColor: [
-          "#5B8C5A",
-          "#F4E4BA",
-          "#E5A9A9",
-          "#DB5461",
-        ],
-        borderColor: [
-          "#5B8C5A",
-          "#F4E4BA",
-          "#E5A9A9",
-          "#DB5461",
-        ],
+        backgroundColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
+        borderColor: ["rgba(128, 97, 195, 0.3)"],
         borderWidth: 1,
       },
     ],
@@ -150,7 +140,7 @@ const ILPexAssessment: React.FC = () => {
         alignItems="center"
         boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
         sx={{
-          width: "460px",
+          width: "459px",
           padding: "20px",
           margin: "auto",
           borderRadius: "5px",
@@ -158,7 +148,7 @@ const ILPexAssessment: React.FC = () => {
           "&:hover": {
             transform: "scale(1.05)",
           },
-          cursor: "pointer", // Make the component appear clickable
+          cursor: "pointer", 
         }}
         onClick={handleOpenModal} // Handle click to open modal
       >
@@ -173,12 +163,12 @@ const ILPexAssessment: React.FC = () => {
               {scoreData.above80})
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "#F4E4BA" }}>●</span> Between 70%
-              and 80% ({scoreData.between70and80})
+              <span style={{ color: "#F4E4BA" }}>●</span> Between 70% and 80% (
+              {scoreData.between70and80})
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              <span style={{ color: "#E5A9A9" }}>●</span> Between 60%
-              and 70% ({scoreData.between60and70})
+              <span style={{ color: "#E5A9A9" }}>●</span> Between 60% and 70% (
+              {scoreData.between60and70})
             </Typography>
             <Typography variant="body2" color="textSecondary">
               <span style={{ color: "#DB5461" }}>●</span> Below 60% (

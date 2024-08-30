@@ -102,8 +102,8 @@ const AcceleratedTraineesTrack: React.FC = () => {
         label: "Number of Trainees by Speed",
         data: Object.values(speedData),
         backgroundColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
-        borderColor: ["#5B8C5A", "#F4E4BA", "#E5A9A9", "#DB5461"],
-        borderWidth: 2,
+        borderColor: ["rgba(128, 97, 195, 0.3)"],
+        borderWidth: 1,
       },
     ],
   };

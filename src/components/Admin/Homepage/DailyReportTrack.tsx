@@ -3,6 +3,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import ReportModal from "./Modals/DailyReportModal"; // Import the modal component
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { BorderColor } from "@mui/icons-material";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -74,6 +75,8 @@ const DailyReportTrack: React.FC = () => {
         label: "Percentage of Trainees Behind",
         data: [speedPercentage, 100 - speedPercentage],
         backgroundColor: ["#5B8C5A", "#EDF3ED"],
+        borderColor: ["rgba(128, 97, 195, 0.3)"],
+        borderWidth: 1,
       },
     ],
   };

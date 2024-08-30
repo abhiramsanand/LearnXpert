@@ -108,7 +108,7 @@ const PercipioAssessment: React.FC = () => {
           "#F4E4BA", // Yellow for between 90 and 99
           "#5B8C5A", // Green for exactly 100
         ],
-        borderColor: ["#DB5461", "#E5A9A9", "#F4E4BA", "#5B8C5A"],
+        borderColor: ["rgba(128, 97, 195, 0.3)"],
         borderWidth: 1,
       },
     ],
@@ -132,7 +132,7 @@ const PercipioAssessment: React.FC = () => {
         alignItems="center"
         boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
         sx={{
-          width: "460px",
+          width: "459px",
           padding: "20px",
           margin: "auto",
           borderRadius: "5px",
