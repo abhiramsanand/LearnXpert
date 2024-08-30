@@ -1,16 +1,16 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer";
+import Footer from "../shared components/Footer";
+import AdminHeader from "../shared components/Admin/AdminHeader";
+import Sidebar from "../shared components/Admin/AdminSidebar";
 import { Box, CssBaseline } from "@mui/material";
-import TraineeHeader from "./Trainee/TraineeHeader";
-import TraineeSidebar from "./Trainee/TraineeSidebar";
 
-const TraineeLayout = () => {
+const AdminLayout = () => {
   return (
     <>
-      <TraineeHeader />
+      <AdminHeader />
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <TraineeSidebar />
+        <Sidebar />
         <Box
           component="main"
           sx={{
@@ -33,4 +33,4 @@ const TraineeLayout = () => {
   );
 };
 
-export default TraineeLayout;
+export default AdminLayout;

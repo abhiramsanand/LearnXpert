@@ -106,7 +106,7 @@ const ILPexAssessment: React.FC = () => {
         position: "right" as "right",
       },
     },
-    cutout: "40%",
+    cutout: "0%",
   };
 
   return (

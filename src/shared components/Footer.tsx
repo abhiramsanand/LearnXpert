@@ -18,7 +18,7 @@ const Footer = () => {
     <FooterContainer>
       <Container>
         <Typography variant="body2">
-          © MentorMinds - ILPex<span style={{fontSize: '5px'}}>WEB</span> 2024 
+          © Experion Technologies - ILPex<span style={{fontSize: '5px'}}>WEB</span> 2024 
         </Typography>
       </Container>
     </FooterContainer>

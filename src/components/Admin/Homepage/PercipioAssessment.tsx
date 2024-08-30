@@ -4,6 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from "axios";
+import TraineeScoreModal from "./Modals/PercipioModal";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,12 +16,7 @@ const PercipioAssessment: React.FC = () => {
     exactly100: 0,
   });
 
-  const [traineeData, setTraineeData] = useState({
-    below80: [] as string[],
-    between80and90: [] as string[],
-    between90and99: [] as string[],
-    exactly100: [] as string[],
-  });
+  const [traineeData, setTraineeData] = useState<{ [traineeName: string]: number }>({});
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -74,22 +70,15 @@ const PercipioAssessment: React.FC = () => {
           exactly100: exactly100.length,
         };
 
-        const newTraineeData = {
-          below80,
-          between80and90,
-          between90and99,
-          exactly100,
-        };
-
         setScoreData(newScoreData);
-        setTraineeData(newTraineeData);
+        setTraineeData(scores);
 
         // Cache the data with the current timestamp
         localStorage.setItem(
           cacheKey,
           JSON.stringify({
             scoreData: newScoreData,
-            traineeData: newTraineeData,
+            traineeData: scores,
             timestamp: new Date().getTime(),
           })
         );
@@ -135,56 +124,64 @@ const PercipioAssessment: React.FC = () => {
         position: "right" as const,
       },
     },
-    cutout: "40%", // Adjusted to fill the entire chart
+    cutout: "0%", // Adjusted to fill the entire chart
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
-      sx={{
-        width: "460px",
-        padding: "20px",
-        margin: "auto",
-        borderRadius: "5px",
-        transition: "transform 0.3s ease-in-out",
-        cursor: "pointer",
-        "&:hover": {
-          transform: "scale(1.05)",
-        },
-      }}
-      onClick={handleOpenModal}
-    >
-      <Box width="100%" sx={{ pr: 2 }}>
-        <Typography variant="h5">Percipio</Typography>
-        <Typography variant="subtitle1" sx={{ whiteSpace: "nowrap" }}>
-          Batch Assessment Score Overview
-        </Typography>
-        <Box>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 80% (
-            {scoreData.below80})
+    <>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        boxShadow="0px 4px 10px rgba(128, 97, 195, 0.5)"
+        sx={{
+          width: "460px",
+          padding: "20px",
+          margin: "auto",
+          borderRadius: "5px",
+          transition: "transform 0.3s ease-in-out",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+        onClick={handleOpenModal}
+      >
+        <Box width="100%" sx={{ pr: 2 }}>
+          <Typography variant="h5">Percipio</Typography>
+          <Typography variant="subtitle1" sx={{ whiteSpace: "nowrap" }}>
+            Batch Assessment Score Overview
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 80%
-            and 90% ({scoreData.between80and90})
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 90%
-            and 99% ({scoreData.between90and99})
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <span style={{ color: "rgba(85, 217, 130)" }}>●</span> 100% (
-            {scoreData.exactly100})
-          </Typography>
+          <Box>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(217, 85, 85)" }}>●</span> Below 80% (
+              {scoreData.below80})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(247, 143, 84)" }}>●</span> Between 80%
+              and 90% ({scoreData.between80and90})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(217, 196, 85)" }}>●</span> Between 90%
+              and 99% ({scoreData.between90and99})
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              <span style={{ color: "rgba(85, 217, 130)" }}>●</span> 100% (
+              {scoreData.exactly100})
+            </Typography>
+          </Box>
+        </Box>
+        <Box width="35%">
+          <Doughnut data={data} options={options} />
         </Box>
       </Box>
-      <Box width="35%">
-        <Doughnut data={data} options={options} />
-      </Box>
-    </Box>
+
+      <TraineeScoreModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        traineeData={traineeData}
+      />
+    </>
   );
 };
 
