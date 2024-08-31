@@ -19,7 +19,7 @@ const BatchForm: React.FC = () => {
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
-    const [excelData, setExcelData] = useState<any[]>([]);
+    const [excelData, setExcelData] = useState<any[][]>([]);
 
     useEffect(() => {
         const fetchPrograms = async () => {
@@ -41,7 +41,6 @@ const BatchForm: React.FC = () => {
             setFile(selectedFile);
             setFileSelected(true);
 
-            // Create a FileReader to read the file
             const reader = new FileReader();
             reader.onload = (e) => {
                 const data = new Uint8Array(e.target?.result as ArrayBuffer);
@@ -55,6 +54,12 @@ const BatchForm: React.FC = () => {
         }
     };
 
+    const handleExcelDataChange = (value: string, rowIndex: number, cellIndex: number) => {
+        const updatedData = [...excelData];
+        updatedData[rowIndex][cellIndex] = value;
+        setExcelData(updatedData);
+    };
+
     const handleSubmit = async () => {
         if (selectedProgram === '') {
             setErrorMessages(["Please select a program."]);
@@ -66,7 +71,19 @@ const BatchForm: React.FC = () => {
         formData.append("batchData", batchData);
 
         if (file) {
-            formData.append("file", file);
+            // Convert the updated excelData back to a workbook
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+            // Convert workbook to a binary array
+            const updatedFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+            // Convert the binary array to a Blob
+            const updatedBlob = new Blob([updatedFile], { type: "application/octet-stream" });
+            const updatedFileObj = new File([updatedBlob], file.name);
+
+            formData.append("file", updatedFileObj);
         } else {
             setErrorMessages(["Please upload a file."]);
             return;
@@ -102,7 +119,7 @@ const BatchForm: React.FC = () => {
     return (
         <Container
             sx={{
-                maxHeight: "calc(100vh - 64px)", // Adjust this value based on header/footer height
+                maxHeight: "calc(100vh - 64px)",
                 overflowY: "auto",
                 p: 2,
             }}
@@ -114,7 +131,7 @@ const BatchForm: React.FC = () => {
                     bgcolor: "#ffffff",
                     borderRadius: "15px",
                     boxShadow: "4px 8px 10px rgba(0, 0, 0, 0.4)",
-                    minHeight: "100vh", // Ensures content takes up at least full viewport height
+                    minHeight: "100vh",
                 }}
             >
                 <Typography variant="h4" fontFamily={"Montserrat, sans-serif"}>
@@ -251,11 +268,7 @@ const BatchForm: React.FC = () => {
                             <Box sx={{ mt: 2 }}>
                                 <Typography variant="caption">Uploaded file:</Typography>
                                 <Typography variant="body2">{file.name}</Typography>
-                                {/* Display file preview if it's an image */}
-                                {file.type.startsWith("image/") && (
-                                    <img src={filePreview as string} alt="File preview" style={{ maxWidth: "100%", maxHeight: "300px", marginTop: "10px" }} />
-                                )}
-                                {/* Display Excel data if the file is an Excel file */}
+
                                 {file.type.includes("sheet") && (
                                     <Box sx={{ mt: 2 }}>
                                         <Typography variant="h6">Excel File Content:</Typography>
@@ -271,7 +284,14 @@ const BatchForm: React.FC = () => {
                                                 {excelData.slice(1).map((row: any[], rowIndex: number) => (
                                                     <tr key={rowIndex}>
                                                         {row.map((cell, cellIndex) => (
-                                                            <td key={cellIndex}>{cell}</td>
+                                                            <td key={cellIndex}>
+                                                                <TextField
+                                                                    value={cell}
+                                                                    onChange={(e) => handleExcelDataChange(e.target.value, rowIndex + 1, cellIndex)}
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                />
+                                                            </td>
                                                         ))}
                                                     </tr>
                                                 ))}
@@ -341,7 +361,5 @@ const BatchForm: React.FC = () => {
         </Container>
     );
 };
-
-
 
 export default BatchForm;

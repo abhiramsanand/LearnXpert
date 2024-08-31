@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import enUS from 'date-fns/locale/en-US';
 import axios from 'axios';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
 interface CourseDate {
@@ -37,7 +37,7 @@ const HolidayCalendar: React.FC = () => {
 
   const fetchCourseDates = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/courses/dates/dayNumber');
+      const response = await axios.get('http://localhost:8080/api/courses/dates/dayNumber');
       if (Array.isArray(response.data)) {
         setCourseDates(response.data);
       } else {
@@ -49,15 +49,16 @@ const HolidayCalendar: React.FC = () => {
     }
   };
 
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
+  const handleDateClick = (slotInfo: any) => {
+    console.log('Date clicked:', slotInfo.start); // Debugging line
+    setSelectedDate(slotInfo.start);
     setDialogOpen(true);
   };
 
   const handleMarkHoliday = async () => {
     if (selectedDate) {
       try {
-        await axios.post('http://localhost:8080/api/v1/courses/mark-holiday/day', {
+        await axios.post('http://localhost:8080/api/courses/mark-holiday/day', {
           holidayDate: selectedDate.toISOString().split('T')[0],
         });
         enqueueSnackbar('Holiday marked successfully', { variant: 'success' });
@@ -73,7 +74,7 @@ const HolidayCalendar: React.FC = () => {
   const handleUnmarkHoliday = async () => {
     if (selectedDate) {
       try {
-        await axios.post('http://localhost:8080/api/v1/courses/unmark-holiday', {
+        await axios.post('http://localhost:8080/api/courses/unmark-holiday', {
           holidayDate: selectedDate.toISOString().split('T')[0],
         });
         enqueueSnackbar('Holiday unmarked successfully', { variant: 'success' });
@@ -95,20 +96,24 @@ const HolidayCalendar: React.FC = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={locales['en-US']}>
+      <Typography variant="h6" style={{ marginBottom: 16 }}>
+        Click on a date to mark or unmark it as a holiday.
+      </Typography>
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
-        onSelectSlot={(slotInfo) => handleDateClick(slotInfo.start)}
+        onSelectSlot={handleDateClick}
         selectable
+        views={['month']}
       />
       <Dialog open={isDialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Select Action</DialogTitle>
         <DialogContent>
-          <Button onClick={handleMarkHoliday} color="primary">Mark as Holiday</Button>
-          <Button onClick={handleUnmarkHoliday} color="secondary">Unmark as Holiday</Button>
+          <Button onClick={handleMarkHoliday} color="primary" variant="contained">Mark as Holiday</Button>
+          <Button onClick={handleUnmarkHoliday} color="secondary" variant="contained">Unmark as Holiday</Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} color="default">Cancel</Button>
