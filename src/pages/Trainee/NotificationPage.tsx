@@ -5,9 +5,9 @@ import styles from '../../components/Trainee/Notification/NotificationPage.modul
 
 interface Notification {
   id: number;
-  title: string;
-  message: string;
-  read: boolean;
+  assessmentName: string;
+  notificationTime: string; // ISO 8601 format date string
+  isRead: boolean;
 }
 
 const NotificationPage: React.FC = () => {
@@ -19,8 +19,9 @@ const NotificationPage: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   const fetchNotifications = async () => {
+    const traineeId = 1283; // Replace with dynamic ID as needed
     try {
-      const response = await fetch('/notifications.json');
+      const response = await fetch(`http://localhost:8080/api/v1/notifications/trainee/${traineeId}`);
       const data: Notification[] = await response.json();
       setNotifications(data);
       updateUnreadCount(data);
@@ -30,14 +31,14 @@ const NotificationPage: React.FC = () => {
   };
 
   const updateUnreadCount = (notifications: Notification[]) => {
-    const count = notifications.filter(notification => !notification.read).length;
+    const count = notifications.filter(notification => !notification.isRead).length;
     setUnreadCount(count);
   };
 
   const handleNotificationClose = (id: number) => {
     setNotifications(prevNotifications => {
       const updatedNotifications = prevNotifications.map(notification => 
-        notification.id === id ? { ...notification, read: true } : notification
+        notification.id === id ? { ...notification, isRead: true } : notification
       );
       updateUnreadCount(updatedNotifications);
       return updatedNotifications;

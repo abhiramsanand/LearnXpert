@@ -3,9 +3,9 @@ import styles from './NotificationPage.module.css';
 
 interface Notification {
   id: number;
-  title: string;
-  message: string;
-  read: boolean;
+  assessmentName: string;
+  notificationTime: string; // ISO 8601 format date string
+  isRead: boolean;
 }
 
 interface NotificationModalProps {
@@ -20,7 +20,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   if (!isOpen) return null;
 
   const getRandomColor = () => {
-    const colors = ['#FFC107', '#FF5722', '#4CAF50', '#2196F3', '#9C27B0'];
+    const colors = ['#CBC3E3'];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
@@ -28,26 +28,30 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <button className={styles.closeButton} onClick={onClose}>X</button>
-        <h2>Notifications</h2>
+        <h1>Notifications</h1>
         <div className={styles.notificationContainer}>
-          {notifications.map((notification) => (
-            !notification.read && (
-              <div
-                key={notification.id}
-                className={styles.notificationItem}
-                style={{ backgroundColor: getRandomColor() }}
-              >
-                <button
-                  className={styles.notificationCloseButton}
-                  onClick={() => onNotificationClose(notification.id)}
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
+              !notification.isRead && (
+                <div
+                  key={notification.id}
+                  className={styles.notificationItem}
+                  style={{ backgroundColor: getRandomColor() }}
                 >
-                  X
-                </button>
-                <h3>{notification.title}</h3>
-                <p>{notification.message}</p>
-              </div>
-            )
-          ))}
+                  <button
+                    className={styles.notificationCloseButton}
+                    onClick={() => onNotificationClose(notification.id)}
+                  >
+                    X
+                  </button>
+                  <h3>NEW ASSESSMENT : {notification.assessmentName}</h3>
+                  <p>Posted on : {new Date(notification.notificationTime).toLocaleString()}</p>
+                </div>
+              )
+            ))
+          ) : (
+            <p>No new notifications.</p>
+          )}
         </div>
       </div>
     </div>
