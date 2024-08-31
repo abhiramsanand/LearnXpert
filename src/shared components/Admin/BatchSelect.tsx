@@ -114,7 +114,7 @@ const BatchSelect: React.FC<BatchSelectProps> = ({
               <Typography variant="h6" sx={{ fontSize: "12px" }}>
                 {batch.batchName}
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: "6px" }}>
+              <Typography variant="body2" sx={{ fontSize: "8px" }}>
                 {batch.isActive ? "Active" : "Complete"}
               </Typography>
             </Box>

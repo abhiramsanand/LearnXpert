@@ -36,9 +36,13 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
               };
             }
             acc[item.dayNumber].totalDuration += durationInMinutes;
-            acc[item.dayNumber].sessions.push({ title: item.courseName });
+            acc[item.dayNumber].sessions.push({ 
+              title: item.courseName, 
+              courseDuration: item.courseDuration  // Include courseDuration here
+            });
             return acc;
-          }, {} as Record<number, { totalDuration: number; sessions: { title: string }[] }>);
+          }, {} as Record<number, { totalDuration: number; sessions: { title: string; courseDuration: string }[] }>);
+          
 
           setDaysData(transformedData);
           // Set Day 1 as selected if it exists
