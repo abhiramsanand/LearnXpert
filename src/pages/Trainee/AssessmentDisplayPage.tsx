@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, Button, Box } from '@mui/material';
+import { Container, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
+import { styled } from '@mui/system';
 
 interface Question {
+  questionId: number;
   question: string;
   optionA: string;
   optionB: string;
@@ -17,6 +19,33 @@ interface Assessment {
   questions: Question[];
 }
 
+// Custom styled components
+const StyledContainer = styled(Container)({
+  textAlign: 'center',
+  marginTop: '16px',
+});
+
+const StyledTypography = styled(Typography)({
+  fontSize: '1.2rem',
+  marginBottom: '16px',
+});
+
+const StyledQuestionBox = styled(Box)({
+  borderRadius: '12px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  marginBottom: '16px',
+  padding: '16px',
+  backgroundColor: '#f5f5f5',
+});
+
+const StyledButton = styled(Button)({
+  backgroundColor: '#917fb3',
+  color: '#fff',
+  fontSize: '0.75rem',
+  padding: '8px 16px',
+  margin: '0 4px',
+});
+
 const AssessmentDisplayPage: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -26,7 +55,8 @@ const AssessmentDisplayPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [responses, setResponses] = useState<string[]>([]);
+  const [responses, setResponses] = useState<{ [questionId: number]: string }>({});
+  const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAssessment = async () => {
@@ -57,75 +87,122 @@ const AssessmentDisplayPage: React.FC = () => {
     }
   };
 
-  const handleResponseChange = (response: string) => {
-    const newResponses = [...responses];
-    newResponses[currentQuestionIndex] = response;
-    setResponses(newResponses);
+  const handleResponseChange = (questionId: number, responseContent: string) => {
+    setResponses(prevResponses => ({
+      ...prevResponses,
+      [questionId]: responseContent,
+    }));
   };
 
   const handleSubmit = async () => {
-    try {
-      await axios.post('http://localhost:8080/api/v1/assessments/submit', {
-        assessmentName,
-        responses
-      });
-      console.log('Assessment submitted successfully');
-    } catch (err) {
-      console.error('Failed to submit assessment');
+    if (!assessment) return;
+
+    const validResponses: { [key: number]: string } = {};
+    assessment.questions.forEach(question => {
+      const response = responses[question.questionId];
+      if (response) {
+        validResponses[question.questionId] = response;
+      }
+    });
+
+    if (Object.keys(validResponses).length === 0) {
+      setError('Please provide responses to all questions.');
+      return;
     }
+
+    const data = {
+      assessmentName: assessment.assessmentName,
+      traineeId: 1416,
+      questionResponses: validResponses,
+    };
+
+    try {
+      await axios.post('http://localhost:8080/api/v1/assessments/submit', data);
+      setSuccessDialogOpen(true); // Open the success dialog on successful submission
+    } catch (err) {
+      console.error('Failed to submit assessment:', err);
+      setError('Failed to submit assessment.');
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setSuccessDialogOpen(false);
+    // Optionally, redirect or perform other actions after closing the dialog
   };
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Container maxWidth="md" sx={{ textAlign: 'center', mt: 2 }}>
+    <StyledContainer maxWidth="md">
       {assessment && (
         <>
-          <Typography variant="h4" gutterBottom sx={{ fontSize: '1.2rem', mb: 2 }}>
+          <StyledTypography variant="h4" gutterBottom>
             {assessment.assessmentName}
-          </Typography>
-          <QuestionCard
-            questionText={assessment.questions[currentQuestionIndex].question}
-            options={{
-              optionA: assessment.questions[currentQuestionIndex].optionA,
-              optionB: assessment.questions[currentQuestionIndex].optionB,
-              optionC: assessment.questions[currentQuestionIndex].optionC,
-              optionD: assessment.questions[currentQuestionIndex].optionD,
-            }}
-            selectedOption={responses[currentQuestionIndex]}
-            onResponseChange={handleResponseChange}
-          />
+          </StyledTypography>
+
+          <StyledQuestionBox>
+            <QuestionCard
+              questionId={assessment.questions[currentQuestionIndex].questionId}
+              questionText={assessment.questions[currentQuestionIndex].question}
+              options={{
+                optionA: assessment.questions[currentQuestionIndex].optionA,
+                optionB: assessment.questions[currentQuestionIndex].optionB,
+                optionC: assessment.questions[currentQuestionIndex].optionC,
+                optionD: assessment.questions[currentQuestionIndex].optionD,
+              }}
+              selectedOption={
+                Object.entries(assessment.questions[currentQuestionIndex]).find(
+                  ([key, value]) => value === responses[assessment.questions[currentQuestionIndex].questionId]
+                )?.[0] || ''
+              }
+              onResponseChange={(questionId, selectedOptionKey) => {
+                const optionContent = assessment.questions[currentQuestionIndex][selectedOptionKey as keyof typeof assessment.questions[currentQuestionIndex]];
+                handleResponseChange(questionId, optionContent);
+              }}
+            />
+          </StyledQuestionBox>
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-            <Button
+            <StyledButton
               variant="contained"
-              sx={{ backgroundColor: '#917fb3', color: '#fff', fontSize: '0.75rem', px: 2 }}
               onClick={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
             >
               Previous
-            </Button>
+            </StyledButton>
             {currentQuestionIndex === assessment.questions.length - 1 ? (
-              <Button
+              <StyledButton
                 variant="contained"
-                sx={{ backgroundColor: '#917fb3', color: '#fff', fontSize: '0.75rem', px: 2 }}
                 onClick={handleSubmit}
               >
                 Submit
-              </Button>
+              </StyledButton>
             ) : (
-              <Button
+              <StyledButton
                 variant="contained"
-                sx={{ backgroundColor: '#917fb3', color: '#fff', fontSize: '0.75rem', px: 2 }}
                 onClick={handleNextQuestion}
               >
                 Next
-              </Button>
+              </StyledButton>
             )}
           </Box>
         </>
       )}
-    </Container>
+
+      {/* Success Dialog */}
+      <Dialog open={successDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Submission Successful</DialogTitle>
+        <DialogContent>
+          <Typography>Your assessment has been submitted successfully.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </StyledContainer>
   );
 };
 

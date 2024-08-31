@@ -38,7 +38,7 @@ import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeCourseReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
 import CreateCoursePage from "./pages/Admin/CreateCoursePage";
-import CalendarComponent from "./components/Admin/ManageBatch/Calendar";
+import HolidayCalendar from "./pages/Admin/CalendarAdmin";
 
 ChartJS.register(
   CategoryScale,
@@ -70,6 +70,7 @@ function App() {
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
+          <Route path="Admin-Calendar" element={<HolidayCalendar/>} />
        <Route path="/Admin-Assessments" element={<AdminAssessmentDetailsPage />} />
 
           <Route
@@ -101,7 +102,7 @@ function App() {
           <Route path="/Admin-Trainees" element={<TraineesPage />} />
           <Route path="/trainee/:id" element={<TraineeReport />} />
           <Route path="/Admin-Courses" element={<AdminCoursePage />} />
-          <Route path="/Admin-Calendar" element={<CalendarComponent />} />
+          <Route path="/Admin-Calendar" element={<HolidayCalendar />} />
         </Route>
       </Routes>
     </Router>
