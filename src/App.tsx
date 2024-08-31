@@ -38,7 +38,7 @@ import TraineesPage from "./pages/Admin/TraineesPage";
 import TraineeReport from "./pages/Admin/TraineeCourseReportPage";
 import AssessmentDisplayPage from "./pages/Trainee/AssessmentDisplayPage";
 import CreateCoursePage from "./pages/Admin/CreateCoursePage";
-import HolidayCalendar from "./pages/Admin/CalendarAdmin";
+import Calendar from "./components/Admin/ManageBatch/Calendar";
 
 ChartJS.register(
   CategoryScale,
@@ -66,21 +66,23 @@ function App() {
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
           <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
-          <Route path="/Trainee-Assessments/assessment" element={<AssessmentDisplayPage />} />
+          <Route
+            path="/Trainee-Assessments/assessment"
+            element={<AssessmentDisplayPage />}
+          />
         </Route>
         <Route path="/" element={<AdminLayout />}>
           <Route path="Admin-Home" element={<AdminHomePage />} />
-          <Route path="Admin-Calendar" element={<HolidayCalendar/>} />
-       <Route path="/Admin-Assessments" element={<AdminAssessmentDetailsPage />} />
+          <Route
+            path="/Admin-Assessments"
+            element={<AdminAssessmentDetailsPage />}
+          />
 
           <Route
             path="/Admin-AssessmentCreation"
             element={<AdminAssessmentCreationPage />}
           />
-          <Route
-            path="/Admin-CourseCreation"
-            element={<CreateCoursePage />}
-          />
+          <Route path="/Admin-CourseCreation" element={<CreateCoursePage />} />
           <Route
             path="/Add-Admin"
             element={
@@ -95,14 +97,17 @@ function App() {
             }
           />
           <Route path="/Admin-Batches" element={<TraineeCourseReportPage />} />
-          <Route path="/Admin-ManageBatch/:batchId" element={<ManageBatchPage />} />
+          <Route
+            path="/Admin-ManageBatch/:batchId"
+            element={<ManageBatchPage />}
+          />
           <Route path="Admin-BatchAdd" element={<BatchForm />} />
           <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
           <Route path="/Admin-DailyReport" element={<AdminReportPage />} />
           <Route path="/Admin-Trainees" element={<TraineesPage />} />
           <Route path="/trainee/:id" element={<TraineeReport />} />
           <Route path="/Admin-Courses" element={<AdminCoursePage />} />
-          <Route path="/Admin-Calendar" element={<HolidayCalendar />} />
+          <Route path="/Admin-Calendar" element={<Calendar />} />
         </Route>
       </Routes>
     </Router>

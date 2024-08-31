@@ -139,7 +139,7 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
                 sx={{
                   "& .MuiInputBase-root": {
                     padding: "4px 8px",
-                    width: "60%",
+                    width: "70%",
                     height: "30px",
                     backgroundColor: "#f0f0f0",
                   },
@@ -160,7 +160,7 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
                 sx={{
                   backgroundColor: "#5B8C5A",
                   color: "white",
-                  ml: "-110px",
+                  ml: "-90px",
                   fontSize: "10px",
                   width: "130px",
                   mt: 1,

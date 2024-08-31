@@ -11,7 +11,6 @@ import {
   Box,
   TextField,
   InputAdornment,
-  IconButton,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import SearchIcon from "@mui/icons-material/Search";
@@ -141,14 +140,26 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
     [searchTerm, reportData]
   );
 
-  const getCellStyle = (totalCourses: number, estimatedCourses: number) => {
+  const getTextStyle = (totalCourses: number, estimatedCourses: number) => {
     const difference = totalCourses - estimatedCourses;
     if (difference > 4) {
-      return { backgroundColor: theme.palette.error.light };
+      return {
+        backgroundColor: "#DB5461",
+        color: "#fff",
+        padding: "2px",
+        borderRadius: "2px",
+        width: "13%",
+      };
     } else if (difference > 0) {
-      return { backgroundColor: theme.palette.warning.light };
+      return {
+        backgroundColor: "#E5A9A9",
+        color: "#000",
+        padding: "2px",
+        borderRadius: "2px",
+        width: "13%",
+      };
     } else {
-      return {};
+      return { backgroundColor: "transparent", color: "#000" };
     }
   };
 
@@ -225,8 +236,8 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
       <TableContainer
         component={Paper}
         sx={{
-          marginTop: "20px",
-          maxHeight: "calc(100vh - 200px)",
+          marginTop: "15px",
+          maxHeight: "calc(100vh - 190px)",
           overflowY: "auto",
           backgroundColor: "#F1EDEE",
           "&::-webkit-scrollbar": { width: "8px" },
@@ -238,7 +249,14 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
         }}
       >
         <Table stickyHeader>
-          <TableHead>
+          <TableHead
+            sx={{
+              position: "sticky",
+              top: 0,
+              backgroundColor: "#F1EDEE",
+              zIndex: theme.zIndex.appBar, // Ensure it's above the table body
+            }}
+          >
             <TableRow>
               <TableCell
                 sx={{
@@ -286,7 +304,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   fontSize: "14px",
                 }}
               >
-                Total Days 
+                Total Days
               </TableCell>
               <TableCell
                 sx={{
@@ -316,21 +334,18 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                 <TableCell>{trainee.traineeName}</TableCell>
                 <TableCell>{trainee.totalDuration}</TableCell>
                 <TableCell>{trainee.estimatedDuration}</TableCell>
-                <TableCell
-                  style={getCellStyle(
-                    trainee.totalCourses,
-                    trainee.estimatedCourses
-                  )}
-                >
-                  {trainee.totalCourses}
+                <TableCell>
+                  <Typography>{trainee.totalCourses}</Typography>
                 </TableCell>
-                <TableCell
-                  style={getCellStyle(
-                    trainee.totalCourses,
-                    trainee.estimatedCourses
-                  )}
-                >
-                  {trainee.estimatedCourses}
+                <TableCell>
+                  <Typography
+                    sx={getTextStyle(
+                      trainee.totalCourses,
+                      trainee.estimatedCourses
+                    )}
+                  >
+                    {trainee.estimatedCourses}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
