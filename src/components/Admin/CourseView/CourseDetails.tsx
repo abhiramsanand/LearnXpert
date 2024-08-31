@@ -11,14 +11,31 @@ interface CourseDetailsProps {
 
 const CourseDetails: React.FC<CourseDetailsProps> = ({ courses }) => {
   return (
-    <Box sx={{ padding: '16px', backgroundColor: '#FAFAFA' }}>
-      <Typography variant="h6" sx={{ marginBottom: '12px', fontWeight: '600' }}>Courses</Typography>
+    <Box sx={{ padding: '16px', backgroundColor: 'rgba(91, 140, 90, 0.1)', borderRadius: '8px' }}>
       <Grid container spacing={2}>
         {courses.map((course, index) => (
           <Grid item xs={12} key={index}>
-            <Card sx={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', borderRadius: '8px', backgroundColor: '#FFFFFF' }}>
+            <Card
+              sx={{
+                borderRadius: '8px',
+                backgroundColor: '#ffffff',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                },
+              }}
+            >
               <CardContent>
-                <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: '500' }}>{course.title}</Typography>
+                <Typography
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#8061C3',
+                    marginBottom: '8px',
+                  }}
+                >
+                  {course.title}
+                </Typography>
               </CardContent>
             </Card>
           </Grid>

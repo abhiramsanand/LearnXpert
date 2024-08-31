@@ -29,6 +29,7 @@ import { Add, FilterList } from "@mui/icons-material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
+import { Link } from "react-router-dom";
 
 interface Assessment {
   assessmentName: string;
@@ -256,21 +257,22 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                 ))}
               </Select>
             </FormControl>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Add />}
-              href="/Admin-AssessmentCreation"
-              sx={{
-                borderRadius: "20px",
-                backgroundColor: "#8061C3",
-                "&:hover": {
-                  backgroundColor: "#6A529D",
-                },
-              }}
-            >
-              Create Assessment
-            </Button>
+            <Link to="/Admin-AssessmentCreation">
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Add />}
+                sx={{
+                  borderRadius: "20px",
+                  backgroundColor: "#8061C3",
+                  "&:hover": {
+                    backgroundColor: "#6A529D",
+                  },
+                }}
+              >
+                Create Assessment
+              </Button>
+            </Link>
           </Box>
           <Box
             sx={{
