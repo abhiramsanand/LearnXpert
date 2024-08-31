@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Drawer,
@@ -18,10 +17,11 @@ import {
   HelpOutline as HelpOutlineIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const TraineeSidebar: React.FC = () => {
   const [open, setOpen] = useState(window.innerWidth > 600);
+  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,6 +40,34 @@ const TraineeSidebar: React.FC = () => {
     setOpen(!open);
   };
 
+  const menuItems = [
+    {
+      text: "Dashboard",
+      icon: <HomeIcon />,
+      to: "/Trainee-Dashboard",
+    },
+    {
+      text: "Courses",
+      icon: <ClassIcon />,
+      to: "/Trainee-Courses",
+    },
+    {
+      text: "Assessments",
+      icon: <AssessmentIcon />,
+      to: "/Trainee-Assessments",
+    },
+    {
+      text: "Daily Report",
+      icon: <ReportIcon />,
+      to: "/Trainee-DailyReport",
+    },
+    {
+      text: "Enquiry",
+      icon: <HelpOutlineIcon />,
+      to: "/Trainee-Enquiry",
+    },
+  ];
+
   return (
     <Drawer
       variant="permanent"
@@ -56,7 +84,12 @@ const TraineeSidebar: React.FC = () => {
       <Toolbar>
         {open && (
           <Typography
-            sx={{ fontSize: "30px", color:"rgba(128, 97, 195)", fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
+            sx={{
+              fontSize: "30px",
+              color: "rgba(128, 97, 195)",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: "bold",
+            }}
           >
             ILPex{" "}
             <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
@@ -73,48 +106,41 @@ const TraineeSidebar: React.FC = () => {
         </IconButton>
       </Toolbar>
       <List>
-        {[
-          {
-            text: "Dashboard",
-            icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Trainee-Dashboard",
-          },
-          {
-            text: "Courses",
-            icon: <ClassIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Trainee-Courses",
-          },
-          {
-            text: "Assessments",
-            icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Trainee-Assessments",
-          },
-          {
-            text: "Daily Report",
-            icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Trainee-DailyReport",
-          },
-          {
-            text: "Enquiry",
-            icon: <HelpOutlineIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Trainee-Enquiry",
-          },
-        ].map((item, _index) => (
+        {menuItems.map((item) => (
           <ListItem
             button
             key={item.text}
             component={Link}
             to={item.to}
             sx={{
-              "&:hover .MuiListItemText-root": {
-                display: open ? "block" : "block",
+              backgroundColor:
+                location.pathname === item.to
+                  ? "rgba(128, 97, 195, 0.8)"
+                  : "transparent",
+              borderRadius: "7px",
+              width: "80%",
+              ml: 2,
+              "&:hover": {
+                backgroundColor: "rgba(128, 97, 195, 0.1)",
               },
             }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemIcon
+              sx={{
+                color:
+                  location.pathname === item.to
+                    ? "#FFFFFF"
+                    : "rgba(128, 97, 195, 1)",
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={{ display: open ? "block" : "none" }}
+              sx={{
+                display: open ? "block" : "none",
+                color: location.pathname === item.to ? "#FFFFFF" : "#8061C3",
+              }}
             />
           </ListItem>
         ))}

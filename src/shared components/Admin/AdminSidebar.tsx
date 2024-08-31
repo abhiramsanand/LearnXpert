@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Drawer,
@@ -19,11 +18,11 @@ import {
   Report as ReportIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import Person2Icon from "@mui/icons-material/Person2";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   const [open, setOpen] = useState(window.innerWidth > 600);
+  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
@@ -41,6 +40,39 @@ const Sidebar: React.FC = () => {
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
+
+  const menuItems = [
+    {
+      text: "Home",
+      icon: <HomeIcon />,
+      to: "/Admin-Home",
+    },
+    {
+      text: "Batches",
+      icon: <GroupIcon />,
+      to: "/Admin-Batches",
+    },
+    {
+      text: "Assessments",
+      icon: <AssessmentIcon />,
+      to: "/Admin-Assessments",
+    },
+    {
+      text: "Daily Report",
+      icon: <ReportIcon />,
+      to: "/Admin-DailyReport",
+    },
+    {
+      text: "Courses",
+      icon: <SchoolIcon />,
+      to: "/Admin-Courses",
+    },
+    {
+      text: "Add Admin",
+      icon: <AdminPanelSettingsIcon />,
+      to: "/Add-Admin",
+    },
+  ];
 
   return (
     <Drawer
@@ -80,55 +112,41 @@ const Sidebar: React.FC = () => {
         </IconButton>
       </Toolbar>
       <List>
-        {[
-          {
-            text: "Home",
-            icon: <HomeIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-Home",
-          },
-          {
-            text: "Batches",
-            icon: <GroupIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-Batches",
-          },
-          {
-            text: "Assessments",
-            icon: <AssessmentIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-Assessments",
-          },
-          {
-            text: "Daily Report",
-            icon: <ReportIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-DailyReport",
-          },
-          {
-            text: "Courses",
-            icon: <SchoolIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />,
-            to: "/Admin-Courses",
-          },
-          {
-            text: "Add Admin",
-            icon: (
-              <AdminPanelSettingsIcon sx={{ color: "rgba(128, 97, 195, 1)" }} />
-            ),
-            to: "/Add-Admin",
-          },
-        ].map((item, _index) => (
+        {menuItems.map((item) => (
           <ListItem
             button
             key={item.text}
             component={Link}
             to={item.to}
             sx={{
-              "&:hover .MuiListItemText-root": {
-                display: open ? "block" : "block",
+              backgroundColor:
+                location.pathname === item.to
+                  ? "rgba(128, 97, 195, 0.8)"
+                  : "transparent",
+              borderRadius: "7px",
+              width: "80%",
+              ml: 2,
+              "&:hover": {
+                backgroundColor: "rgba(128, 97, 195, 0.1)",
               },
             }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemIcon
+              sx={{
+                color:
+                  location.pathname === item.to
+                    ? "#FFFFFF" 
+                    : "rgba(128, 97, 195, 1)",
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={{ display: open ? "block" : "none" }}
+              sx={{
+                display: open ? "block" : "none",
+                color: location.pathname === item.to ? "#FFFFFF" : "#8061C3", 
+              }}
             />
           </ListItem>
         ))}
