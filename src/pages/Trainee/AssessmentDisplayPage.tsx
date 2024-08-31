@@ -17,6 +17,7 @@ interface Question {
 interface Assessment {
   assessmentName: string;
   questions: Question[];
+  traineeId: number;
 }
 
 // Custom styled components
@@ -58,7 +59,7 @@ const AssessmentDisplayPage: React.FC = () => {
   const [responses, setResponses] = useState<{ [questionId: number]: string }>({});
   const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchAssessment = async () => {
       if (assessmentName) {
         try {
@@ -110,9 +111,10 @@ const AssessmentDisplayPage: React.FC = () => {
       return;
     }
 
+    const Id = localStorage.getItem('traineeId');
     const data = {
       assessmentName: assessment.assessmentName,
-      traineeId: 1416,
+      traineeId: Id,
       questionResponses: validResponses,
     };
 

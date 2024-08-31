@@ -444,7 +444,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
             </Box>
           </Box>
         ) : (
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -456,10 +456,15 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                         alignItems: "center",
                         cursor: "pointer",
                         fontWeight: "bold",
+                        color: "#4A4A4A",
+                        fontSize: "14px",
                       }}
                     >
                       Trainee Name
-                      <SwapVertIcon fontSize="small" />
+                      <SwapVertIcon
+                        fontSize="small"
+                        sx={{ ml: 1, color: "#4A4A4A" }}
+                      />
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -470,10 +475,15 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                         alignItems: "center",
                         cursor: "pointer",
                         fontWeight: "bold",
+                        color: "#4A4A4A",
+                        fontSize: "14px",
                       }}
                     >
                       Score
-                      <SwapVertIcon fontSize="small" />
+                      <SwapVertIcon
+                        fontSize="small"
+                        sx={{ ml: 1, color: "#4A4A4A" }}
+                      />
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -484,10 +494,15 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                         alignItems: "center",
                         cursor: "pointer",
                         fontWeight: "bold",
+                        color: "#4A4A4A",
+                        fontSize: "14px",
                       }}
                     >
                       Status
-                      <SwapVertIcon fontSize="small" />
+                      <SwapVertIcon
+                        fontSize="small"
+                        sx={{ ml: 1, color: "#4A4A4A" }}
+                      />
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -497,20 +512,29 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                   <TableRow
                     key={index}
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
+                      backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#F9F9F9",
+                      "&:hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                      borderBottom: "1px solid #E0E0E0",
                     }}
                   >
-                    <TableCell>{trainee.traineeName}</TableCell>
-                    <TableCell>{trainee.traineeScore}</TableCell>
-                    {/* Conditional coloring based on traineeStatus */}
+                    <TableCell sx={{ padding: "12px" }}>
+                      {trainee.traineeName}
+                    </TableCell>
+                    <TableCell sx={{ padding: "12px" }}>
+                      {trainee.traineeScore}
+                    </TableCell>
                     <TableCell
                       sx={{
+                        padding: "12px",
                         color:
                           trainee.traineeStatus === "Completed"
                             ? "#5B8C5A"
                             : trainee.traineeStatus === "Pending"
                             ? "#DB5461"
-                            : "inherit",
+                            : "#4A4A4A",
+                        fontWeight: "bold",
                       }}
                     >
                       {trainee.traineeStatus}

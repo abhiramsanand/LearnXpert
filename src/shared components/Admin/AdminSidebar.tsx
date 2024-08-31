@@ -127,7 +127,7 @@ const Sidebar: React.FC = () => {
               width: "80%",
               ml: 2,
               "&:hover": {
-                backgroundColor: "rgba(128, 97, 195, 0.1)",
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
               },
             }}
           >
