@@ -25,7 +25,7 @@ import {
   FormControlLabel,
   Skeleton,
 } from "@mui/material";
-import { Add, Search, FilterList } from "@mui/icons-material";
+import { Add, FilterList } from "@mui/icons-material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
@@ -261,7 +261,13 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
               color="primary"
               startIcon={<Add />}
               href="/Admin-AssessmentCreation"
-              sx={{ borderRadius: "20px", backgroundColor: "#8061C3" }}
+              sx={{
+                borderRadius: "20px",
+                backgroundColor: "#8061C3",
+                "&:hover": {
+                  backgroundColor: "#6A529D",
+                },
+              }}
             >
               Create Assessment
             </Button>

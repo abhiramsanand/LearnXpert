@@ -9,9 +9,9 @@ import {
   Typography,
   Grid,
   Input,
-  Paper,
   Link,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -30,7 +30,7 @@ interface Batch {
 
 const AssessmentCreation: React.FC = () => {
   const [title, setTitle] = useState<string>("");
-  const [batch, setBatch] = useState<number | string>(""); 
+  const [batch, setBatch] = useState<number | string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -77,23 +77,32 @@ const AssessmentCreation: React.FC = () => {
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("batchId", batch.toString()); 
-    formData.append("startDate", startDate ? startDate.toISOString().split('T')[0] : ''); 
-    formData.append("endDate", endDate ? endDate.toISOString().split('T')[0] : ''); 
+    formData.append("batchId", batch.toString());
+    formData.append(
+      "startDate",
+      startDate ? startDate.toISOString().split("T")[0] : ""
+    );
+    formData.append(
+      "endDate",
+      endDate ? endDate.toISOString().split("T")[0] : ""
+    );
     if (file) {
       formData.append("file", file);
     }
-  
+
     try {
-      const response = await fetch("http://localhost:8080/api/assessmentcreation/create", {
-        method: "POST",
-        body: formData,
-      });
-  
+      const response = await fetch(
+        "http://localhost:8080/api/v1/assessments/create",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (response.ok) {
         showModal("Success", "Assessment created successfully!");
       } else {
-        const errorData = await response.text(); 
+        const errorData = await response.text();
         showModal("Error", errorData || "An error occurred.");
       }
     } catch (error) {
@@ -101,17 +110,30 @@ const AssessmentCreation: React.FC = () => {
       showModal("Error", "An error occurred. Please try again.");
     }
   };
-  
+
   return (
-    <Box component={Paper} className={styles.container}>
-      <Typography variant="h4" gutterBottom className={styles.heading}>
-        Create Assessment
+    <Box>
+      <Typography
+        align="center"
+        sx={{
+          color: "#8061C3",
+          mb: 2,
+          ml: "-3",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        CREATE ASSESSMENT
       </Typography>
 
       <Box className={styles.formSection}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1" className={styles.label}>
+            <Typography
+              sx={{
+                color: "#8061C3",
+              }}
+            >
               Title
             </Typography>
             <TextField
@@ -120,20 +142,50 @@ const AssessmentCreation: React.FC = () => {
               size="small"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={styles.textField}
+              placeholder="Assessment 1"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: "#8061C3",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#8061C3",
+                  },
+                },
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1" className={styles.label}>
+            <Typography
+              sx={{
+                color: "#8061C3",
+              }}
+            >
               Select Batch
             </Typography>
-            <FormControl fullWidth variant="outlined" size="small">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: "#8061C3",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#8061C3",
+                  },
+                },
+              }}
+            >
               <Select
                 value={batch}
                 onChange={(e) => setBatch(e.target.value)}
                 displayEmpty
                 renderValue={(selected) =>
-                  selected ? batches.find(b => b.id === Number(selected))?.batchName : "Select Batch"
+                  selected
+                    ? batches.find((b) => b.id === Number(selected))?.batchName
+                    : "Batch 5"
                 }
                 className={styles.select}
               >
@@ -148,9 +200,13 @@ const AssessmentCreation: React.FC = () => {
         </Grid>
       </Box>
 
-      <Grid container spacing={3} className={styles.formSection}>
+      <Grid container className={styles.formSection}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1" className={styles.label}>
+          <Typography
+            sx={{
+              color: "#8061C3",
+            }}
+          >
             Start Date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -173,7 +229,11 @@ const AssessmentCreation: React.FC = () => {
           </LocalizationProvider>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1" className={styles.label}>
+          <Typography
+            sx={{
+              color: "#8061C3",
+            }}
+          >
             End Date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -198,10 +258,14 @@ const AssessmentCreation: React.FC = () => {
       </Grid>
 
       <Box className={styles.uploadSection}>
-        <Typography variant="subtitle1" className={styles.label}>
+        <Typography
+          sx={{
+            color: "#8061C3",
+          }}
+        >
           Upload the Assessment
         </Typography>
-        <Box className={styles.uploadBox}>
+        <Box className={styles.uploadBox} gap={4}>
           <label htmlFor="upload-file">
             <Input
               id="upload-file"
@@ -216,7 +280,14 @@ const AssessmentCreation: React.FC = () => {
               startIcon={<UploadIcon />}
               color="primary"
               size="small"
-              className={styles.uploadButton}
+              sx={{
+                borderRadius: "20px",
+                color: "#8061C3",
+                borderColor: "#8061C3",
+                "&:hover": {
+                  backgroundColor: "#6A529D",
+                },
+              }}
             >
               {file ? file.name : "Choose File"}
             </Button>
@@ -224,33 +295,43 @@ const AssessmentCreation: React.FC = () => {
           <Link
             href="/assets/Files/AssessmentTemplate.xlsx"
             download
-            className={styles.downloadLink}
+            sx={{
+              color: "#5B8C5A",
+              textDecoration: "none",
+              borderBottom: "1px solid #5B8C5A",
+              "&:hover": {
+                color: "#8061C3",
+                borderBottomColor: "#8061C3",
+              },
+            }}
           >
-            Get Template
+            Get template from here
           </Link>
         </Box>
       </Box>
 
-      <Box className={styles.buttonSection}>
+      <Box className={styles.buttonSection} gap={4}>
         <Button
           variant="contained"
-          className={styles.submitButton}
           onClick={handleSubmit}
           size="small"
+          sx={{
+            borderRadius: "20px",
+            backgroundColor: "#8061C3",
+            width: "100px",
+            "&:hover": {
+              backgroundColor: "#6A529D",
+            },
+          }}
         >
           Submit
         </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => console.log("Cancel")}
-          size="small"
-          className={styles.cancelButton}
-        >
-          Cancel
-        </Button>
+        <RouterLink to="/Admin-Assessments" className={styles.cancelButton}>
+          <Button variant="outlined" color="secondary" size="small">
+            Cancel
+          </Button>
+        </RouterLink>
       </Box>
-
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>{modalTitle}</DialogTitle>
         <DialogContent>
