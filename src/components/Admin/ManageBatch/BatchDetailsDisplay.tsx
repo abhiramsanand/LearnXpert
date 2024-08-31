@@ -172,21 +172,23 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
               >
                 Confirm
               </Button>
-              <Button
-                sx={{
-                  backgroundColor: "#8061C3",
-                  color: "white",
-                  ml: "50px",
-                  fontSize: "10px",
-                  width: "250px",
-                  mt: 1,
-                  "&:hover": {
-                    backgroundColor: "#5b3f9f",
-                  },
-                }}
-              >
-                Configure calendar
-              </Button>
+              <Link to={"/Admin-Calendar"}>
+                <Button
+                  sx={{
+                    backgroundColor: "#8061C3",
+                    color: "white",
+                    ml: "50px",
+                    fontSize: "10px",
+                    width: "250px",
+                    mt: 1,
+                    "&:hover": {
+                      backgroundColor: "#5b3f9f",
+                    },
+                  }}
+                >
+                  Configure calendar
+                </Button>
+              </Link>
             </Box>
           </Grid>
         </Grid>
