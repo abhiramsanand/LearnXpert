@@ -19,7 +19,7 @@ const NotificationPage: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   const fetchNotifications = async () => {
-    const traineeId = 1283; // Replace with dynamic ID as needed
+    const traineeId = 1284; // Replace with dynamic ID as needed
     try {
       const response = await fetch(`http://localhost:8080/api/v1/notifications/trainee/${traineeId}`);
       const data: Notification[] = await response.json();
@@ -35,14 +35,23 @@ const NotificationPage: React.FC = () => {
     setUnreadCount(count);
   };
 
-  const handleNotificationClose = (id: number) => {
-    setNotifications(prevNotifications => {
-      const updatedNotifications = prevNotifications.map(notification => 
-        notification.id === id ? { ...notification, isRead: true } : notification
-      );
-      updateUnreadCount(updatedNotifications);
-      return updatedNotifications;
-    });
+  const handleNotificationClose = async (id: number) => {
+    try {
+      // Make API call to mark the notification as read
+      await fetch(`http://localhost:8080/api/v1/notifications/${id}/mark-read`, {
+        method: 'PATCH',
+      });
+      // Update UI by removing the closed notification
+      setNotifications(prevNotifications => {
+        const updatedNotifications = prevNotifications.map(notification => 
+          notification.id === id ? { ...notification, isRead: true } : notification
+        );
+        updateUnreadCount(updatedNotifications);
+        return updatedNotifications;
+      });
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
   useEffect(() => {
