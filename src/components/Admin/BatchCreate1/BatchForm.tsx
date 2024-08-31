@@ -1,8 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, Grid, TextField, Typography, MenuItem, Select, InputLabel, FormControl, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import axios from "axios";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import * as XLSX from "xlsx";
 
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
@@ -10,17 +24,26 @@ const BatchForm: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [fileSelected, setFileSelected] = useState<boolean>(false); 
+  const [fileSelected, setFileSelected] = useState<boolean>(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [excelData, setExcelData] = useState<any[][]>([]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/programs");
-        setPrograms(response.data.map((program: { programName: string }) => program.programName));
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/programs"
+        );
+        setPrograms(
+          response.data.map(
+            (program: { programName: string }) => program.programName
+          )
+        );
       } catch (error) {
         console.error("Error fetching programs", error);
         alert("Error fetching programs.");
@@ -32,25 +55,66 @@ const BatchForm: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setFile(event.target.files[0]);
-      setFileSelected(true); 
+      const selectedFile = event.target.files[0];
+      setFile(selectedFile);
+      setFileSelected(true);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        setExcelData(json);
+        setFilePreview(e.target?.result);
+      };
+      reader.readAsArrayBuffer(selectedFile);
     }
   };
 
+  const handleExcelDataChange = (
+    value: string,
+    rowIndex: number,
+    cellIndex: number
+  ) => {
+    const updatedData = [...excelData];
+    updatedData[rowIndex][cellIndex] = value;
+    setExcelData(updatedData);
+  };
+
   const handleSubmit = async () => {
-    if (selectedProgram === '') {
-      alert("Please select a program.");
+    if (selectedProgram === "") {
+      setErrorMessages(["Please select a program."]);
       return;
     }
 
     const formData = new FormData();
-    const batchData = JSON.stringify({ batchName, startDate, endDate, programName: selectedProgram });
+    const batchData = JSON.stringify({
+      batchName,
+      startDate,
+      endDate,
+      programName: selectedProgram,
+    });
     formData.append("batchData", batchData);
 
     if (file) {
-      formData.append("file", file);
+      // Convert the updated excelData back to a workbook
+      const ws = XLSX.utils.aoa_to_sheet(excelData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+      // Convert workbook to a binary array
+      const updatedFile = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+      // Convert the binary array to a Blob
+      const updatedBlob = new Blob([updatedFile], {
+        type: "application/octet-stream",
+      });
+      const updatedFileObj = new File([updatedBlob], file.name);
+
+      formData.append("file", updatedFileObj);
     } else {
-      alert("Please upload a file.");
+      setErrorMessages(["Please upload a file."]);
       return;
     }
 
@@ -64,13 +128,16 @@ const BatchForm: React.FC = () => {
           },
         }
       );
-      const batchId = response.data.batchId; 
+      const batchId = response.data;
       setSuccessMessage("Batch created successfully!");
-      setSuccessModalOpen(true); 
-      navigate(`/Admin-BatchAdd2/${batchId}`); 
+      setSuccessModalOpen(true);
+      navigate(`/Admin-BatchAdd2/${batchId}`);
     } catch (error) {
-      console.error("There was an error creating the batch!", error);
-      alert("There was an error creating the batch. Check the console for details.");
+      if (error.response && error.response.data) {
+        setErrorMessages([error.response.data]);
+      } else {
+        setErrorMessages(["There was an error creating the batch."]);
+      }
     }
   };
 
@@ -79,7 +146,13 @@ const BatchForm: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container
+      sx={{
+        maxHeight: "calc(100vh - 64px)",
+        overflowY: "auto",
+        p: 2,
+      }}
+    >
       <Box
         sx={{
           mt: 1,
@@ -87,6 +160,7 @@ const BatchForm: React.FC = () => {
           bgcolor: "#ffffff",
           borderRadius: "15px",
           boxShadow: "4px 8px 10px rgba(0, 0, 0, 0.4)",
+          minHeight: "100vh",
         }}
       >
         <Typography variant="h4" fontFamily={"Montserrat, sans-serif"}>
@@ -101,7 +175,9 @@ const BatchForm: React.FC = () => {
                   <InputLabel>Program</InputLabel>
                   <Select
                     value={selectedProgram}
-                    onChange={(e) => setSelectedProgram(e.target.value as string)}
+                    onChange={(e) =>
+                      setSelectedProgram(e.target.value as string)
+                    }
                     label="Program"
                   >
                     {programs.map((program) => (
@@ -161,7 +237,6 @@ const BatchForm: React.FC = () => {
                     shrink: true,
                   }}
                   sx={{
-                    bgcolor: "#FFF",
                     width: "100%",
                     borderRadius: "4px",
                   }}
@@ -205,7 +280,7 @@ const BatchForm: React.FC = () => {
               {fileSelected && (
                 <CheckCircleIcon
                   sx={{
-                    color: "#4caf50", 
+                    color: "#4caf50",
                     ml: 1,
                     fontSize: "24px",
                   }}
@@ -214,11 +289,73 @@ const BatchForm: React.FC = () => {
 
               <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
-                <a href="/BatchCreationTemplate.xlsx" download style={{ color: "#6C63FF" }}>
+                <a
+                  href="/BatchCreationTemplate.xlsx"
+                  download
+                  style={{ color: "#6C63FF" }}
+                >
                   here
                 </a>
               </Typography>
             </Grid>
+
+            {file && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="caption">Uploaded file:</Typography>
+                <Typography variant="body2">{file.name}</Typography>
+
+                {file.type.includes("sheet") && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="h6">Excel File Content:</Typography>
+                    <table>
+                      <thead>
+                        <tr>
+                          {excelData[0]?.map(
+                            (header: string, index: number) => (
+                              <th key={index}>{header}</th>
+                            )
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {excelData
+                          .slice(1)
+                          .map((row: any[], rowIndex: number) => (
+                            <tr key={rowIndex}>
+                              {row.map((cell, cellIndex) => (
+                                <td key={cellIndex}>
+                                  <TextField
+                                    value={cell}
+                                    onChange={(e) =>
+                                      handleExcelDataChange(
+                                        e.target.value,
+                                        rowIndex + 1,
+                                        cellIndex
+                                      )
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                  />
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </Box>
+                )}
+              </Box>
+            )}
+
+            {errorMessages.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                {errorMessages.map((message, index) => (
+                  <Typography key={index} color="error">
+                    {message}
+                  </Typography>
+                ))}
+              </Box>
+            )}
 
             <Grid item xs={12} sm={6}>
               <Button
@@ -236,7 +373,7 @@ const BatchForm: React.FC = () => {
                     bgcolor: "white",
                   },
                 }}
-                onClick={() => navigate(-1)} 
+                onClick={() => navigate(-1)}
               >
                 CANCEL
               </Button>
@@ -256,36 +393,14 @@ const BatchForm: React.FC = () => {
                 }}
                 onClick={handleSubmit}
               >
-                submit
+                SUBMIT
               </Button>
             </Grid>
           </Grid>
         </form>
       </Box>
-
-      <SuccessModal 
-        open={successModalOpen} 
-        onClose={handleCloseSuccessModal} 
-        message={successMessage || "Batch created successfully!"} 
-      />
     </Container>
   );
-};
-
-const SuccessModal: React.FC<{ open: boolean; onClose: () => void; message: string }> = ({ open, onClose, message }) => {
-    return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Success</DialogTitle>
-            <DialogContent>
-                <Typography variant="body1">{message}</Typography>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    OK
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
 };
 
 export default BatchForm;
