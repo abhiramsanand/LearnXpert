@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Container, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import TraineeTable from '../../components/Admin/BatchCreate1/TraineeTable';
-import AddTraineeModal from '../../components/Admin/BatchCreate1/AddTraineeModal';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Typography,
+  Container,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import TraineeTable from "../../components/Admin/BatchCreate1/TraineeTable";
+import AddTraineeModal from "../../components/Admin/BatchCreate1/AddTraineeModal";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Trainee {
   id: number;
@@ -19,7 +29,7 @@ const BatchAdd2: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
+  const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,16 +37,23 @@ const BatchAdd2: React.FC = () => {
       fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`)
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           return response.json();
         })
         .then((data: Trainee[]) => setTrainees(data))
-        .catch((error) => console.error('There was a problem with the fetch operation:', error));
+        .catch((error) =>
+          console.error("There was a problem with the fetch operation:", error)
+        );
     }
   }, [batchId]);
 
-  const handleAddTrainee = (userName: string, email: string, percipioEmail: string, password: string) => {
+  const handleAddTrainee = (
+    userName: string,
+    email: string,
+    percipioEmail: string,
+    password: string
+  ) => {
     const newTrainee: Trainee = {
       id: trainees.length + 1,
       userName,
@@ -54,24 +71,26 @@ const BatchAdd2: React.FC = () => {
 
   const handleSubmit = () => {
     fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(trainees),
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(trainees),
     })
-    .then((response) => {
+      .then((response) => {
         if (!response.ok) {
-            throw new Error('Failed to submit trainee data');
+          throw new Error("Failed to submit trainee data");
         }
         return response.json(); // Parse response as JSON
-    })
-    .then((data) => {
-        console.log('Trainee data updated successfully:', data);
+      })
+      .then((data) => {
+        console.log("Trainee data updated successfully:", data);
         setSuccessMessage(data.message); // Set success message for the modal
         setSuccessModalOpen(true); // Open success modal
-    })
-    .catch((error) => console.error('There was a problem with the submission:', error));
+      })
+      .catch((error) =>
+        console.error("There was a problem with the submission:", error)
+      );
   };
 
   const handleCloseSuccessModal = () => {
@@ -79,10 +98,11 @@ const BatchAdd2: React.FC = () => {
     navigate(-1); // Navigate back after closing the success modal
   };
 
-  const filteredTrainees = trainees.filter((trainee) =>
-    trainee.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    trainee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    trainee.percipioEmail.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTrainees = trainees.filter(
+    (trainee) =>
+      trainee.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      trainee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      trainee.percipioEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -98,12 +118,17 @@ const BatchAdd2: React.FC = () => {
         }}
       >
         <Box sx={{ paddingLeft: 3 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography 
-              variant="h5" 
-              component="h2" 
-              gutterBottom 
-              sx={{ fontWeight: 'bold' }}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Typography
+              variant="h5"
+              component="h2"
+              gutterBottom
+              sx={{ fontWeight: "bold" }}
             >
               CREATE BATCH
             </Typography>
@@ -112,13 +137,13 @@ const BatchAdd2: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{
-                width: '30%',
+                width: "30%",
                 marginBottom: 2,
-                height: '40px',
-                '& .MuiInputBase-root': {
-                  height: '100%',
-                  border: '5px',
-                  borderColor: '#8061C3',
+                height: "40px",
+                "& .MuiInputBase-root": {
+                  height: "100%",
+                  border: "5px",
+                  borderColor: "#8061C3",
                 },
               }}
             />
@@ -130,13 +155,19 @@ const BatchAdd2: React.FC = () => {
             onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
           />
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
-            <Button 
-              variant="outlined" 
-              sx={{ 
-                color: "#8061C3", 
-                borderColor: "#8061C3", 
-                borderRadius: "4px", 
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 1,
+            }}
+          >
+            <Button
+              variant="outlined"
+              sx={{
+                color: "#8061C3",
+                borderColor: "#8061C3",
+                borderRadius: "4px",
                 "&:hover": {
                   borderColor: "#D0C7FF",
                   bgcolor: "white",
@@ -149,10 +180,10 @@ const BatchAdd2: React.FC = () => {
             <Button
               onClick={() => setModalOpen(true)}
               variant="outlined"
-              sx={{ 
-                color: "#8061C3", 
-                borderColor: "#8061C3", 
-                borderRadius: "4px", 
+              sx={{
+                color: "#8061C3",
+                borderColor: "#8061C3",
+                borderRadius: "4px",
                 "&:hover": {
                   borderColor: "#D0C7FF",
                   bgcolor: "white",
@@ -186,15 +217,10 @@ const BatchAdd2: React.FC = () => {
         batchId={Number(batchId)} // Ensure batchId is passed as a number
       />
 
-      <Dialog
-        open={successModalOpen}
-        onClose={handleCloseSuccessModal}
-      >
+      <Dialog open={successModalOpen} onClose={handleCloseSuccessModal}>
         <DialogTitle>Success</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">
-            {successMessage}
-          </Typography>
+          <Typography variant="body1">{successMessage}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseSuccessModal} color="primary">
