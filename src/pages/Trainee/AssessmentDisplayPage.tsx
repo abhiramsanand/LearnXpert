@@ -5,6 +5,7 @@ import { Container, Typography, Button, Box } from '@mui/material';
 import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
 
 interface Question {
+  questionId: number;
   question: string;
   optionA: string;
   optionB: string;
@@ -26,7 +27,7 @@ const AssessmentDisplayPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [responses, setResponses] = useState<string[]>([]);
+  const [responses, setResponses] = useState<{ [questionId: number]: string }>({});
 
   useEffect(() => {
     const fetchAssessment = async () => {
@@ -57,21 +58,48 @@ const AssessmentDisplayPage: React.FC = () => {
     }
   };
 
-  const handleResponseChange = (response: string) => {
-    const newResponses = [...responses];
-    newResponses[currentQuestionIndex] = response;
-    setResponses(newResponses);
+  // This function now accepts the actual option content instead of just the option identifier
+  const handleResponseChange = (questionId: number, responseContent: string) => {
+    setResponses(prevResponses => {
+      const updatedResponses = {
+        ...prevResponses,
+        [questionId]: responseContent, // Store the content of the selected option
+      };
+      console.log('Updated Responses:', updatedResponses); // Debugging
+      return updatedResponses;
+    });
   };
 
   const handleSubmit = async () => {
+    if (!assessment) return;
+
+    const validResponses: { [key: number]: string } = {};
+    assessment.questions.forEach(question => {
+      const response = responses[question.questionId];
+      if (response) {
+        validResponses[question.questionId] = response;
+      }
+    });
+
+    if (Object.keys(validResponses).length === 0) {
+      setError('Please provide responses to all questions.');
+      return;
+    }
+
+    const data = {
+      assessmentName: assessment.assessmentName,
+      traineeId: 1416,
+      questionResponses: validResponses,
+    };
+
+    console.log('Data to Submit:', data); // Debugging
+
     try {
-      await axios.post('http://localhost:8080/api/v1/assessments/submit', {
-        assessmentName,
-        responses
-      });
+      await axios.post('http://localhost:8080/api/v1/assessments/submit', data);
       console.log('Assessment submitted successfully');
     } catch (err) {
-      console.error('Failed to submit assessment');
+      console.error('Failed to submit assessment:', err);
+      setError('Failed to submit assessment.');
     }
   };
 
@@ -86,16 +114,25 @@ const AssessmentDisplayPage: React.FC = () => {
             {assessment.assessmentName}
           </Typography>
           <QuestionCard
-            questionText={assessment.questions[currentQuestionIndex].question}
-            options={{
-              optionA: assessment.questions[currentQuestionIndex].optionA,
-              optionB: assessment.questions[currentQuestionIndex].optionB,
-              optionC: assessment.questions[currentQuestionIndex].optionC,
-              optionD: assessment.questions[currentQuestionIndex].optionD,
-            }}
-            selectedOption={responses[currentQuestionIndex]}
-            onResponseChange={handleResponseChange}
-          />
+  questionId={assessment.questions[currentQuestionIndex].questionId}
+  questionText={assessment.questions[currentQuestionIndex].question}
+  options={{
+    optionA: assessment.questions[currentQuestionIndex].optionA,
+    optionB: assessment.questions[currentQuestionIndex].optionB,
+    optionC: assessment.questions[currentQuestionIndex].optionC,
+    optionD: assessment.questions[currentQuestionIndex].optionD,
+  }}
+  selectedOption={
+    Object.entries(assessment.questions[currentQuestionIndex]).find(
+      ([key, value]) => value === responses[assessment.questions[currentQuestionIndex].questionId]
+    )?.[0] || ''
+  }
+  onResponseChange={(questionId, selectedOptionKey) => {
+    const optionContent = assessment.questions[currentQuestionIndex][selectedOptionKey as keyof typeof assessment.questions[currentQuestionIndex]];
+    handleResponseChange(questionId, optionContent);
+  }}
+/>
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
             <Button
               variant="contained"
