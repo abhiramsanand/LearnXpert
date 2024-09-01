@@ -252,7 +252,7 @@ const CustomCalendar: React.FC = () => {
           sx={{
             backgroundColor: "#DB5461",
             color: "#fff",
-            "&:hover": { backgroundColor: "#6749a4" },
+            "&:hover": { backgroundColor: "#C63C49" },
           }}
           onClick={() => setOpenMarkDialog(true)}
           disabled={loadingMark} // Disable button while loading
@@ -268,7 +268,7 @@ const CustomCalendar: React.FC = () => {
           sx={{
             backgroundColor: "#5B8C5A",
             color: "#fff",
-            "&:hover": { backgroundColor: "#c53939" },
+            "&:hover": { backgroundColor: "#4A6B49" },
           }}
           onClick={() => setOpenUnmarkDialog(true)}
           disabled={loadingUnmark} // Disable button while loading
