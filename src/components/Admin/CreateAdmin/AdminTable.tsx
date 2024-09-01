@@ -1,31 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, IconButton } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  IconButton,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 
-// Define types
 interface Admin {
-  slno: number;
+  id: number;
   name: string;
 }
 
 interface AdminTableProps {
-  onDeleteClick: (admin: Admin) => void;
+  onDeleteClick: (adminId: number) => void;
 }
 
 const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
   const [admins, setAdmins] = useState<Admin[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(3);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
 
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/v1/users/view');
-        setAdmins(response.data.map((user: any) => ({
-          slno: user.id,
-          name: user.userName
-        })));
+        setAdmins(
+          response.data.map((user: any) => ({
+            id: user.id,
+            name: user.userName,
+          }))
+        );
       } catch (error) {
         console.error('Error fetching admins:', error);
       }
@@ -34,63 +51,106 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
     fetchAdmins();
   }, []);
 
-  const handleDelete = async (adminToDelete: Admin) => {
-    try {
-      await axios.delete(`http://localhost:8080/api/v1/users/${adminToDelete.slno}`);
-      setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.slno !== adminToDelete.slno));
-      onDeleteClick(adminToDelete); // Notify the parent component
-    } catch (error) {
-      console.error('Error deleting admin:', error);
+  const handleDeleteClick = (admin: Admin) => {
+    setSelectedAdmin(admin);
+    setOpenDialog(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (selectedAdmin) {
+      try {
+        await axios.delete(`http://localhost:8080/api/v1/users/delete/${selectedAdmin.id}`);
+        setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== selectedAdmin.id));
+        onDeleteClick(selectedAdmin.id);
+      } catch (error) {
+        console.error('Error deleting admin:', error);
+      }
+      setOpenDialog(false);
     }
   };
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setPage(newPage);
+  const handleDeleteCancel = () => {
+    setOpenDialog(false);
   };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to first page
-  };
-
-  // Calculate serial number based on page and rows per page
-  const getSerialNumber = (index: number) => page * rowsPerPage + index + 1;
 
   return (
-    <TableContainer component={Paper} sx={{ marginBottom: '5px' }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ padding: '4px' }}>Sl. No</TableCell>
-            <TableCell sx={{ padding: '4px' }}>Name</TableCell>
-            <TableCell sx={{ padding: '4px' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {admins.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((admin, index) => (
-            <TableRow key={admin.slno} sx={{ height: '10px' }}>
-              <TableCell sx={{ padding: '2px' }}>{getSerialNumber(index)}</TableCell>
-              <TableCell sx={{ padding: '2px' }}>{admin.name}</TableCell>
-              <TableCell sx={{ padding: '2px' }}>
-                <IconButton onClick={() => handleDelete(admin)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+    <Container>
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: '100%',
+          maxHeight: 'calc(100vh - 150px)',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          backgroundColor: '#F1EDEE',
+          "&::-webkit-scrollbar": { width: "8px" },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#8061C3",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": { backgroundColor: "#f1f1f1" },
+        }}
+      >
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Sl. No</TableCell>
+              <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Name</TableCell>
+              <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[3, 10, 25]}
-        component="div"
-        count={admins.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ height: '35px', overflowY: 'hidden' }}
-      />
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {admins.map((admin, index) => (
+              <TableRow
+                key={admin.id}
+                sx={{
+                  backgroundColor: index % 2 === 0 ? '#F9F6F7' : '#f9f9f9',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                  "&:hover": {
+                    backgroundColor: "#e0d8e0",
+                  },
+                }}
+              >
+                <TableCell sx={{ padding: '8px' }}>{index + 1}</TableCell>
+                <TableCell sx={{ padding: '8px' }}>{admin.name}</TableCell>
+                <TableCell sx={{ padding: '8px' }}>
+                  <IconButton onClick={() => handleDeleteClick(admin)} sx={{ color: '#d32f2f' }}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+            {admins.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={3} align="center" sx={{ padding: '16px' }}>
+                  <Typography variant="body1" color="textSecondary">
+                    No admins found.
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog open={openDialog} onClose={handleDeleteCancel}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to delete this admin?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
