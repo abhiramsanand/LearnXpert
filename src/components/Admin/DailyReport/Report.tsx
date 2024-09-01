@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -18,6 +19,10 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  styled,
 } from "@mui/material";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
@@ -105,8 +110,19 @@ const TraineeReport: React.FC = () => {
       return 0;
     });
 
+    const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+      <Tooltip {...props} arrow classes={{ popper: className }} />
+    ))(({}) => ({
+      [`& .${tooltipClasses.arrow}`]: {
+        color: "rgba(128, 97, 195)",
+      },
+      [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: "rgba(128, 97, 195)",
+      },
+    }));
+
   return (
-    <Container>
+    <Container sx={{ mt: "-20px"}}>
       <Box
         sx={{
           display: "flex",
@@ -162,7 +178,7 @@ const TraineeReport: React.FC = () => {
       <TableContainer
         component={Paper}
         sx={{
-          maxHeight: "calc(100vh - 270px)",
+          maxHeight: "calc(100vh - 245px)",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F1EDEE",
@@ -217,26 +233,44 @@ const TraineeReport: React.FC = () => {
           </TableHead>
           <TableBody>
             {filteredTrainees.map((trainee, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
-                  cursor: "pointer",
-                  transition: "transform 0.2s",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              <BootstrapTooltip
+                title="Click to view reports"
+                placement="top-end"
+                arrow
+                slotProps={{
+                  popper: {
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -14],
+                        },
+                      },
+                    ],
                   },
                 }}
-                onClick={() => navigate("/Admin-WholeReport")} // Use navigate for routing
               >
-                <TableCell>{trainee.traineeName}</TableCell>
-                <TableCell>{trainee.totalCourses}</TableCell>
-                <TableCell>{trainee.totalDailyReports}</TableCell>
-                <TableCell>
-                  {trainee.totalCourses - trainee.totalDailyReports}
-                </TableCell>
-              </TableRow>
+                <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
+                    cursor: "pointer",
+                    transition: "transform 0.2s",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    },
+                  }}
+                  onClick={() => navigate("/Admin-WholeReport")}
+                >
+                  <TableCell>{trainee.traineeName}</TableCell>
+                  <TableCell>{trainee.totalCourses}</TableCell>
+                  <TableCell>{trainee.totalDailyReports}</TableCell>
+                  <TableCell>
+                    {trainee.totalCourses - trainee.totalDailyReports}
+                  </TableCell>
+                </TableRow>
+              </BootstrapTooltip>
             ))}
           </TableBody>
         </Table>

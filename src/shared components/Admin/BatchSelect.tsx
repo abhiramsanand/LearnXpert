@@ -7,7 +7,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface BatchSelectProps {
   selectedBatch: number;
@@ -25,7 +25,6 @@ const BatchSelect: React.FC<BatchSelectProps> = ({
   onBatchSelect,
 }) => {
   const [batches, setBatches] = useState<Batch[]>([]);
-  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     // Fetch data from the backend API
@@ -38,11 +37,6 @@ const BatchSelect: React.FC<BatchSelectProps> = ({
         console.error("Error fetching batch data:", error);
       });
   }, []);
-
-  const handleCreateNewBatch = () => {
-    // Navigate to the route for creating a new batch
-    navigate("/Admin-BatchAdd"); // Adjust the route as needed
-  };
 
   return (
     <FormControl
@@ -120,23 +114,28 @@ const BatchSelect: React.FC<BatchSelectProps> = ({
             </Box>
           </MenuItem>
         ))}
-        <MenuItem
-          onClick={handleCreateNewBatch}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "10px 20px",
-            backgroundColor: "transparent",
-            transition: "transform 0.3s ease",
-            "&:hover": {
-              transform: "scale(1.05)",
-            },
-          }}
-        >
-          <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
-            + Create Batch
-          </Typography>
-        </MenuItem>
+        <Link to="/Admin-BatchAdd" style={{ textDecoration: "none" }}>
+          <MenuItem
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "10px 20px",
+              backgroundColor: "transparent",
+              transition: "transform 0.3s ease",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
+              "&:active": {
+                backgroundColor: "#8061C3",
+                color: "#ffffff",
+              },
+            }}
+          >
+            <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
+              + Create Batch
+            </Typography>
+          </MenuItem>
+        </Link>
       </Select>
     </FormControl>
   );
