@@ -8,12 +8,11 @@ const CreateAdminPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate data fetching or component preparation
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000); // Adjust the delay as needed
+    }, 1000);
 
-    return () => clearTimeout(timer); // Cleanup the timer
+    return () => clearTimeout(timer);
   }, []);
 
   const handleCreateAdmin = async (
@@ -37,7 +36,9 @@ const CreateAdminPage: React.FC = () => {
   const handleDeleteClick = useCallback(
     async (admin: { slno: number; name: string }) => {
       try {
-        await axios.delete(`http://localhost:8080/api/v1/users/${admin.slno}`);
+        await axios.delete(
+          `http://localhost:8080/api/v1/users/${admin.slno}`
+        );
         // Optionally refresh the admin list here
       } catch (error) {
         console.error("Error deleting admin:", error);
@@ -80,19 +81,18 @@ const CreateAdminPage: React.FC = () => {
         padding: "8px", // Adjust padding as needed
         minHeight: "100vh",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row", // Changed to row for side-by-side layout
         gap: "16px",
-        alignItems: "flex-start", // Align items to the start
+        alignItems: "flex-start",
       }}
     >
       {/* Create Admin Form */}
       <Box
         sx={{
-          width: "100%",
+          width: "50%", // Occupy half of the available width
           display: "flex",
           flexDirection: "column",
           gap: "16px",
-          mb: "-1",
         }}
       >
         <CreateAdminForm onCreate={handleCreateAdmin} />
@@ -101,7 +101,7 @@ const CreateAdminPage: React.FC = () => {
       {/* Admin Table */}
       <Box
         sx={{
-          width: "100%",
+          width: "50%", // Occupy half of the available width
           display: "flex",
           flexDirection: "column",
           gap: "4px",

@@ -107,6 +107,7 @@ const Sidebar: React.FC = () => {
           width: open ? 240 : 72,
           boxSizing: "border-box",
           backgroundColor: "rgba(128, 97, 195, 0.1)",
+          perspective: "1000px", // Add perspective here to enable 3D effect
         },
       }}
     >
@@ -193,79 +194,70 @@ const Sidebar: React.FC = () => {
                   sx={{
                     backgroundColor: "rgba(128, 97, 195, 0.1)",
                     border: "1px rgba(128, 97, 195, 0.3) solid",
-                    borderRadius: "0px 0px 7px 7px ",
+                    borderRadius: "7px",
                     width: "80%",
                     ml: 2,
+                    mt: 1, // Margin-top to create a gap below the main item
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // 3D shadow effect
+                    transform: "translateZ(-10px)", // Move 10px into the screen
+                    transition: "transform 0.3s ease-in-out", // Smooth transition
                   }}
                 >
-                  {item.subItems && (
-                    <Collapse in={openBatches} timeout="auto" unmountOnExit>
-                      <List
-                        component="div"
-                        disablePadding
+                  {item.subItems.map((subItem) => (
+                    <ListItem
+                      button
+                      key={subItem.text}
+                      component={Link}
+                      to={subItem.to}
+                      sx={{
+                        pl: 3,
+                        backgroundColor:
+                          location.pathname === subItem.to
+                            ? "rgba(128, 97, 195, 0.8)"
+                            : "transparent",
+                        borderRadius: "7px",
+                        "&:hover": {
+                          backgroundColor: "rgba(0, 0, 0, 0.1)",
+                        },
+                      }}
+                    >
+                      <ListItemIcon
                         sx={{
-                          backgroundColor: "transparent",
-                          borderRadius: "7px",
+                          color:
+                            location.pathname === subItem.to
+                              ? "#FFFFFF"
+                              : "#8061C3",
+                          fontSize:
+                            subItem.text === "Create Batch" ||
+                            subItem.text === "Batch Report"
+                              ? "12px"
+                              : "24px",
+                          minWidth: "12px",
                         }}
                       >
-                        {item.subItems.map((subItem) => (
-                          <ListItem
-                            button
-                            key={subItem.text}
-                            component={Link}
-                            to={subItem.to}
+                        {subItem.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography
                             sx={{
-                              pl: 3,
-                              backgroundColor:
+                              fontSize:
+                                subItem.text === "Create Batch" ||
+                                subItem.text === "Batch Report"
+                                  ? "12px"
+                                  : "inherit",
+                              color:
                                 location.pathname === subItem.to
-                                  ? "rgba(128, 97, 195, 0.8)"
-                                  : "transparent",
-                              borderRadius: "7px",
-                              "&:hover": {
-                                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                              },
+                                  ? "#FFFFFF"
+                                  : "#8061C3",
                             }}
                           >
-                            <ListItemIcon
-                              sx={{
-                                color:
-                                  location.pathname === subItem.to
-                                    ? "#FFFFFF"
-                                    : "#8061C3",
-                                fontSize:
-                                  subItem.text === "Create Batch" ||
-                                  subItem.text === "Batch Report"
-                                    ? "12px"
-                                    : "24px",
-                                minWidth: "12px",
-                              }}
-                            >
-                              {subItem.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography
-                                  sx={{
-                                    fontSize:
-                                      subItem.text === "Create Batch" ||
-                                      subItem.text === "Batch Report"
-                                        ? "12px"
-                                        : "inherit",
-                                    color:
-                                      location.pathname === subItem.to
-                                        ? "#FFFFFF"
-                                        : "#8061C3",
-                                  }}
-                                >
-                                  {subItem.text}
-                                </Typography>
-                              }
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Collapse>
-                  )}
+                            {subItem.text}
+                          </Typography>
+                        }
+                      />
+                    </ListItem>
+                  ))}
                 </List>
               </Collapse>
             )}
