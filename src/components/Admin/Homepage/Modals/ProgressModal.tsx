@@ -165,9 +165,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
 
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CustomDialogTitle>
-        Trainees Behind
-      </CustomDialogTitle>
+      <CustomDialogTitle>Trainees Behind</CustomDialogTitle>
       <DialogContent>
         <Typography
           variant="subtitle1"
@@ -237,7 +235,10 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
       <Footer>
         <Button
           variant="contained"
-          onClick={onClose}
+          onClick={(event) => {
+            event.stopPropagation(); 
+            onClose(); 
+          }}
           sx={{
             color: "white",
             backgroundColor: "#4A148C",
