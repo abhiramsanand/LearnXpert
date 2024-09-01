@@ -366,6 +366,22 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                 Filter
               </Button>
             </Box>
+            <Link to="/Admin-AssessmentCreation">
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            sx={{
+              borderRadius: "20px",
+              backgroundColor: "#8061C3",
+              "&:hover": {
+                backgroundColor: "#6A529D",
+              },
+            }}
+          >
+            Create Assessment
+          </Button>
+        </Link>
           </Box>
         </Box>
 
