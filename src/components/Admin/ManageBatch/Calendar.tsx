@@ -24,10 +24,13 @@ const CustomCalendar: React.FC = () => {
   const [value, setValue] = useState<Date | Date[]>(new Date());
   const [holidayDate, setHolidayDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [loadingMark, setLoadingMark] = useState(false);
+  const [loadingUnmark, setLoadingUnmark] = useState(false);
   const [openMarkDialog, setOpenMarkDialog] = useState(false);
   const [openUnmarkDialog, setOpenUnmarkDialog] = useState(false);
 
-  useEffect(() => {
+  // Function to fetch dates
+  const fetchDates = () => {
     setLoading(true);
     axios
       .get<DayNumberWithDateDTO[]>(
@@ -42,9 +45,14 @@ const CustomCalendar: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchDates();
   }, []);
 
   const handleMarkHoliday = () => {
+    setLoadingMark(true); // Start loading
     axios
       .post("http://localhost:8080/api/courses/mark-holiday/day", {
         holidayDate,
@@ -52,20 +60,29 @@ const CustomCalendar: React.FC = () => {
       })
       .then(() => {
         alert("Holiday marked successfully.");
+        fetchDates(); // Refresh dates after marking a holiday
       })
       .catch((error) => {
         console.error("Error marking holiday:", error);
+      })
+      .finally(() => {
+        setLoadingMark(false); // Stop loading
       });
   };
 
   const handleUnmarkHoliday = () => {
+    setLoadingUnmark(true); // Start loading
     axios
       .post("http://localhost:8080/api/courses/unmark-holiday", { holidayDate })
       .then(() => {
         alert("Holiday unmarked successfully.");
+        fetchDates(); // Refresh dates after unmarking a holiday
       })
       .catch((error) => {
         console.error("Error unmarking holiday:", error);
+      })
+      .finally(() => {
+        setLoadingUnmark(false); // Stop loading
       });
   };
 
@@ -139,7 +156,7 @@ const CustomCalendar: React.FC = () => {
             },
           }}
         >
-          Loading...
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
         </Typography>
       </Box>
     );
@@ -238,8 +255,13 @@ const CustomCalendar: React.FC = () => {
             "&:hover": { backgroundColor: "#6749a4" },
           }}
           onClick={() => setOpenMarkDialog(true)}
+          disabled={loadingMark} // Disable button while loading
         >
-          Mark as Holiday
+          {loadingMark ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            "Mark as Holiday"
+          )}
         </Button>
         <Button
           variant="contained"
@@ -249,8 +271,13 @@ const CustomCalendar: React.FC = () => {
             "&:hover": { backgroundColor: "#c53939" },
           }}
           onClick={() => setOpenUnmarkDialog(true)}
+          disabled={loadingUnmark} // Disable button while loading
         >
-          Unmark Holiday
+          {loadingUnmark ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            "Unmark Holiday"
+          )}
         </Button>
       </Box>
 
@@ -273,6 +300,7 @@ const CustomCalendar: React.FC = () => {
             }}
             color="primary"
             autoFocus
+            disabled={loadingMark}
           >
             Confirm
           </Button>
@@ -301,6 +329,7 @@ const CustomCalendar: React.FC = () => {
             }}
             color="primary"
             autoFocus
+            disabled={loadingUnmark}
           >
             Confirm
           </Button>
