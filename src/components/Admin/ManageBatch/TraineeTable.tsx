@@ -226,6 +226,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
         sx={{
           maxHeight: "350px",
           overflowY: "auto",
+          overflowX: "hidden",
           backgroundColor: "#F1EDEE",
           "&::-webkit-scrollbar": { width: "8px" },
           "&::-webkit-scrollbar-thumb": {

@@ -37,14 +37,22 @@ interface Assessment {
 
 interface TraineeAssessment {
   traineeName: string;
-  traineeScore: number;
+  traineeScore: number | string; // Changed to number or string to handle "N/A"
   traineeStatus: string;
   assessmentName: string;
+}
+
+interface Trainee {
+  traineeName: string;
 }
 
 const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [traineeAssessments, setTraineeAssessments] = useState<
+    TraineeAssessment[]
+  >([]);
+  const [allTrainees, setAllTrainees] = useState<Trainee[]>([]);
+  const [mergedTraineeAssessments, setMergedTraineeAssessments] = useState<
     TraineeAssessment[]
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,41 +71,70 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
   });
 
   useEffect(() => {
-    const fetchAssessments = async () => {
+    const fetchAllData = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/ilpex/assessments/details?batchId=15"
-        );
-        const fetchedAssessments = response.data.data;
+        const [traineesResponse, assessmentsResponse] = await Promise.all([
+          axios.get(`http://localhost:8080/api/trainees/batch/${batchId}`),
+          axios.get(
+            `http://localhost:8080/api/v1/ilpex/assessments/details?batchId=${batchId}`
+          ),
+        ]);
+
+        const allTraineesData = traineesResponse.data;
+        setAllTrainees(allTraineesData);
+
+        const fetchedAssessments = assessmentsResponse.data.data;
         setAssessments(fetchedAssessments);
 
         if (fetchedAssessments.length > 0) {
           const latestAssessmentName = fetchedAssessments[0].assessmentName;
           setSelectedAssessment(latestAssessmentName);
-          fetchTraineeAssessments(latestAssessmentName);
+          await fetchTraineeAssessments(latestAssessmentName, allTraineesData);
         }
       } catch (error) {
-        console.error("Error fetching assessments data:", error);
-        setError("Failed to fetch assessments. Please try again later.");
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch data. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAssessments();
+    fetchAllData();
   }, [batchId]);
 
-  const fetchTraineeAssessments = async (assessmentName: string) => {
+  const fetchTraineeAssessments = async (
+    assessmentName: string,
+    allTrainees: Trainee[]
+  ) => {
     setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:8080/api/v1/ilpex/trainee-assessments"
       );
-      const filteredData = response.data.data.filter(
+      const completedAssessments = response.data.data.filter(
         (assessment: TraineeAssessment) =>
           assessment.assessmentName === assessmentName
       );
-      setTraineeAssessments(filteredData);
+
+      // Merge with all trainees to ensure all are listed
+      const mergedData = allTrainees.map((trainee) => {
+        const matchingAssessment = completedAssessments.find(
+          (assessment) => assessment.traineeName === trainee.traineeName
+        );
+
+        return matchingAssessment
+          ? matchingAssessment
+          : {
+              traineeName: trainee.traineeName,
+              traineeScore: "N/A",
+              traineeStatus: "Pending",
+              assessmentName: assessmentName,
+            };
+      });
+
+      setTraineeAssessments(completedAssessments);
+      setMergedTraineeAssessments(mergedData);
     } catch (error) {
       console.error("Error fetching trainee assessments data:", error);
       setError("Failed to fetch trainee assessments. Please try again later.");
@@ -112,7 +149,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
     const assessmentName = event.target.value as string;
     setSelectedAssessment(assessmentName);
     setError(null);
-    fetchTraineeAssessments(assessmentName);
+    fetchTraineeAssessments(assessmentName, allTrainees);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,26 +188,33 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
   };
 
   const sortedAssessments = React.useMemo(() => {
-    let sortableAssessments = [...traineeAssessments];
+    let sortableAssessments = [...mergedTraineeAssessments];
+
     if (sortConfig.key) {
       sortableAssessments.sort((a, b) => {
-        if (
-          a[sortConfig.key as keyof TraineeAssessment] <
-          b[sortConfig.key as keyof TraineeAssessment]
-        ) {
+        const aValue =
+          sortConfig.key === "traineeScore" &&
+          a[sortConfig.key as keyof TraineeAssessment] === "N/A"
+            ? 0
+            : a[sortConfig.key as keyof TraineeAssessment];
+        const bValue =
+          sortConfig.key === "traineeScore" &&
+          b[sortConfig.key as keyof TraineeAssessment] === "N/A"
+            ? 0
+            : b[sortConfig.key as keyof TraineeAssessment];
+
+        if (aValue < bValue) {
           return sortConfig.direction === "asc" ? -1 : 1;
         }
-        if (
-          a[sortConfig.key as keyof TraineeAssessment] >
-          b[sortConfig.key as keyof TraineeAssessment]
-        ) {
+        if (aValue > bValue) {
           return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;
       });
     }
+
     return sortableAssessments;
-  }, [traineeAssessments, sortConfig]);
+  }, [mergedTraineeAssessments, sortConfig]);
 
   const filteredAssessments = sortedAssessments
     .filter((trainee) =>
@@ -178,22 +222,13 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
     )
     .filter((trainee) => {
       if (selectedScores.length === 0) return true;
-      if (selectedScores.includes("100") && trainee.traineeScore === 100)
+      const score = trainee.traineeScore === "N/A" ? 0 : trainee.traineeScore;
+      if (selectedScores.includes("100") && score === 100) return true;
+      if (selectedScores.includes("90-100") && score >= 90 && score < 100)
         return true;
-      if (
-        selectedScores.includes("90-100") &&
-        trainee.traineeScore >= 90 &&
-        trainee.traineeScore < 100
-      )
+      if (selectedScores.includes("80-90") && score >= 80 && score < 90)
         return true;
-      if (
-        selectedScores.includes("80-90") &&
-        trainee.traineeScore >= 80 &&
-        trainee.traineeScore < 90
-      )
-        return true;
-      if (selectedScores.includes("below 80") && trainee.traineeScore < 80)
-        return true;
+      if (selectedScores.includes("below 80") && score < 80) return true;
       return false;
     })
     .filter((trainee) => {
@@ -238,382 +273,229 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
               <InputLabel
                 shrink
                 htmlFor="assessment-select"
-                sx={{ color: "#8061C3" }}
+                sx={{
+                  color: "#8061C3",
+                  "&.Mui-focused": {
+                    color: "#8061C3",
+                  },
+                  position: "absolute",
+                  backgroundColor: "#F1EDEE", // Match the background color to avoid visual overlap
+                }}
               >
                 Select Assessment
               </InputLabel>
               <Select
-                label="Select Assessment"
+                id="assessment-select"
                 value={selectedAssessment}
                 onChange={handleAssessmentChange}
                 inputProps={{
                   id: "assessment-select",
                 }}
+                sx={{
+                  "& .MuiSelect-select": {
+                    padding: "10px 14px", 
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#000000", // Default border color
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#000000", // Hover border color
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8061C3", // Focus border color
+                  },
+                }}
               >
-                {assessments.map((assessment, index) => (
-                  <MenuItem key={index} value={assessment.assessmentName}>
+                {assessments.map((assessment) => (
+                  <MenuItem
+                    key={assessment.assessmentName}
+                    value={assessment.assessmentName}
+                  >
                     {assessment.assessmentName}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <Link to="/Admin-AssessmentCreation">
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Add />}
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                size="small"
+                placeholder="Search..."
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: "action.active" }} />
+                    </InputAdornment>
+                  ),
+                }}
+                value={searchTerm}
+                onChange={handleSearch}
                 sx={{
-                  borderRadius: "20px",
-                  backgroundColor: "#8061C3",
+                  marginRight: "16px", // Adjust the spacing between input and button
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#000000", // Default border color
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#000000", // Hover border color
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#8061C3", // Focus border color
+                    },
+                  },
+                }}
+              />
+              <Button
+                variant="outlined"
+                startIcon={<FilterList />}
+                onClick={handleFilterOpen}
+                sx={{
+                  color: "#8061C3",
+                  borderColor: "#8061C3",
                   "&:hover": {
-                    backgroundColor: "#6A529D",
+                    backgroundColor: "#8061C3",
+                    color: "white",
                   },
                 }}
               >
-                Create Assessment
+                Filter
               </Button>
-            </Link>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "left",
-              gap: "20px",
-              mt: 2,
-            }}
-          >
-            <Button
-              variant="outlined"
-              startIcon={<FilterList />}
-              onClick={handleFilterOpen}
-              sx={{
-                borderRadius: "20px",
-                color: "#5B8C5A",
-                borderColor: "#5B8C5A",
-                "&:hover": {
-                  borderColor: "#8061C3",
-                },
-                "&.Mui-focused": {
-                  borderColor: "#8061C3",
-                },
-              }}
-            >
-              Filter
-            </Button>
-            <TextField
-              placeholder="Search Trainee"
-              size="small"
-              variant="outlined"
-              value={searchTerm}
-              onChange={handleSearch}
-              sx={{
-                "& .MuiInputBase-root": {
-                  padding: "4px 8px",
-                  width: "100%",
-                  height: "40px",
-                  backgroundColor: "#FFFFFF",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#8061C3",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#A281EA",
-                  "&.Mui-focused": {
-                    color: "#8061C3",
-                  },
-                },
-                mr: 2,
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
-              }}
-            />
+            </Box>
           </Box>
         </Box>
-        {loading ? (
-          <Box sx={{ mt: 2 }}>
-            <Skeleton
-              variant="rectangular"
-              height={50}
-              animation="wave"
-              sx={{
-                backgroundColor: "#d3d3d3", // Light grey color
-              }}
-            />
-            <Skeleton
-              variant="rectangular"
-              height={50}
-              animation="wave"
-              sx={{
-                mt: 1,
-                backgroundColor: "#d3d3d3", // Light grey color
-              }}
-            />
-            <Skeleton
-              variant="rectangular"
-              height={50}
-              animation="wave"
-              sx={{
-                mt: 1,
-                backgroundColor: "#d3d3d3",
-              }}
-            />
-          </Box>
-        ) : filteredAssessments.length === 0 ? (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6" align="center" sx={{ color: "#DB5461" }}>
-              Nothing to show
-            </Typography>
-            {/* First Row */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-            </Box>
-            {/* Second Row */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-              <Skeleton
-                variant="rectangular"
-                height={50}
-                width="30%"
-                animation="wave"
-                sx={{ backgroundColor: "#d3d3d3", mx: 1 }} // Light grey color
-              />
-            </Box>
-          </Box>
-        ) : (
-          <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <Typography
-                      onClick={() => handleSort("traineeName")}
+
+        <TableContainer
+          component={Paper}
+          sx={{
+            maxHeight: "calc(100vh - 270px)",
+            overflowY: "auto",
+            overflowX: "hidden",
+            backgroundColor: "#F1EDEE",
+            "&::-webkit-scrollbar": { width: "8px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#8061C3",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-track": { backgroundColor: "#f1f1f1" },
+          }}
+        >
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                {["traineeName", "traineeScore", "traineeStatus"].map(
+                  (field) => (
+                    <TableCell
+                      key={field}
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
                         fontWeight: "bold",
-                        color: "#4A4A4A",
+                        backgroundColor: "#F1EDEE",
                         fontSize: "14px",
                       }}
                     >
-                      Trainee Name
-                      <SwapVertIcon
-                        fontSize="small"
-                        sx={{ ml: 1, color: "#4A4A4A" }}
-                      />
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      onClick={() => handleSort("traineeScore")}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        color: "#4A4A4A",
-                        fontSize: "14px",
-                      }}
-                    >
-                      Score
-                      <SwapVertIcon
-                        fontSize="small"
-                        sx={{ ml: 1, color: "#4A4A4A" }}
-                      />
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      onClick={() => handleSort("traineeStatus")}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        color: "#4A4A4A",
-                        fontSize: "14px",
-                      }}
-                    >
-                      Status
-                      <SwapVertIcon
-                        fontSize="small"
-                        sx={{ ml: 1, color: "#4A4A4A" }}
-                      />
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredAssessments.map((trainee, index) => (
-                  <TableRow
-                    key={index}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleSort(field)}
+                      >
+                        {field === "traineeName"
+                          ? "Trainee Name"
+                          : field === "traineeScore"
+                          ? "Trainee Score"
+                          : "Trainee Status"}
+                        <SwapVertIcon fontSize="small" />
+                      </Box>
+                    </TableCell>
+                  )
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredAssessments.map((trainee, index) => (
+                <TableRow
+                  key={trainee.traineeName}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
+                  }}
+                >
+                  <TableCell
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#F9F9F9",
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      borderBottom: "1px solid #E0E0E0",
+                      fontSize: "13px",
+                      backgroundColor: "inherit",
                     }}
                   >
-                    <TableCell sx={{ padding: "12px" }}>
-                      {trainee.traineeName}
-                    </TableCell>
-                    <TableCell sx={{ padding: "12px" }}>
-                      {trainee.traineeScore}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        padding: "12px",
-                        color:
-                          trainee.traineeStatus === "Completed"
-                            ? "#5B8C5A"
-                            : trainee.traineeStatus === "Pending"
-                            ? "#DB5461"
-                            : "#4A4A4A",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {trainee.traineeStatus}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+                    {trainee.traineeName}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: "13px",
+                      backgroundColor: "inherit",
+                    }}
+                  >
+                    {trainee.traineeScore === "N/A"
+                      ? "N/A"
+                      : trainee.traineeScore}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontSize: "13px",
+                      backgroundColor: "inherit",
+                    }}
+                  >
+                    {trainee.traineeStatus}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
+
       {/* Filter Dialog */}
       <Dialog open={openFilter} onClose={handleFilterClose}>
-        <DialogTitle sx={{ color: "#5B8C5A" }}>
-          Filter Trainee Assessments
-        </DialogTitle>
+        <DialogTitle>Filter</DialogTitle>
         <DialogContent>
-          <Typography>By Score</Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedScores.includes("100")}
-                onChange={() => handleScoreChange("100")}
-              />
-            }
-            label="100"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedScores.includes("90-100")}
-                onChange={() => handleScoreChange("90-100")}
-              />
-            }
-            label="90-100"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedScores.includes("80-90")}
-                onChange={() => handleScoreChange("80-90")}
-              />
-            }
-            label="80-90"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedScores.includes("below 80")}
-                onChange={() => handleScoreChange("below 80")}
-              />
-            }
-            label="Below 80"
-          />
-          <Typography>By Status</Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedStatuses.includes("completed")}
-                onChange={() => handleStatusChange("completed")}
-              />
-            }
-            label="Completed"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={selectedStatuses.includes("pending")}
-                onChange={() => handleStatusChange("pending")}
-              />
-            }
-            label="pending"
-          />
+          {/* Score Filter */}
+          <Typography sx={{ mt: 1, mb: 1 }}>Score</Typography>
+          {["100", "90-100", "80-90", "below 80"].map((scoreRange) => (
+            <FormControlLabel
+              key={scoreRange}
+              control={
+                <Checkbox
+                  checked={selectedScores.includes(scoreRange)}
+                  onChange={() => handleScoreChange(scoreRange)}
+                />
+              }
+              label={scoreRange}
+            />
+          ))}
+          {/* Status Filter */}
+          <Typography sx={{ mt: 2, mb: 1 }}>Status</Typography>
+          {["Completed", "Pending"].map((status) => (
+            <FormControlLabel
+              key={status}
+              control={
+                <Checkbox
+                  checked={selectedStatuses.includes(status.toLowerCase())}
+                  onChange={() => handleStatusChange(status.toLowerCase())}
+                />
+              }
+              label={status}
+            />
+          ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleFilterClose} sx={{ color: "#DB5461" }}>
+          <Button onClick={handleFilterClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={applyFilters} sx={{ color: "#5B8C5A" }}>
+          <Button onClick={applyFilters} color="primary">
             Apply
           </Button>
         </DialogActions>

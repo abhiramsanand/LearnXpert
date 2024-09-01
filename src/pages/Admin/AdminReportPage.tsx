@@ -5,7 +5,7 @@ import SearchBarComponent from '../../components/Trainee/WholeReport/SearchBarCo
 import SortByComponent from '../../components/Trainee/WholeReport/SortByComponent';
 import ReportsTableComponent from '../../components/Trainee/WholeReport/ReportsTableComponent';
 import BackButtonComponent from '../../components/Trainee/WholeReport/BackButtonComponent';
-import StudentSearchComponent from '../../components/Admin/WholeReportNameWise/StudentSearchComponent';
+import StudentSearchComponent from '../../components/Admin/DailyReport/StudentSearchComponent';
 
 interface Report {
   day: string;
