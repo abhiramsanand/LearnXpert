@@ -1,65 +1,112 @@
-import React, { useCallback } from 'react';
-import { Box, Typography } from '@mui/material';
-import AdminTable from '../../components/Admin/CreateAdmin/AdminTable';
-import CreateAdminForm from '../../components/Admin/CreateAdmin/CreateAdminForm';
-import axios from 'axios';
+import React, { useCallback, useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import AdminTable from "../../components/Admin/CreateAdmin/AdminTable";
+import CreateAdminForm from "../../components/Admin/CreateAdmin/CreateAdminForm";
+import axios from "axios";
 
 const CreateAdminPage: React.FC = () => {
-  const handleCreateAdmin = async (username: string, email: string, password: string) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching or component preparation
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Adjust the delay as needed
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
+
+  const handleCreateAdmin = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
     try {
-      await axios.post('http://localhost:8080/api/v1/users/save', {
+      await axios.post("http://localhost:8080/api/v1/users/save", {
         username,
         email,
         password,
-        rolesId: '1',
+        rolesId: "1",
       });
       // Optionally refresh the admin list here
     } catch (error) {
-      console.error('Error creating admin:', error);
+      console.error("Error creating admin:", error);
     }
   };
 
-  const handleDeleteClick = useCallback(async (admin: { slno: number; name: string }) => {
-    try {
-      await axios.delete(`http://localhost:8080/api/v1/users/${admin.slno}`);
-      // Optionally refresh the admin list here
-    } catch (error) {
-      console.error('Error deleting admin:', error);
-    }
-  }, []);
+  const handleDeleteClick = useCallback(
+    async (admin: { slno: number; name: string }) => {
+      try {
+        await axios.delete(`http://localhost:8080/api/v1/users/${admin.slno}`);
+        // Optionally refresh the admin list here
+      } catch (error) {
+        console.error("Error deleting admin:", error);
+      }
+    },
+    []
+  );
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
       sx={{
-        padding: '8px', // Adjust padding as needed
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        alignItems: 'flex-start', // Align items to the start
+        padding: "8px", // Adjust padding as needed
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        alignItems: "flex-start", // Align items to the start
       }}
     >
       {/* Create Admin Form */}
-      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px',mb:'-1' }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          mb: "-1",
+        }}
+      >
         <CreateAdminForm onCreate={handleCreateAdmin} />
       </Box>
 
       {/* Admin Table */}
-      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <Typography
-          variant="h5"
-          gutterBottom
-          sx={{
-            fontSize: '17px',
-            fontWeight: 'bold',
-            fontFamily: "Montserrat, sans-serif",
-            color: '#8061C3',
-            textAlign: 'left', // Ensure text is aligned to the left
-            marginBottom: '2px', // Adjust margin if needed
-          }}
-        >
-          List of Admins
-        </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          gap: "4px",
+        }}
+      >
         <AdminTable onDeleteClick={handleDeleteClick} />
       </Box>
     </Box>

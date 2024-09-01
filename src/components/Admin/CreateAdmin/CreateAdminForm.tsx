@@ -53,13 +53,24 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
       sx={{
         mb: 2,
         p: 2,
-        backgroundColor: 'rgba(128, 97, 195, 0.1)',
+        mt: -3,
+        backgroundColor: '#FFFFFF',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         borderRadius: '8px',
       }}
     >
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: "#8061C3", fontFamily: "Montserrat, sans-serif", fontSize: "19px" }}>
-        CREATE NEW ADMIN
+           <Typography
+        align="center"
+        sx={{
+          color: "#8061C3",
+          mb: 2,
+          mt: "-5px",
+          ml: "-3",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        CREATE ADMIN
       </Typography>
       <Formik
         initialValues={{

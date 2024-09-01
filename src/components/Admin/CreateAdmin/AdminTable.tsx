@@ -79,9 +79,10 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
         component={Paper}
         sx={{
           width: '100%',
-          maxHeight: 'calc(100vh - 150px)',
+          maxHeight: 'calc(100vh - 377px)',
           overflowY: 'auto',
           overflowX: 'hidden',
+          mt: "-28px",
           backgroundColor: '#F1EDEE',
           "&::-webkit-scrollbar": { width: "8px" },
           "&::-webkit-scrollbar-thumb": {
@@ -94,7 +95,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-              <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Sl. No</TableCell>
+              <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>#</TableCell>
               <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Name</TableCell>
               <TableCell sx={{ padding: '8px', fontWeight: 'bold' }}>Actions</TableCell>
             </TableRow>

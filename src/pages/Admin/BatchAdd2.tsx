@@ -30,6 +30,7 @@ const BatchAdd2: React.FC = () => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
+  const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const BatchAdd2: React.FC = () => {
         .then((data: Trainee[]) => setTrainees(data))
         .catch((error) =>
           console.error("There was a problem with the fetch operation:", error)
-        );
+        )
+        .finally(() => setLoading(false)); // Set loading to false after data is fetched
     }
   }, [batchId]);
 
@@ -104,6 +106,34 @@ const BatchAdd2: React.FC = () => {
       trainee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       trainee.percipioEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Container>
