@@ -1,103 +1,230 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Typography } from '@mui/material';
+import { Box, TextField, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
 
 interface CreateAdminFormProps {
   onCreate: (username: string, email: string, password: string) => void;
 }
 
-const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [roleId, setRoleId] = useState<string>('1'); // Default roleId, adjust as needed
+// Validation schema using Yup
+const validationSchema = Yup.object({
+  username: Yup.string()
+    .matches(/^[A-Za-z]+$/, 'Username must contain only alphabets')
+    .required('Username is required'),
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
+});
 
-  const handleCreate = async () => {
-    if (password === confirmPassword) {
-      try {
-        await axios.post('http://localhost:8080/api/v1/users/save', {
-          userName: username,
-          email,
-          password,
-          rolesId:1 // Include roleId in the API request
-        });
-        // Clear form fields and notify parent component
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        setRoleId('1'); // Reset roleId to default value
-        onCreate(username, email, password); // Optional: Notify parent component
-      } catch (error) {
-        console.error('Error creating admin:', error);
-      }
-    } else {
-      console.error('Passwords do not match');
+const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleCreate = async (values: { username: string; email: string; password: string }) => {
+    try {
+      await axios.post('http://localhost:8080/api/v1/users/save', {
+        userName: values.username,
+        email: values.email,
+        password: values.password,
+        rolesId: 1,
+      });
+      // Notify parent component and open success dialog
+      onCreate(values.username, values.email, values.password);
+      setOpen(true);
+    } catch (error) {
+      console.error('Error creating admin:', error);
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Box component="form" noValidate autoComplete="off" sx={{ mb: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Create New Admin
+    <Box
+      component="div"
+      sx={{
+        mb: 2,
+        p: 2,
+        backgroundColor: 'rgba(128, 97, 195, 0.1)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        borderRadius: '8px',
+      }}
+    >
+      <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: "#8061C3", fontFamily: "Montserrat, sans-serif", fontSize: "19px" }}>
+        CREATE NEW ADMIN
       </Typography>
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <TextField
-            label="Username"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            fullWidth
-            sx={{ height: '40px', '& input': { padding: '8px' } }}
-          />
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            sx={{ height: '40px', '& input': { padding: '8px' } }}
-          />
-        </Box>
-      </Box>
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mt: 2 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            sx={{ height: '40px', '& input': { padding: '8px' } }}
-          />
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <TextField
-            label="Confirm Password"
-            type="password"
-            variant="outlined"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            fullWidth
-            sx={{ height: '40px', '& input': { padding: '8px' } }}
-          />
-        </Box>
-      </Box>
-     
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCreate}
+      <Formik
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => handleCreate(values)}
+      >
+        {({ isSubmitting, errors, touched }) => (
+          <Form>
+            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+              <Field
+                as={TextField}
+                label="Username"
+                name="username"
+                variant="outlined"
+                fullWidth
+                error={touched.username && Boolean(errors.username)}
+                helperText={<ErrorMessage name="username" />}
+                sx={{
+                  '& .MuiInputLabel-root': { color: '#8061C3' },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: touched.username && errors.username ? 'red' : '#8061C3',
+                    },
+                    '&:hover fieldset': { borderColor: '#6A529D' },
+                    '&.Mui-focused fieldset': { borderColor: '#8061C3' },
+                  },
+                  '& input': { padding: '12px 8px', color: '#8061C3' },
+                }}
+              />
+              <Field
+                as={TextField}
+                label="Email"
+                name="email"
+                variant="outlined"
+                fullWidth
+                error={touched.email && Boolean(errors.email)}
+                helperText={<ErrorMessage name="email" />}
+                sx={{
+                  '& .MuiInputLabel-root': { color: '#8061C3' },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: touched.email && errors.email ? 'red' : '#8061C3',
+                    },
+                    '&:hover fieldset': { borderColor: '#6A529D' },
+                    '&.Mui-focused fieldset': { borderColor: '#8061C3' },
+                  },
+                  '& input': { padding: '12px 8px', color: '#8061C3' },
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mt: 2 }}>
+              <Field
+                as={TextField}
+                label="Password"
+                type="password"
+                name="password"
+                variant="outlined"
+                fullWidth
+                error={touched.password && Boolean(errors.password)}
+                helperText={<ErrorMessage name="password" />}
+                sx={{
+                  '& .MuiInputLabel-root': { color: '#8061C3' },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: touched.password && errors.password ? 'red' : '#8061C3',
+                    },
+                    '&:hover fieldset': { borderColor: '#6A529D' },
+                    '&.Mui-focused fieldset': { borderColor: '#8061C3' },
+                  },
+                  '& input': { padding: '12px 8px', color: '#8061C3' },
+                }}
+              />
+              <Field
+                as={TextField}
+                label="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                variant="outlined"
+                fullWidth
+                error={touched.confirmPassword && Boolean(errors.confirmPassword)}
+                helperText={<ErrorMessage name="confirmPassword" />}
+                sx={{
+                  '& .MuiInputLabel-root': { color: '#8061C3' },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: touched.confirmPassword && errors.confirmPassword ? 'red' : '#8061C3',
+                    },
+                    '&:hover fieldset': { borderColor: '#6A529D' },
+                    '&.Mui-focused fieldset': { borderColor: '#8061C3' },
+                  },
+                  '& input': { padding: '12px 8px', color: '#8061C3' },
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={isSubmitting}
+                sx={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  backgroundColor: '#8061C3',
+                  '&:hover': { backgroundColor: '#6A529D' },
+                }}
+              >
+                Create Admin
+              </Button>
+            </Box>
+          </Form>
+        )}
+      </Formik>
+
+      {/* Success Dialog */}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{
+          '& .MuiDialog-paper': {
+            padding: '20px',
+            borderRadius: '8px',
+            backgroundColor: '#fff',
+            width: '400px',  // Adjust width as needed
+            maxWidth: '100%',
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            fontWeight: 'bold',
+            color: '#8061C3',
+            borderBottom: '1px solid #ccc',
+            fontSize: '18px',
+            textAlign: 'center',
+          }}
         >
-          Create Admin
-        </Button>
-      </Box>
+          Success
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            padding: '20px',
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="body1" sx={{ color: '#333' }}>
+            Admin created successfully!
+          </Typography>
+        </DialogContent>
+        <DialogActions
+          sx={{
+            justifyContent: 'center',
+            padding: '8px 16px',
+            borderTop: '1px solid #ccc',
+          }}
+        >
+          <Button onClick={handleClose} color="primary" sx={{ borderRadius: '20px' }}>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
