@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-empty-pattern */
 import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  IconButton,
   Button,
   Table,
   TableBody,
@@ -19,7 +16,6 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
 
@@ -27,7 +23,7 @@ interface TraineeModalProps {
   open: boolean;
   onClose: () => void;
   batchDayNumber: number;
-  traineesBehind: Array<{ traineeName: string; traineeDayNumber: number }>;
+  trainees: Array<{ traineeName: string; traineeDayNumber: number }>; 
 }
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
@@ -122,14 +118,13 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
   open,
   onClose,
   batchDayNumber,
-  traineesBehind,
+  trainees = [], // Default to an empty array if not provided
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] =
-    useState<keyof (typeof traineesBehind)[0]>("traineeName");
+  const [orderBy, setOrderBy] = useState<keyof typeof trainees[0]>("traineeName");
   const [filterStatus, setFilterStatus] = useState<string>("All");
 
-  const handleRequestSort = (property: keyof (typeof traineesBehind)[0]) => {
+  const handleRequestSort = (property: keyof typeof trainees[0]) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -141,8 +136,8 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
 
   const filteredTrainees =
     filterStatus === "All"
-      ? traineesBehind
-      : traineesBehind.filter((trainee) => {
+      ? trainees
+      : trainees.filter((trainee) => {
           if (filterStatus === "Behind") {
             return trainee.traineeDayNumber < batchDayNumber;
           } else if (filterStatus === "Ahead") {
@@ -165,7 +160,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
 
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CustomDialogTitle>Trainees Behind</CustomDialogTitle>
+      <CustomDialogTitle>Trainee Progress</CustomDialogTitle>
       <DialogContent>
         <Typography
           variant="subtitle1"

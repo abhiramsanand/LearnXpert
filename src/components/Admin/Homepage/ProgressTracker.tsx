@@ -43,7 +43,7 @@ const ProgressTracker: React.FC = () => {
     onTrack: 0,
     ahead: 0,
   });
-  const [traineesBehind, setTraineesBehind] = useState<
+  const [trainees, setTrainees] = useState<
     Array<{ traineeName: string; traineeDayNumber: number }>
   >([]);
   const [batchDayNumber, setBatchDayNumber] = useState<number>(0);
@@ -57,27 +57,25 @@ const ProgressTracker: React.FC = () => {
       "http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number"
     )
       .then((response) => response.json())
-      .then((trainees) => {
-        if (trainees.length === 0) {
+      .then((traineesData) => {
+        if (traineesData.length === 0) {
           console.error("No trainee data available");
           setLoading(false);
           return;
         }
 
-        const batchDayNumber = trainees[0].batchDayNumber;
+        const batchDayNumber = traineesData[0].batchDayNumber;
         setBatchDayNumber(batchDayNumber);
 
         let behind = 0;
         let onTrack = 0;
         let ahead = 0;
-        const behindTrainees = [];
 
-        for (const trainee of trainees) {
-          const { traineeDayNumber, traineeName } = trainee;
+        for (const trainee of traineesData) {
+          const { traineeDayNumber } = trainee;
 
           if (traineeDayNumber < batchDayNumber) {
             behind++;
-            behindTrainees.push({ traineeName, traineeDayNumber });
           } else if (traineeDayNumber === batchDayNumber) {
             onTrack++;
           } else {
@@ -87,7 +85,7 @@ const ProgressTracker: React.FC = () => {
 
         const progress = { behind, onTrack, ahead };
         setProgressData(progress);
-        setTraineesBehind(behindTrainees);
+        setTrainees(traineesData);
         setLoading(false);
       })
       .catch((error) => {
@@ -177,7 +175,7 @@ const ProgressTracker: React.FC = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         batchDayNumber={batchDayNumber}
-        traineesBehind={traineesBehind}
+        trainees={trainees} // Pass all trainees to the modal
       />
     </Box>
   );

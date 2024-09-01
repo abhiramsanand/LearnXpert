@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  IconButton,
   Button,
   Table,
   TableBody,
@@ -16,7 +15,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
 
@@ -153,7 +151,7 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <CustomDialogTitle>
-        Trainee Assessment Scores
+        Percipio Assessment Scores
       </CustomDialogTitle>
       <DialogContent>
         <FilterContainer>

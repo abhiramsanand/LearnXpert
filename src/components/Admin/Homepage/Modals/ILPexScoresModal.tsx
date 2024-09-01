@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  IconButton,
   Button,
   Table,
   TableBody,
@@ -17,7 +16,6 @@ import {
   MenuItem,
   styled,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface TraineeScoreModalProps {
@@ -154,7 +152,7 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <CustomDialogTitle>
-        Trainee Assessment Scores
+        ILPex Assessment Scores
       </CustomDialogTitle>
       <DialogContent>
         <FilterContainer>
