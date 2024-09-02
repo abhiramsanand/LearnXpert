@@ -53,11 +53,11 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
       );
       const courseDurationData = await courseDurationResponse.json();
 
-      // Fetch the total days completed per batch
-      const totalDaysCompletedResponse = await fetch(
-        `http://localhost:8080/api/courses/total-course-days-completed/${batchId}`
-      );
-      const totalDaysCompletedData = await totalDaysCompletedResponse.json();
+        // Fetch the total days completed per batch
+    const totalDaysCompletedResponse = await fetch(
+      `http://localhost:8080/api/courses/count?batchId=${batchId}`
+    );
+    const totalDaysCompletedData = await totalDaysCompletedResponse.json();
 
       // Fetch distinct course duration count per trainee
       const distinctCourseCountResponse = await fetch(
@@ -80,8 +80,8 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
               totalDurationData.totalDurationMinutes
             ),
             estimatedDuration: formatSecondsToHours(estimatedDuration),
-            totalCourses: totalDaysCompletedData.totalCourseDaysCompleted,
-            estimatedCourses: estimatedCourses,
+          totalCourses: totalDaysCompletedData.courseCount, // Update here to use courseCount
+          estimatedCourses: estimatedCourses,
           };
         }
       );
