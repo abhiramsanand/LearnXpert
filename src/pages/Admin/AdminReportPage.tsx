@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography } from '@mui/material';
-
-import SearchBarComponent from '../../components/Trainee/WholeReport/SearchBarComponent';
-import SortByComponent from '../../components/Trainee/WholeReport/SortByComponent';
-import ReportsTableComponent from '../../components/Trainee/WholeReport/ReportsTableComponent';
-import BackButtonComponent from '../../components/Trainee/WholeReport/BackButtonComponent';
-import StudentSearchComponent from '../../components/Admin/DailyReport/StudentSearchComponent';
+import React, { useState, useEffect } from "react";
+import { Container, Box, Typography } from "@mui/material";
+import SortByComponent from "../../components/Admin/DailyReport/SortByComponent";
+import ReportsTableComponent from "../../components/Admin/DailyReport/ReportTable";
+import BackButtonComponent from "../../components/Admin/DailyReport/BackButtonComponent";
+import axios from "axios";
+import { format } from "date-fns-tz";
 
 interface Report {
   day: string;
@@ -16,50 +15,50 @@ interface Report {
   planForTomorrow: string;
 }
 
-interface Student {
-  name: string;
-  reports: Report[];
-}
-
 const AdminReportPage: React.FC = () => {
-  const [students, setStudents] = useState<Student[]>([]);
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
-  const [selectedStudent, setSelectedStudent] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/WholeReportMultipleStudent.json') // Adjust path as needed
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const fetchReports = async () => {
+      try {
+        const batchId = 15;
+        const traineeId = localStorage.getItem("traineeId");
+
+        if (!traineeId) {
+          console.error("No traineeId found in localStorage");
+          return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        setStudents(data.students);
-        // Optionally, set the default student and their reports
-        if (data.students.length > 0) {
-          setSelectedStudent(data.students[0].name);
-          setFilteredReports(data.students[0].reports);
-        }
-      })
-      .catch((error) => console.error('Error loading students:', error));
+
+        const response = await axios.get(
+          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
+        );
+
+        const reports: Report[] = response.data.map((course: any) => ({
+          day: new Date(course.courseDate).toISOString().slice(0, 10), // Updated line
+          course: course.courseName,
+          timeTaken: course.timeTaken.toString(),
+          status: "completed",
+          keyLearnings: course.keyLearnings || "",
+          planForTomorrow: course.planForTomorrow || "",
+        }));
+        
+        setFilteredReports(reports);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
   }, []);
 
-  const handleStudentSelect = (studentName: string) => {
-    setSelectedStudent(studentName);
-    const selected = students.find(student => student.name === studentName);
-    if (selected) {
-      setFilteredReports(selected.reports);
-    }
-  };
-
   const handleSearch = (searchValue: string) => {
-    setFilteredReports(
-      students
-        .find(student => student.name === selectedStudent)?.reports
-        .filter((report) =>
-          report.course.toLowerCase().includes(searchValue.toLowerCase())
-        ) || []
+    setFilteredReports((prevReports) =>
+      prevReports.filter((report) =>
+        report.course.toLowerCase().includes(searchValue.toLowerCase())
+      )
     );
   };
 
@@ -70,26 +69,51 @@ const AdminReportPage: React.FC = () => {
     setFilteredReports(sortedReports);
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Container>
-      <Box sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-        <BackButtonComponent /> {/* Move the button slightly to the left */}
-
+      <Box sx={{ mb: 1, display: "flex", alignItems: "center", mt: "-20px" }}>
+        <BackButtonComponent />
         <Box sx={{ ml: 1 }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold',fontSize: '1.25rem' }}>Daily Report</Typography>
-          <Typography variant="h6" sx={{ mt: 1, color: 'textSecondary' }}>
-            {selectedStudent || 'No student selected'}
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
+          >
+            Daily Report
           </Typography>
-        
         </Box>
-        <Box sx={{ display: 'flex', gap: 1, ml: 'auto', mt: 1 }}>
-        <StudentSearchComponent students={students} onStudentSelect={handleStudentSelect}   />
-          <SearchBarComponent
-            onSearch={handleSearch}
-            sx={{ width: 300, height: 20 }}
-            // Set placeholder with selected student's name
+        <Box sx={{ display: "flex", gap: 1, ml: "auto", mt: 1 }}>
+          <SortByComponent
+            onSortChange={handleSortChange}
+            sx={{ width: 50, height: 40 }}
           />
-          <SortByComponent onSortChange={handleSortChange} sx={{ width: 50, height: 40 }} />
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>

@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -31,6 +30,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { useNavigate } from "react-router-dom";
 
 interface Trainee {
+  traineeId: number;
   traineeName: string;
   totalCourses: number;
   totalDailyReports: number;
@@ -110,16 +110,16 @@ const TraineeReport: React.FC = () => {
       return 0;
     });
 
-    const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-      <Tooltip {...props} arrow classes={{ popper: className }} />
-    ))(({}) => ({
-      [`& .${tooltipClasses.arrow}`]: {
-        color: "rgba(128, 97, 195)",
-      },
-      [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: "rgba(128, 97, 195)",
-      },
-    }));
+  const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({}) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "rgba(128, 97, 195)",
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "rgba(128, 97, 195)",
+    },
+  }));
 
   return (
     <Container sx={{ mt: "-20px"}}>
@@ -261,7 +261,13 @@ const TraineeReport: React.FC = () => {
                       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                     },
                   }}
-                  onClick={() => navigate("/Admin-WholeReport")}
+                  onClick={() => {
+                    // Store the traineeId in localStorage
+                    localStorage.setItem("traineeId", trainee.traineeId.toString());
+
+                    // Navigate to the next page
+                    navigate("/Admin-WholeReport");
+                  }}
                 >
                   <TableCell>{trainee.traineeName}</TableCell>
                   <TableCell>{trainee.totalCourses}</TableCell>
