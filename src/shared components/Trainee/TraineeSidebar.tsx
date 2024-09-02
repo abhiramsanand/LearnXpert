@@ -62,9 +62,9 @@ const TraineeSidebar: React.FC = () => {
       to: "/Trainee-DailyReport",
     },
     {
-      text: "Enquiry",
-      icon: <HelpOutlineIcon />,
-      to: "/Trainee-Enquiry",
+      // text: "Enquiry",
+      // icon: <HelpOutlineIcon />,
+      // to: "/Trainee-Enquiry",
     },
   ];
 
