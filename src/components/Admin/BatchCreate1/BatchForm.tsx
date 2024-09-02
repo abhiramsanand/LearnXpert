@@ -11,19 +11,26 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  InputAdornment,
 } from "@mui/material";
 import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import * as XLSX from "xlsx";
 import SuccessModal from "./SuccessModal";
-
+import SearchIcon from "@mui/icons-material/Search";
+ 
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
   const [batchName, setBatchName] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [setFilePreview] = useState<string | ArrayBuffer | null>(null);
+  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [fileSelected, setFileSelected] = useState<boolean>(false);
@@ -31,7 +38,8 @@ const BatchForm: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [excelData, setExcelData] = useState<any[][]>([]);
-
+  const [searchTerm, setSearchTerm] = useState<string>("");
+ 
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
@@ -48,16 +56,16 @@ const BatchForm: React.FC = () => {
         alert("Error fetching programs.");
       }
     };
-
+ 
     fetchPrograms();
   }, []);
-
+ 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
       setFileSelected(true);
-
+ 
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
@@ -70,7 +78,7 @@ const BatchForm: React.FC = () => {
       reader.readAsArrayBuffer(selectedFile);
     }
   };
-
+ 
   const handleExcelDataChange = (
     value: string,
     rowIndex: number,
@@ -80,13 +88,13 @@ const BatchForm: React.FC = () => {
     updatedData[rowIndex][cellIndex] = value;
     setExcelData(updatedData);
   };
-
+ 
   const handleSubmit = async () => {
     if (selectedProgram === "") {
       setErrorMessages(["Please select a program."]);
       return;
     }
-
+ 
     const formData = new FormData();
     const batchData = JSON.stringify({
       batchName,
@@ -95,28 +103,28 @@ const BatchForm: React.FC = () => {
       programName: selectedProgram,
     });
     formData.append("batchData", batchData);
-
+ 
     if (file) {
       // Convert the updated excelData back to a workbook
       const ws = XLSX.utils.aoa_to_sheet(excelData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
+ 
       // Convert workbook to a binary array
       const updatedFile = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-
+ 
       // Convert the binary array to a Blob
       const updatedBlob = new Blob([updatedFile], {
         type: "application/octet-stream",
       });
       const updatedFileObj = new File([updatedBlob], file.name);
-
+ 
       formData.append("file", updatedFileObj);
     } else {
       setErrorMessages(["Please upload a file."]);
       return;
     }
-
+ 
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/batches/create",
@@ -139,17 +147,36 @@ const BatchForm: React.FC = () => {
       }
     }
   };
-
+ 
   const handleCloseSuccessModal = () => {
     setSuccessModalOpen(false);
   };
-
+ 
+  // Filtered data based on the search term
+  const filteredExcelData = excelData.filter((row) =>
+    row.some((cell) =>
+      cell.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
   return (
     <Container
       sx={{
         maxHeight: "calc(100vh - 64px)",
         overflowY: "auto",
         p: 2,
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#f1f1f1",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#888",
+          borderRadius: "4px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#555",
+        },
       }}
     >
       <Box
@@ -159,13 +186,12 @@ const BatchForm: React.FC = () => {
           bgcolor: "#ffffff",
           borderRadius: "15px",
           boxShadow: "4px 8px 10px rgba(0, 0, 0, 0.4)",
-          minHeight: "100vh",
         }}
       >
-        <Typography variant="h4" fontFamily={"Montserrat, sans-serif"}>
+        <Typography variant="h4" fontFamily={"Montserrat, sans-serif"} mb={3}>
           CREATE BATCH
         </Typography>
-
+ 
         <form>
           <Grid container spacing={3}>
             <Grid container item xs={12} spacing={3} alignItems="center">
@@ -187,7 +213,7 @@ const BatchForm: React.FC = () => {
                   </Select>
                 </FormControl>
               </Grid>
-
+ 
               <Grid item xs={6}>
                 <TextField
                   label="Batch Name"
@@ -198,14 +224,14 @@ const BatchForm: React.FC = () => {
                   InputProps={{
                     sx: {
                       bgcolor: "#FFF",
-                      width: "100%",
                       borderRadius: "4px",
                     },
                   }}
+                  fullWidth
                 />
               </Grid>
             </Grid>
-
+ 
             <Grid container item xs={12} spacing={3} mt={2}>
               <Grid item xs={6}>
                 <TextField
@@ -219,12 +245,12 @@ const BatchForm: React.FC = () => {
                   }}
                   sx={{
                     bgcolor: "#FFF",
-                    width: "100%",
                     borderRadius: "4px",
                   }}
+                  fullWidth
                 />
               </Grid>
-
+ 
               <Grid item xs={6}>
                 <TextField
                   label="End Date (Tentative)"
@@ -236,19 +262,19 @@ const BatchForm: React.FC = () => {
                     shrink: true,
                   }}
                   sx={{
-                    width: "100%",
                     borderRadius: "4px",
                   }}
+                  fullWidth
                 />
               </Grid>
             </Grid>
-
+ 
             <Grid item xs={12}>
               <Typography variant="caption" color="textSecondary">
                 Upload the list of trainees (Format: .xlsx)
               </Typography>
             </Grid>
-
+ 
             <Grid item xs={12} display="flex" alignItems="center">
               <Button
                 variant="contained"
@@ -275,7 +301,7 @@ const BatchForm: React.FC = () => {
                   onChange={handleFileChange}
                 />
               </Button>
-
+ 
               {fileSelected && (
                 <CheckCircleIcon
                   sx={{
@@ -285,127 +311,130 @@ const BatchForm: React.FC = () => {
                   }}
                 />
               )}
-
+ 
               <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
                 <a
-                  href="/BatchCreationTemplate.xlsx"
-                  download
-                  style={{ color: "#6C63FF" }}
+                  href="https://example.com/template.xlsx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "#3f51b5",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
                 >
                   here
                 </a>
               </Typography>
             </Grid>
+ 
+            {excelData.length > 0 && (
+              <Grid item xs={12} mt={2}>
+                <Typography variant="h6" mb={2}>
+                  Excel File Content
+                </Typography>
+                <Grid container spacing={2} mb={2}>
 
-            {file && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="caption">Uploaded file:</Typography>
-                <Typography variant="body2">{file.name}</Typography>
-
-                {file.type.includes("sheet") && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="h6">Excel File Content:</Typography>
-                    <table>
-                      <thead>
-                        <tr>
-                          {excelData[0]?.map(
-                            (header: string, index: number) => (
-                              <th key={index}>{header}</th>
-                            )
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {excelData
-                          .slice(1)
-                          .map((row: any[], rowIndex: number) => (
-                            <tr key={rowIndex}>
-                              {row.map((cell, cellIndex) => (
-                                <td key={cellIndex}>
-                                  <TextField
-                                    value={cell}
-                                    onChange={(e) =>
-                                      handleExcelDataChange(
-                                        e.target.value,
-                                        rowIndex + 1,
-                                        cellIndex
-                                      )
-                                    }
-                                    variant="outlined"
-                                    size="small"
-                                  />
-                                </td>
-                              ))}
-                            </tr>
+</Grid>
+ 
+                <Box
+                  sx={{
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                    "&::-webkit-scrollbar": {
+                      width: "8px",
+                    },
+                    "&::-webkit-scrollbar-track": {
+                      background: "#f1f1f1",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                      background: "#888",
+                      borderRadius: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb:hover": {
+                      background: "#555",
+                    },
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Sl. No</TableCell>
+                        {excelData[0].map((cell: any, index: number) => (
+                          <TableCell key={index}>{cell}</TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredExcelData.slice(1).map((row, rowIndex) => (
+                        <TableRow key={rowIndex}>
+                          <TableCell>{rowIndex + 1}</TableCell>
+                          {row.map((cell, cellIndex) => (
+                            <TableCell key={cellIndex}>
+                              <TextField
+                                value={cell}
+                                onChange={(e) =>
+                                  handleExcelDataChange(
+                                    e.target.value,
+                                    rowIndex + 1,
+                                    cellIndex
+                                  )
+                                }
+                                variant="standard"
+                              />
+                            </TableCell>
                           ))}
-                      </tbody>
-                    </table>
-                  </Box>
-                )}
-              </Box>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </Grid>
             )}
-
-            {errorMessages.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                {errorMessages.map((message, index) => (
-                  <Typography key={index} color="error">
-                    {message}
-                  </Typography>
-                ))}
-              </Box>
-            )}
-
-            <Grid item xs={12} sm={6}>
-              <Button
-                variant="outlined"
-                sx={{
-                  color: "#8061C3",
-                  borderColor: "#8061C3",
-                  borderRadius: "4px",
-                  height: "36px",
-                  width: "90px",
-                  fontSize: "16px",
-                  marginRight: "26px",
-                  "&:hover": {
-                    borderColor: "#D0C7FF",
-                    bgcolor: "white",
-                  },
-                }}
-                onClick={() => navigate(-1)}
-              >
-                CANCEL
-              </Button>
-
-              <Button
-                variant="contained"
-                sx={{
-                  bgcolor: "#8061C3",
-                  color: "#FFFFFF",
-                  borderRadius: "4px",
-                  height: "36px",
-                  width: "90px",
-                  fontSize: "16px",
-                  "&:hover": {
-                    bgcolor: "#D0C7FF",
-                  },
-                }}
-                onClick={handleSubmit}
-              >
-                SUBMIT
-              </Button>
-            </Grid>
           </Grid>
+ 
+          {errorMessages.length > 0 && (
+            <Box mt={2}>
+              {errorMessages.map((message, index) => (
+                <Typography key={index} color="error">
+                  {message}
+                </Typography>
+              ))}
+            </Box>
+          )}
+ 
+          <Box mt={4} display="flex" justifyContent="center">
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "24px",
+                width: "225px",
+                height: "52px",
+                bgcolor: "#6D5BD0",
+                fontSize: "18px",
+                fontWeight: "bold",
+                "&:hover": {
+                  bgcolor: "#D0C7FF",
+                },
+              }}
+              onClick={handleSubmit}
+            >
+              Create Batch
+            </Button>
+          </Box>
         </form>
       </Box>
-
-      <SuccessModal
-        open={successModalOpen}
-        onClose={handleCloseSuccessModal}
-        message={successMessage || "Batch created successfully!"}
-      />
+ 
+      {successModalOpen && (
+        <SuccessModal
+          open={successModalOpen}
+          message={successMessage}
+          onClose={handleCloseSuccessModal}
+        />
+      )}
     </Container>
   );
 };
-
+ 
 export default BatchForm;
