@@ -34,8 +34,8 @@ const PercipioAssessment: React.FC = () => {
         const { scoreData, traineeData, timestamp } = JSON.parse(cachedData);
         const currentTime = new Date().getTime();
 
-        // Check if cached data is older than 5 minutes (300000 ms)
-        if (currentTime - timestamp < 300000) {
+        // Check if cached data is older than 1 hour (3600000 ms)
+        if (currentTime - timestamp < 3600000) {
           setScoreData(scoreData);
           setTraineeData(traineeData);
           return;

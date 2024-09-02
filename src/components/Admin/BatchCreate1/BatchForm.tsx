@@ -23,14 +23,16 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import * as XLSX from "xlsx";
 import SuccessModal from "./SuccessModal";
 import SearchIcon from "@mui/icons-material/Search";
- 
+
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
   const [batchName, setBatchName] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
+  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(
+    null
+  );
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [fileSelected, setFileSelected] = useState<boolean>(false);
@@ -39,7 +41,7 @@ const BatchForm: React.FC = () => {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [excelData, setExcelData] = useState<any[][]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
- 
+
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
@@ -56,16 +58,16 @@ const BatchForm: React.FC = () => {
         alert("Error fetching programs.");
       }
     };
- 
+
     fetchPrograms();
   }, []);
- 
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
       setFileSelected(true);
- 
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
@@ -78,7 +80,7 @@ const BatchForm: React.FC = () => {
       reader.readAsArrayBuffer(selectedFile);
     }
   };
- 
+
   const handleExcelDataChange = (
     value: string,
     rowIndex: number,
@@ -88,13 +90,13 @@ const BatchForm: React.FC = () => {
     updatedData[rowIndex][cellIndex] = value;
     setExcelData(updatedData);
   };
- 
+
   const handleSubmit = async () => {
     if (selectedProgram === "") {
       setErrorMessages(["Please select a program."]);
       return;
     }
- 
+
     const formData = new FormData();
     const batchData = JSON.stringify({
       batchName,
@@ -103,28 +105,28 @@ const BatchForm: React.FC = () => {
       programName: selectedProgram,
     });
     formData.append("batchData", batchData);
- 
+
     if (file) {
       // Convert the updated excelData back to a workbook
       const ws = XLSX.utils.aoa_to_sheet(excelData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
- 
+
       // Convert workbook to a binary array
       const updatedFile = XLSX.write(wb, { bookType: "xlsx", type: "array" });
- 
+
       // Convert the binary array to a Blob
       const updatedBlob = new Blob([updatedFile], {
         type: "application/octet-stream",
       });
       const updatedFileObj = new File([updatedBlob], file.name);
- 
+
       formData.append("file", updatedFileObj);
     } else {
       setErrorMessages(["Please upload a file."]);
       return;
     }
- 
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/batches/create",
@@ -147,11 +149,11 @@ const BatchForm: React.FC = () => {
       }
     }
   };
- 
+
   const handleCloseSuccessModal = () => {
     setSuccessModalOpen(false);
   };
- 
+
   // Filtered data based on the search term
   const filteredExcelData = excelData.filter((row) =>
     row.some((cell) =>
@@ -181,9 +183,8 @@ const BatchForm: React.FC = () => {
     >
       <Box
         sx={{
-          mt: 1,
+          mt: "-50px",
           p: 4,
-          bgcolor: "#ffffff",
           borderRadius: "15px",
           boxShadow: "4px 8px 10px rgba(0, 0, 0, 0.4)",
         }}
@@ -191,7 +192,7 @@ const BatchForm: React.FC = () => {
         <Typography variant="h4" fontFamily={"Montserrat, sans-serif"} mb={3}>
           CREATE BATCH
         </Typography>
- 
+
         <form>
           <Grid container spacing={3}>
             <Grid container item xs={12} spacing={3} alignItems="center">
@@ -213,7 +214,7 @@ const BatchForm: React.FC = () => {
                   </Select>
                 </FormControl>
               </Grid>
- 
+
               <Grid item xs={6}>
                 <TextField
                   label="Batch Name"
@@ -231,7 +232,7 @@ const BatchForm: React.FC = () => {
                 />
               </Grid>
             </Grid>
- 
+
             <Grid container item xs={12} spacing={3} mt={2}>
               <Grid item xs={6}>
                 <TextField
@@ -250,7 +251,7 @@ const BatchForm: React.FC = () => {
                   fullWidth
                 />
               </Grid>
- 
+
               <Grid item xs={6}>
                 <TextField
                   label="End Date (Tentative)"
@@ -268,13 +269,13 @@ const BatchForm: React.FC = () => {
                 />
               </Grid>
             </Grid>
- 
+
             <Grid item xs={12}>
               <Typography variant="caption" color="textSecondary">
                 Upload the list of trainees (Format: .xlsx)
               </Typography>
             </Grid>
- 
+
             <Grid item xs={12} display="flex" alignItems="center">
               <Button
                 variant="contained"
@@ -301,7 +302,7 @@ const BatchForm: React.FC = () => {
                   onChange={handleFileChange}
                 />
               </Button>
- 
+
               {fileSelected && (
                 <CheckCircleIcon
                   sx={{
@@ -311,7 +312,7 @@ const BatchForm: React.FC = () => {
                   }}
                 />
               )}
- 
+
               <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
                 <a
@@ -328,16 +329,14 @@ const BatchForm: React.FC = () => {
                 </a>
               </Typography>
             </Grid>
- 
+
             {excelData.length > 0 && (
               <Grid item xs={12} mt={2}>
                 <Typography variant="h6" mb={2}>
                   Excel File Content
                 </Typography>
-                <Grid container spacing={2} mb={2}>
+                <Grid container spacing={2} mb={2}></Grid>
 
-</Grid>
- 
                 <Box
                   sx={{
                     maxHeight: "300px",
@@ -393,7 +392,7 @@ const BatchForm: React.FC = () => {
               </Grid>
             )}
           </Grid>
- 
+
           {errorMessages.length > 0 && (
             <Box mt={2}>
               {errorMessages.map((message, index) => (
@@ -403,7 +402,7 @@ const BatchForm: React.FC = () => {
               ))}
             </Box>
           )}
- 
+
           <Box mt={4} display="flex" justifyContent="center">
             <Button
               variant="contained"
@@ -411,11 +410,11 @@ const BatchForm: React.FC = () => {
                 borderRadius: "24px",
                 width: "225px",
                 height: "52px",
-                bgcolor: "#6D5BD0",
+                bgcolor: "#8061C3",
                 fontSize: "18px",
                 fontWeight: "bold",
                 "&:hover": {
-                  bgcolor: "#D0C7FF",
+                  bgcolor: "#8061C3",
                 },
               }}
               onClick={handleSubmit}
@@ -425,7 +424,7 @@ const BatchForm: React.FC = () => {
           </Box>
         </form>
       </Box>
- 
+
       {successModalOpen && (
         <SuccessModal
           open={successModalOpen}
@@ -436,5 +435,5 @@ const BatchForm: React.FC = () => {
     </Container>
   );
 };
- 
+
 export default BatchForm;

@@ -318,7 +318,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                 }}
                 onClick={() => handleSort("estimatedCourses")}
               >
-                Days Completed
+                Courses Completed
                 <SwapVertIcon fontSize="small" />
               </TableCell>
             </TableRow>

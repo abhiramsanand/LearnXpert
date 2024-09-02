@@ -51,13 +51,29 @@ const ProgressTracker: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setLoading(true);
+    const fetchData = async () => {
+      const storedData = localStorage.getItem("traineeProgressData");
+      const currentTime = new Date().getTime();
 
-    fetch(
-      "http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number"
-    )
-      .then((response) => response.json())
-      .then((traineesData) => {
+      if (storedData) {
+        const { data, timestamp } = JSON.parse(storedData);
+        if (currentTime - timestamp < 3600000) { // 1 hour in milliseconds
+          setBatchDayNumber(data.batchDayNumber);
+          setProgressData(data.progress);
+          setTrainees(data.trainees);
+          setLoading(false);
+          return;
+        }
+      }
+
+      setLoading(true);
+
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number"
+        );
+        const traineesData = await response.json();
+
         if (traineesData.length === 0) {
           console.error("No trainee data available");
           setLoading(false);
@@ -86,12 +102,22 @@ const ProgressTracker: React.FC = () => {
         const progress = { behind, onTrack, ahead };
         setProgressData(progress);
         setTrainees(traineesData);
-        setLoading(false);
-      })
-      .catch((error) => {
+        
+        localStorage.setItem(
+          "traineeProgressData",
+          JSON.stringify({
+            data: { progress, trainees: traineesData, batchDayNumber },
+            timestamp: currentTime,
+          })
+        );
+      } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const data = {
