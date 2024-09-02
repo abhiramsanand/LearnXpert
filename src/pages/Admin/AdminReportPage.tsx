@@ -4,13 +4,13 @@ import SortByComponent from "../../components/Admin/DailyReport/SortByComponent"
 import ReportsTableComponent from "../../components/Admin/DailyReport/ReportTable";
 import BackButtonComponent from "../../components/Admin/DailyReport/BackButtonComponent";
 import axios from "axios";
-import { format } from "date-fns-tz";
 
 interface Report {
   day: string;
   course: string;
   timeTaken: string;
   status: string;
+  dailyReportId: number;
   keyLearnings: string;
   planForTomorrow: string;
 }
@@ -38,6 +38,7 @@ const AdminReportPage: React.FC = () => {
           day: new Date(course.courseDate).toISOString().slice(0, 10), // Updated line
           course: course.courseName,
           timeTaken: course.timeTaken.toString(),
+          dailyReportId: course.dailyReportId,
           status: "completed",
           keyLearnings: course.keyLearnings || "",
           planForTomorrow: course.planForTomorrow || "",
