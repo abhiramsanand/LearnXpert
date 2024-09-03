@@ -57,7 +57,7 @@ const ProgressTracker: React.FC = () => {
 
       if (storedData) {
         const { data, timestamp } = JSON.parse(storedData);
-        if (currentTime - timestamp < 0) { // 1 hour in milliseconds
+        if (currentTime - timestamp < 0) { 
           setBatchDayNumber(data.batchDayNumber);
           setProgressData(data.progress);
           setTrainees(data.trainees);
