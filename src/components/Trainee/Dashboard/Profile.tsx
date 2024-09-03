@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Paper, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import axios from "axios";
 
 // Define the type for the Profile data
@@ -12,6 +12,10 @@ interface ProfileData {
 
 const Profile: React.FC = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [batchCurrentDay, setBatchCurrentDay] = useState<number | null>(null);
+  const [traineeCurrentDay, setTraineeCurrentDay] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     // Get traineeId from local storage
@@ -20,12 +24,24 @@ const Profile: React.FC = () => {
     if (traineeId) {
       const fetchProfileData = async () => {
         try {
-          const response = await axios.get<ProfileData>(
-            `http://localhost:8080/api/v1/profiles/${traineeId}`
-          );
-          setProfile(response.data);
+          const [profileResponse, batchDayResponse, traineeDayResponse] =
+            await Promise.all([
+              axios.get<ProfileData>(
+                `http://localhost:8080/api/v1/profiles/${traineeId}`
+              ),
+              axios.get<number>(
+                `http://localhost:8080/api/trainees/1400/currentdaynumber`
+              ),
+              axios.get<{ lastDayNumber: number }>(
+                `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`
+              ),
+            ]);
+
+          setProfile(profileResponse.data);
+          setBatchCurrentDay(batchDayResponse.data); // Direct numeric value
+          setTraineeCurrentDay(traineeDayResponse.data.lastDayNumber); // Extract lastDayNumber
         } catch (error) {
-          console.error("Error fetching profile data:", error);
+          console.error("Error fetching data:", error);
         }
       };
 
@@ -44,7 +60,7 @@ const Profile: React.FC = () => {
     return `${day}-${month}-${year}`;
   };
 
-  if (!profile) {
+  if (!profile || batchCurrentDay === null || traineeCurrentDay === null) {
     return <Typography>Loading...</Typography>;
   }
 
@@ -58,7 +74,7 @@ const Profile: React.FC = () => {
         p: 1,
         mt: -2,
         width: "770px",
-        border: "1px solid rgba(128, 97, 195, 0.3)"
+        border: "1px solid rgba(128, 97, 195, 0.3)",
       }}
     >
       <Box sx={{ border: "1px solid rgba(128, 97, 195, 0.3)", p: 1 }}>
@@ -83,11 +99,13 @@ const Profile: React.FC = () => {
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap" }}>
           <Typography sx={{ color: "#8061C3" }}>
-            Batch's Current Day :
+            Batch's Current Day:
           </Typography>
-          <Typography sx={{ color: "#8061C3", mr: 4 }}>10</Typography>
-          <Typography sx={{ color: "#8061C3" }}>Your Current Day :</Typography>
-          <Typography sx={{ color: "#8061C3" }}>10</Typography>
+          <Typography sx={{ color: "#8061C3", mr: 4 }}>
+            {batchCurrentDay}
+          </Typography>
+          <Typography sx={{ color: "#8061C3" }}>Your Current Day:</Typography>
+          <Typography sx={{ color: "#8061C3" }}>{traineeCurrentDay}</Typography>
         </Box>
       </Box>
     </Container>

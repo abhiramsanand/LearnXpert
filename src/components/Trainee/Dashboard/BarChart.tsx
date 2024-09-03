@@ -64,7 +64,7 @@ const BarChart: React.FC = () => {
           labels,
           datasets: [
             {
-              label: "Actual Watch Time",
+              label: "Expected Watch Time",
               backgroundColor: "#DB5461",
               data: actualData,
               borderRadius: 30,
@@ -144,7 +144,7 @@ const BarChart: React.FC = () => {
         }}
       >
         <Typography sx={{ fontSize: "15px" }}>
-          Actual Watch Time VS Trainee Watch Time
+          Expected Watch Time VS Trainee Watch Time
         </Typography>
 
         <TextField
