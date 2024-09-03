@@ -17,14 +17,18 @@ const BarChart: React.FC = () => {
     labels: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
     datasets: [
       {
-        backgroundColor: "#BFAFE0",
+        label: "Actual Watch Time",
+        backgroundColor: "#DB5461",
         data: [65, 59, 80, 81, 56, 55, 40],
         borderRadius: 30,
+        barThickness: 20, // Reduced bar thickness
       },
       {
-        backgroundColor: "rgba(128, 97, 195, 1)",
+        label: "Trainee Watch Time",
+        backgroundColor: "#5B8C5A",
         data: [28, 48, 40, 19, 86, 27, 90],
         borderRadius: 30,
+        barThickness: 20, // Reduced bar thickness
       },
     ],
   };
@@ -54,7 +58,13 @@ const BarChart: React.FC = () => {
     },
     plugins: {
       legend: {
-        display: false,
+        display: true, // Display legend
+        position: "top", // Position legend at the top
+        labels: {
+          font: {
+            size: 12,
+          },
+        },
       },
     },
   };
@@ -62,11 +72,12 @@ const BarChart: React.FC = () => {
   return (
     <Box
       sx={{
-        height: "300px",
-        width: "100%",
+        height: "230px",
+        width: "770px",
+        mt: 1,
         boxShadow: "0px 4px 8px rgba(128, 97, 195, 0.25)",
         borderRadius: "8px",
-        p: 4,
+        p: 3,
         overflow: "hidden",
       }}
     >
@@ -74,16 +85,12 @@ const BarChart: React.FC = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Typography sx={{ fontSize: "15px", mr: 4 }}>
-          <span style={{ color: "#BFAFE0" }}>
-            Actual Watch Time
-          </span>{" "}
-          VS{" "}
-          <span style={{ color: "rgba(128, 97, 195, 1)" }}>
-            Trainee Watch Time
-          </span>
+        <Typography sx={{ fontSize: "15px" }}>
+          Actual Watch Time VS Trainee Watch Time
         </Typography>
 
         <TextField

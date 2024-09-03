@@ -1,50 +1,32 @@
-import React from 'react';
-import { Container, Box } from '@mui/material';
-import BarChart from './BarChart';
-import PieChart from './PieChart';
-import PieChart2 from './PieChart2';
+import React from "react";
+import { Container, Box } from "@mui/material";
+import BarChart from "./BarChart";
+import ILPexavg from "./ILPexavg";
+import PercipioScore from "./PercipioScore";
 
 const Graph: React.FC = () => {
-  const pieData = {
-    datasets: [
-      {
-        data: [72, 28],
-        backgroundColor: ['#8061C3', '#F5F5F5'],
-      },
-    ],
-  };
-
-  const pieData2 = {
-    datasets: [
-      {
-        data: [90, 10],
-        backgroundColor: ['#8061C3', '#F5F5F5'],
-      },
-    ],
-  };
-
-  const options = {
-    cutout: '70%',
-    plugins: {
-      tooltip: {
-        enabled: false,
-      },
-    },
-  };
-
   return (
-    <Container sx={{mt: '15px'}}>
-      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '80px' }}>
-          <Box>
-            <BarChart />
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <PieChart data={pieData} options={options}/>
-            <PieChart2 data={pieData2} options={options} />
-          </Box>
+    <Container sx={{ mt: "15px" }}>
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "space-between" }}>
+          <ILPexavg />
+          <PercipioScore />
+          <PercipioScore />
+        </Box>
+        <Box>
+          <BarChart />
+        </Box>
       </Box>
     </Container>
   );
-}
+};
 
 export default Graph;
