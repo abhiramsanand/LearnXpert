@@ -38,7 +38,11 @@ const DailyReportContainer: React.FC = () => {
     fetchCourses();
   }, [selectedDate, batchId, traineeId]);
 
-  const handleOpenReportModal = async (courseId: number, courseName: string, dailyReportId: number) => {
+  const handleOpenReportModal = async (
+    courseId: number,
+    courseName: string,
+    dailyReportId: number
+  ) => {
     try {
       const response = await fetch(
         `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
@@ -51,8 +55,6 @@ const DailyReportContainer: React.FC = () => {
       console.error("Error fetching course details:", error);
     }
   };
-  
-  
 
   const handleCloseReportModal = () => {
     setOpenReportModal(false);
@@ -140,15 +142,14 @@ const DailyReportContainer: React.FC = () => {
       </Container>
 
       <DailyReportModal
-  open={openReportModal}
-  handleClose={handleCloseReportModal}
-  courseName={courseDetails?.courseName || ''}
-  courseDetails={courseDetails}
-  setCourseDetails={setCourseDetails} 
-  traineeId={traineeId} 
-  courseId={courseDetails?.courseId || 0}
-/>
-
+        open={openReportModal}
+        handleClose={handleCloseReportModal}
+        courseName={courseDetails?.courseName || ""}
+        courseDetails={courseDetails}
+        setCourseDetails={setCourseDetails}
+        traineeId={traineeId}
+        courseId={courseDetails?.courseId || 0}
+      />
 
       <PendingSubmissionsModal
         open={openPendingModal}
