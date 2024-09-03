@@ -2,38 +2,39 @@ import React from "react";
 import { Card, CardContent, Typography, CardActionArea } from "@mui/material";
 import { styled } from "@mui/system";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-
+import dayjs from "dayjs"; // Import dayjs or another date formatting library
+ 
 interface AssessmentCardProps {
   title: string;
   description: string;
   date?: string;
   dateLabel?: string;
   score?: number;
-  onClick: () => void; // Add onClick prop
+  onClick: () => void;
 }
-
+ 
 const StyledCard = styled(Card)({
   height: "120px",
   display: "flex",
   alignItems: "center",
   padding: "10px",
 });
-
+ 
 const IconWrapper = styled("div")({
   marginRight: "10px",
 });
-
+ 
 const StyledCardContent = styled(CardContent)({
   padding: "6px",
   "&:last-child": {
     paddingBottom: "8px",
   },
 });
-
+ 
 const StyledTypography = styled(Typography)({
   fontSize: "14px",
 });
-
+ 
 const AssessmentCard: React.FC<AssessmentCardProps> = ({
   title,
   description,
@@ -42,6 +43,8 @@ const AssessmentCard: React.FC<AssessmentCardProps> = ({
   score,
   onClick,
 }) => {
+  const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format the date to 'YYYY-MM-DD'
+ 
   return (
     <StyledCard>
       <CardActionArea onClick={onClick}>
@@ -51,9 +54,9 @@ const AssessmentCard: React.FC<AssessmentCardProps> = ({
         <StyledCardContent>
           <StyledTypography variant="h6">{title}</StyledTypography>
           <StyledTypography variant="body2">{description}</StyledTypography>
-          {date && (
+          {formattedDate && (
             <StyledTypography variant="body2">
-              {dateLabel}: {date}
+              {dateLabel}: {formattedDate}
             </StyledTypography>
           )}
           {score !== undefined && (
@@ -64,5 +67,5 @@ const AssessmentCard: React.FC<AssessmentCardProps> = ({
     </StyledCard>
   );
 };
-
+ 
 export default AssessmentCard;
