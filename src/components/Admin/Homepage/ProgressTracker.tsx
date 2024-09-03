@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import TraineeModal from "./Modals/ProgressModal"; // Import the modal component
+import TraineeModal from "./Modals/ProgressModal";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -57,7 +57,7 @@ const ProgressTracker: React.FC = () => {
 
       if (storedData) {
         const { data, timestamp } = JSON.parse(storedData);
-        if (currentTime - timestamp < 3600000) { // 1 hour in milliseconds
+        if (currentTime - timestamp < 0) { // 1 hour in milliseconds
           setBatchDayNumber(data.batchDayNumber);
           setProgressData(data.progress);
           setTrainees(data.trainees);
@@ -69,30 +69,26 @@ const ProgressTracker: React.FC = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/v1/ilpex/traineeprogress/trainee/last-accessed-day-number"
-        );
-        const traineesData = await response.json();
+        const [traineeResponse, batchResponse] = await Promise.all([
+          fetch("http://localhost:8080/api/trainees/batch/15/currentday"),
+          fetch("http://localhost:8080/api/trainees/1400/currentdaynumber"),
+        ]);
 
-        if (traineesData.length === 0) {
-          console.error("No trainee data available");
-          setLoading(false);
-          return;
-        }
+        const traineeData = await traineeResponse.json();
+        const batchData = await batchResponse.json();
 
-        const batchDayNumber = traineesData[0].batchDayNumber;
-        setBatchDayNumber(batchDayNumber);
+        const batchDayNumber = batchData;
 
         let behind = 0;
         let onTrack = 0;
         let ahead = 0;
 
-        for (const trainee of traineesData) {
-          const { traineeDayNumber } = trainee;
+        for (const trainee of traineeData) {
+          const { lastDayNumber } = trainee;
 
-          if (traineeDayNumber < batchDayNumber) {
+          if (lastDayNumber < batchDayNumber) {
             behind++;
-          } else if (traineeDayNumber === batchDayNumber) {
+          } else if (lastDayNumber === batchDayNumber) {
             onTrack++;
           } else {
             ahead++;
@@ -101,12 +97,17 @@ const ProgressTracker: React.FC = () => {
 
         const progress = { behind, onTrack, ahead };
         setProgressData(progress);
-        setTrainees(traineesData);
-        
+        setTrainees(
+          traineeData.map((trainee: { traineeName: string; lastDayNumber: number }) => ({
+            traineeName: trainee.traineeName,
+            traineeDayNumber: trainee.lastDayNumber,
+          }))
+        );
+
         localStorage.setItem(
           "traineeProgressData",
           JSON.stringify({
-            data: { progress, trainees: traineesData, batchDayNumber },
+            data: { progress, trainees: traineeData, batchDayNumber },
             timestamp: currentTime,
           })
         );
@@ -201,7 +202,7 @@ const ProgressTracker: React.FC = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         batchDayNumber={batchDayNumber}
-        trainees={trainees} // Pass all trainees to the modal
+        trainees={trainees}
       />
     </Box>
   );

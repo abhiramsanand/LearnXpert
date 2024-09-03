@@ -21,7 +21,7 @@ interface TraineeCourseReportData {
   totalDuration: string;
   estimatedDuration: string;
   totalCourses: number;
-  estimatedCourses: number;
+  lastDayNumber: number;
 }
 
 interface TraineeCourseReportProps {
@@ -59,29 +59,28 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
       );
       const totalDaysCompletedData = await totalDaysCompletedResponse.json();
 
-      // Fetch distinct course duration count per trainee
-      const distinctCourseCountResponse = await fetch(
-        `http://localhost:8080/api/v1/ilpex/traineeprogress/course-count/${batchId}`
+      // Fetch trainee's last day completed
+      const lastDayCompletedResponse = await fetch(
+        `http://localhost:8080/api/trainees/batch/15/currentday`
       );
-      const distinctCourseCountData = await distinctCourseCountResponse.json();
+      const lastDayCompletedData = await lastDayCompletedResponse.json();
 
-      // Combine data and map each trainee's estimated duration
+      // Combine data and map each trainee's last day completed
       const combinedData: TraineeCourseReportData[] = courseDurationData.map(
         (course: any) => {
-          const estimatedDuration = course.totalCourseDuration;
-          const estimatedCourses =
-            distinctCourseCountData.find(
+          const lastDayNumber =
+            lastDayCompletedData.find(
               (data: any) => data.traineeName === course.traineeName
-            )?.distinctCourseDurationCount || 0;
+            )?.lastDayNumber || 0;
 
           return {
             traineeName: course.traineeName,
             totalDuration: formatMinutesToHours(
               totalDurationData.totalDurationMinutes
             ),
-            estimatedDuration: formatSecondsToHours(estimatedDuration),
+            estimatedDuration: formatSecondsToHours(course.totalCourseDuration),
             totalCourses: totalDaysCompletedData.totalCourseDaysCompleted,
-            estimatedCourses: estimatedCourses,
+            lastDayNumber: lastDayNumber,
           };
         }
       );
@@ -140,8 +139,8 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
     [searchTerm, reportData]
   );
 
-  const getTextStyle = (totalCourses: number, estimatedCourses: number) => {
-    const difference = totalCourses - estimatedCourses;
+  const getTextStyle = (totalCourses: number, lastDayNumber: number) => {
+    const difference = totalCourses - lastDayNumber;
     if (difference > 4) {
       return {
         backgroundColor: "#DB5461",
@@ -264,14 +263,13 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   backgroundColor: "#F1EDEE",
                   fontSize: "14px",
                   cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
                 }}
                 onClick={() => handleSort("traineeName")}
               >
-                Trainee Name
-                <SwapVertIcon fontSize="small" />
+                <Box display="flex" alignItems="center" gap="4px">
+                  Trainee Name
+                  <SwapVertIcon fontSize="small" />
+                </Box>
               </TableCell>
               <TableCell
                 sx={{
@@ -288,14 +286,13 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   backgroundColor: "#F1EDEE",
                   fontSize: "14px",
                   cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
                 }}
                 onClick={() => handleSort("estimatedDuration")}
               >
-                Trainee Watchtime
-                <SwapVertIcon fontSize="small" />
+                <Box display="flex" alignItems="center" gap="4px">
+                  Estimated Duration
+                  <SwapVertIcon fontSize="small" />
+                </Box>
               </TableCell>
               <TableCell
                 sx={{
@@ -304,7 +301,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   fontSize: "14px",
                 }}
               >
-                Total Days
+                Total days
               </TableCell>
               <TableCell
                 sx={{
@@ -312,39 +309,28 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   backgroundColor: "#F1EDEE",
                   fontSize: "14px",
                   cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
                 }}
-                onClick={() => handleSort("estimatedCourses")}
+                onClick={() => handleSort("lastDayNumber")}
               >
-                Courses Completed
-                <SwapVertIcon fontSize="small" />
+                <Box display="flex" alignItems="center" gap="4px">
+                  Days Completed
+                  <SwapVertIcon fontSize="small" />
+                </Box>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map((trainee, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
-                }}
-              >
-                <TableCell>{trainee.traineeName}</TableCell>
-                <TableCell>{trainee.totalDuration}</TableCell>
-                <TableCell>{trainee.estimatedDuration}</TableCell>
-                <TableCell>
-                  <Typography>{trainee.totalCourses}</Typography>
-                </TableCell>
+            {filteredData.map((row) => (
+              <TableRow key={row.traineeName}>
+                <TableCell>{row.traineeName}</TableCell>
+                <TableCell>{row.totalDuration}</TableCell>
+                <TableCell>{row.estimatedDuration}</TableCell>
+                <TableCell>{row.totalCourses}</TableCell>
                 <TableCell>
                   <Typography
-                    sx={getTextStyle(
-                      trainee.totalCourses,
-                      trainee.estimatedCourses
-                    )}
+                    sx={getTextStyle(row.totalCourses, row.lastDayNumber)}
                   >
-                    {trainee.estimatedCourses}
+                    {row.lastDayNumber}
                   </Typography>
                 </TableCell>
               </TableRow>
