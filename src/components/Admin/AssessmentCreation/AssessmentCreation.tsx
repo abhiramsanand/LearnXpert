@@ -10,6 +10,7 @@ import {
   Grid,
   Input,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -22,12 +23,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./AssessmentCreation.module.css";
- 
+
 interface Batch {
   id: number;
   batchName: string;
 }
- 
+
 const AssessmentCreation: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [batch, setBatch] = useState<number | string>("");
@@ -35,11 +36,13 @@ const AssessmentCreation: React.FC = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [batches, setBatches] = useState<Batch[]>([]);
- 
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
   const [modalTitle, setModalTitle] = useState<string>("");
- 
+
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
+
   useEffect(() => {
     const fetchBatches = async () => {
       try {
@@ -48,7 +51,7 @@ const AssessmentCreation: React.FC = () => {
           const data = await response.json();
           setBatches(data);
           if (data.length > 0) {
-            setBatch(data[0].id);  
+            setBatch(data[0].id);
           }
         } else {
           console.error("Failed to fetch batches:", response.statusText);
@@ -57,27 +60,29 @@ const AssessmentCreation: React.FC = () => {
         console.error("Error fetching batches:", error);
       }
     };
- 
+
     fetchBatches();
   }, []);
- 
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setFile(event.target.files[0]);
     }
   };
- 
+
   const showModal = (title: string, message: string) => {
     setModalTitle(title);
     setModalMessage(message);
     setOpenModal(true);
   };
- 
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
- 
+
   const handleSubmit = async () => {
+    setLoading(true); // Start loading
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("batchId", batch.toString());
@@ -92,13 +97,7 @@ const AssessmentCreation: React.FC = () => {
     if (file) {
       formData.append("file", file);
     }
- 
-    // Debugging logs
-    console.log("Form Data:");
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
- 
+
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/assessments/create",
@@ -107,7 +106,7 @@ const AssessmentCreation: React.FC = () => {
           body: formData,
         }
       );
- 
+
       if (response.ok) {
         showModal("Success", "Assessment created successfully!");
       } else {
@@ -117,10 +116,11 @@ const AssessmentCreation: React.FC = () => {
     } catch (error) {
       console.error("Error creating assessment:", error);
       showModal("Error", "An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // End loading
     }
   };
- 
- 
+
   return (
     <Box>
       <Typography
@@ -135,7 +135,7 @@ const AssessmentCreation: React.FC = () => {
       >
         CREATE ASSESSMENT
       </Typography>
- 
+
       <Box className={styles.formSection}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -209,7 +209,7 @@ const AssessmentCreation: React.FC = () => {
           </Grid>
         </Grid>
       </Box>
- 
+
       <Grid container className={styles.formSection}>
         <Grid item xs={12} sm={6}>
           <Typography
@@ -266,7 +266,7 @@ const AssessmentCreation: React.FC = () => {
           </LocalizationProvider>
         </Grid>
       </Grid>
- 
+
       <Box className={styles.uploadSection}>
         <Typography
           sx={{
@@ -319,29 +319,42 @@ const AssessmentCreation: React.FC = () => {
           </Link>
         </Box>
       </Box>
- 
+
       <Box className={styles.buttonSection} gap={4}>
         <Button
           variant="contained"
           onClick={handleSubmit}
           size="small"
+          disabled={loading} // Disable button while loading
           sx={{
-            borderRadius: "20px",
+            width: "10%",
             backgroundColor: "#8061C3",
-            width: "100px",
             "&:hover": {
               backgroundColor: "#6A529D",
             },
           }}
         >
-          Submit
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Submit"}
         </Button>
-        <RouterLink to="/Admin-Assessments" className={styles.cancelButton}>
-          <Button variant="outlined" color="secondary" size="small">
-            Cancel
-          </Button>
-        </RouterLink>
+
+        <Button
+          variant="outlined"
+          component={RouterLink}
+          to="/admin/assessment-table"
+          size="small"
+          sx={{
+            width: "10%",
+            color: "#8061C3",
+            borderColor: "#8061C3",
+            "&:hover": {
+              backgroundColor: "#6A529D",
+            },
+          }}
+        >
+          Cancel
+        </Button>
       </Box>
+
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>{modalTitle}</DialogTitle>
         <DialogContent>
@@ -349,12 +362,12 @@ const AssessmentCreation: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
-            Close
+            OK
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
 };
- 
+
 export default AssessmentCreation;

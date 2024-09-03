@@ -51,13 +51,14 @@ const Profile: React.FC = () => {
     }
   }, []);
 
-  // Function to format today's date
+  // Function to format today's date in "Month day, Year" format
   const formatDate = () => {
     const today = new Date();
-    const day = today.getDate().toString().padStart(2, "0");
-    const month = (today.getMonth() + 1).toString().padStart(2, "0");
-    const year = today.getFullYear();
-    return `${day}-${month}-${year}`;
+    return today.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   if (!profile || batchCurrentDay === null || traineeCurrentDay === null) {
