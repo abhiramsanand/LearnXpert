@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Paper, Menu, MenuItem, TablePagination } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import FilterListIcon from '@mui/icons-material/FilterList'; // Import filter icon
+import FilterListIcon from '@mui/icons-material/FilterList';
 import ReportModalComponent from './ReportModalComponent';
+import axios from 'axios';
 
 interface Report {
   day: string;
@@ -11,6 +12,7 @@ interface Report {
   status: string;
   keyLearnings: string;
   planForTomorrow: string;
+  dailyReportId: number;  // Include dailyReportId for fetching detailed report
 }
 
 interface ReportsTableComponentProps {
@@ -23,9 +25,30 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
   const [selectedReportIndex, setSelectedReportIndex] = useState<number | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [reportDetails, setReportDetails] = useState<Report | null>(null); // State to hold detailed report data
 
-  const handleViewReport = (index: number) => {
-    setSelectedReportIndex(index);
+  // Function to fetch detailed report data when the "eye" icon is clicked
+  const handleViewReport = async (index: number) => {
+    const selectedReport = reports[index];
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${selectedReport.dailyReportId}`
+      );
+
+      const { keylearnings, planfortomorrow } = response.data;
+
+      const updatedReport = {
+        ...selectedReport,
+        keyLearnings: keylearnings,
+        planForTomorrow: planfortomorrow,
+      };
+
+      setSelectedReportIndex(index);
+      setReportDetails(updatedReport);
+    } catch (error) {
+      console.error("Error fetching detailed report data:", error);
+    }
   };
 
   const handlePrevious = () => {
@@ -59,7 +82,7 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
   };
 
   const filteredReports = statusFilter
-    ? reports.filter(report => report.status === statusFilter)
+    ? reports.filter((report) => report.status === statusFilter)
     : reports;
 
   const displayedReports = filteredReports.slice(
@@ -68,20 +91,20 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
   );
 
   return (
-    <Paper sx={{ overflow: 'auto', maxHeight: 400, display: 'flex', flexDirection: 'column' }}>
+    <Paper sx={{ overflow: 'auto', maxHeight: 400, display: 'flex', flexDirection: 'column', mt: "30px" }}>
       <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 5px' }}>
         <TableHead>
           <TableRow sx={{ height: 48 }}>
-            <TableCell sx={{ padding: '4px 8px',fontWeight:'bold' }}>Day</TableCell>
-            <TableCell sx={{ padding: '4px 8px',fontWeight:'bold' }}>Course</TableCell>
-            <TableCell sx={{ padding: '4px 8px',fontWeight:'bold' }}>Time Taken</TableCell>
-            <TableCell sx={{ padding: '4px 8px',fontWeight:'bold' }}>
+            <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold' }}>Day</TableCell>
+            <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold' }}>Course</TableCell>
+            <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold', whiteSpace: "nowrap" }}>Time Taken</TableCell>
+            <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold', whiteSpace: "nowrap" }}>
               Status
               <IconButton onClick={handleFilterClick} size="small">
                 <FilterListIcon />
               </IconButton>
             </TableCell>
-            <TableCell sx={{ padding: '4px 8px',fontWeight:'bold' }}>Actions</TableCell>
+            <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold' }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,13 +113,13 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
               key={index}
               sx={{
                 height: 48,
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add shadow effect to rows
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', 
                 '&:not(:last-child)': {
-                  marginBottom: '1px', // Add space between rows
-                }
+                  marginBottom: '1px',
+                },
               }}
             >
-              <TableCell sx={{ padding: '4px 8px' }}>{report.day}</TableCell>
+              <TableCell sx={{ padding: '4px 8px', whiteSpace: "nowrap" }}>{report.day}</TableCell>
               <TableCell sx={{ padding: '4px 8px' }}>{report.course}</TableCell>
               <TableCell sx={{ padding: '4px 8px' }}>{report.timeTaken}</TableCell>
               <TableCell
@@ -126,16 +149,16 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
         onRowsPerPageChange={handleChangeRowsPerPage}
         sx={{
           alignSelf: 'center',
-          border:'none',
+          border: 'none',
           '& .MuiTablePagination-select': {
-            border: 'none', // Remove border from rows per page select
+            border: 'none',
           },
           '& .MuiTablePagination-actions': {
-            border: 'none', // Remove border from pagination actions
+            border: 'none',
           },
           '& .MuiTablePagination-spacer': {
-            display: 'none', // Hide any spacers if needed
-          }
+            display: 'none',
+          },
         }}
       />
       <Menu
@@ -144,14 +167,14 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem onClick={() => handleFilterClose('pending')}>Pending</MenuItem>
-        <MenuItem onClick={() => handleFilterClose('submitted')}>Submitted</MenuItem>
+        <MenuItem onClick={() => handleFilterClose('completed')}>Completed</MenuItem>
         <MenuItem onClick={() => handleFilterClose(null)}>All</MenuItem>
       </Menu>
-      {selectedReportIndex !== null && (
+      {selectedReportIndex !== null && reportDetails && (
         <ReportModalComponent
           open={selectedReportIndex !== null}
           onClose={() => setSelectedReportIndex(null)}
-          report={filteredReports[selectedReportIndex]}
+          report={reportDetails}
           onPrevious={handlePrevious}
           onNext={handleNext}
         />

@@ -92,7 +92,7 @@ const NewAssessmentPage: React.FC = () => {
   
 
   return (
-    <Container sx={{mt: "50px"}}>
+    <Container sx={{mt: "20px"}}>
       <Sidebar>
         <SidebarHeader>
           <SearchBar onSearchChange={handleSearchChange} />

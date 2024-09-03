@@ -1,42 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography } from '@mui/material';
-
-import SearchBarComponent from '../../components/Trainee/WholeReport/SearchBarComponent';
-import SortByComponent from '../../components/Trainee/WholeReport/SortByComponent';
-import ReportsTableComponent from '../../components/Trainee/WholeReport/ReportsTableComponent';
-import BackButtonComponent from '../../components/Trainee/WholeReport/BackButtonComponent';
+import React, { useState, useEffect } from "react";
+import { Container, Box, Typography } from "@mui/material";
+import SortByComponent from "../../components/Admin/DailyReport/SortByComponent";
+import ReportsTableComponent from "../../components/Admin/DailyReport/ReportTable";
+import BackButtonComponent from "../../components/Admin/DailyReport/BackButtonComponent";
+import axios from "axios";
 
 interface Report {
   day: string;
   course: string;
   timeTaken: string;
   status: string;
+  dailyReportId: number;
   keyLearnings: string;
   planForTomorrow: string;
 }
 
-const WholeReportPageComponent: React.FC = () => {
-  const [reports, setReports] = useState<Report[]>([]);
+const AdminReportPage: React.FC = () => {
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/WholeReport.json')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const fetchReports = async () => {
+      try {
+        const batchId = 15;
+        const traineeId = localStorage.getItem("traineeId");
+
+        if (!traineeId) {
+          console.error("No traineeId found in localStorage");
+          return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        setReports(data.reports); // Adjust if your JSON structure is different
-        setFilteredReports(data.reports);
-      })
-      .catch((error) => console.error('Error loading reports:', error));
+
+        const response = await axios.get(
+          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
+        );
+
+        const reports: Report[] = response.data.map((course: any) => ({
+          day: new Date(course.courseDate).toISOString().slice(0, 10), // Updated line
+          course: course.courseName,
+          timeTaken: course.timeTaken.toString(),
+          dailyReportId: course.dailyReportId,
+          status: "completed",
+          keyLearnings: course.keyLearnings || "",
+          planForTomorrow: course.planForTomorrow || "",
+        }));
+        
+        setFilteredReports(reports);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
   }, []);
 
   const handleSearch = (searchValue: string) => {
-    setFilteredReports(
-      reports.filter((report) =>
+    setFilteredReports((prevReports) =>
+      prevReports.filter((report) =>
         report.course.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
@@ -49,21 +70,58 @@ const WholeReportPageComponent: React.FC = () => {
     setFilteredReports(sortedReports);
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Container>
-      <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
-        <BackButtonComponent  /> {/* Move the button slightly to the left */}
-        <Typography sx={{ ml: 1, fontWeight: 'bold', fontSize: '20px' }}>Report</Typography>
-        <Box sx={{ display: 'flex', gap: 2, ml: 'auto',mt:3 }}>
-          <SearchBarComponent onSearch={handleSearch} sx={{ width: 300, height: 40 }} />
-          <SortByComponent onSortChange={handleSortChange} sx={{ width: 50, height: 40 }} />
+      <Box sx={{ mb: 1, display: "flex", alignItems: "center", mt: "20px" }}>
+        <BackButtonComponent />
+        <Box sx={{ ml: 1 }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
+          >
+            Daily Report
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", gap: 1, ml: "auto", mt: 1 }}>
+          <SortByComponent
+            onSortChange={handleSortChange}
+            sx={{ width: 50, height: 40 }}
+          />
         </Box>
       </Box>
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 2 }}>
         <ReportsTableComponent reports={filteredReports} />
       </Box>
     </Container>
   );
 };
 
-export default WholeReportPageComponent;
+export default AdminReportPage;

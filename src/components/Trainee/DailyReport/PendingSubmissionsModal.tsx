@@ -14,20 +14,35 @@ import {
   Pagination,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PendingData from "./PendingData.json"; 
+import axios from "axios";
 
 interface PendingSubmissionsModalProps {
   open: boolean;
   handleClose: () => void;
 }
 
+interface PendingCourse {
+  courseId: number;
+  courseName: string;
+  dayNumber: number;
+}
+
 const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open, handleClose }) => {
-  const [pendingCourses, setPendingCourses] = useState(PendingData);
+  const [pendingCourses, setPendingCourses] = useState<PendingCourse[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Set the number of items per page
 
   useEffect(() => {
-    setPendingCourses(PendingData);
+    const fetchPendingCourses = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/courses/pending-submissions?batchId=15&traineeId=1307");
+        setPendingCourses(response.data);
+      } catch (error) {
+        console.error("Failed to fetch pending courses", error);
+      }
+    };
+
+    fetchPendingCourses();
   }, []);
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -65,10 +80,10 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
             position: "relative",
           }}
         >
-          <Typography variant="h5" sx={{ color: "#5f4b8b", fontWeight: "bold", fontSize: "24px" }}> {/* Adjusted font size and color to match the screenshot */}
+          <Typography variant="h5" sx={{ color: "#5f4b8b", fontWeight: "bold", fontSize: "24px" }}>
             Pending Submissions
           </Typography>
-          <IconButton 
+          <IconButton
             onClick={handleClose}
             sx={{
               position: "absolute",
@@ -85,17 +100,26 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
           <Table sx={{ borderCollapse: "separate", borderSpacing: "0 8px" }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", color: "#5f4b8b", backgroundColor: "#e0c3fc", borderTopLeftRadius: "8px", borderBottomLeftRadius: "8px", textAlign: "center" }}>Course</TableCell>
+                <TableCell sx={{ fontWeight: "bold", color: "#5f4b8b", backgroundColor: "#e0c3fc", borderTopLeftRadius: "8px", borderBottomLeftRadius: "8px", textAlign: "center" }}>
+                  Course
+                </TableCell>
                 <TableCell sx={{ fontWeight: "bold", color: "#5f4b8b", backgroundColor: "#e0c3fc", borderTopRightRadius: "8px", borderBottomRightRadius: "8px", textAlign: "center" }}>
                   Day
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedData.map((course, index) => (
-                <TableRow key={index} sx={{ backgroundColor: "#ffffff", borderRadius: "8px", boxShadow: "0 0 8px rgba(0, 0, 0, 0.1)", height: "60px" }}> {/* Adjusted row height */}
-                  <TableCell sx={{ borderTopLeftRadius: "8px", borderBottomLeftRadius: "8px", textAlign: "center" }}>{course.name}</TableCell>
-                  <TableCell sx={{ borderTopRightRadius: "8px", borderBottomRightRadius: "8px", textAlign: "center" }}>{course.day}</TableCell>
+              {paginatedData.map((course) => (
+                <TableRow
+                  key={course.courseId}
+                  sx={{ backgroundColor: "#ffffff", borderRadius: "8px", boxShadow: "0 0 8px rgba(0, 0, 0, 0.1)", height: "60px" }} // Adjusted row height
+                >
+                  <TableCell sx={{ borderTopLeftRadius: "8px", borderBottomLeftRadius: "8px", textAlign: "center" }}>
+                    {course.courseName}
+                  </TableCell>
+                  <TableCell sx={{ borderTopRightRadius: "8px", borderBottomRightRadius: "8px", textAlign: "center" }}>
+                    {course.dayNumber}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

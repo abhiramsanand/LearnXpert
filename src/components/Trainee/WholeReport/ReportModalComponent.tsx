@@ -23,8 +23,6 @@ const ReportModalComponent: React.FC<ReportModalComponentProps> = ({
   open,
   onClose,
   report,
-  onPrevious,
-  onNext,
 }) => {
   return (
     <Modal
@@ -56,18 +54,12 @@ const ReportModalComponent: React.FC<ReportModalComponentProps> = ({
           <CloseIcon />
         </IconButton>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2, p: 2 }}>
-          <IconButton onClick={onPrevious} aria-label="Previous course">
-            <Typography variant="h6" sx={{ color: '#8061C3' }}>&lt;</Typography> {/* Violet color */}
-          </IconButton>
           <Typography
             variant="h6"
             sx={{ flexGrow: 1, textAlign: 'center', textTransform: 'uppercase' }}
           >
             {report.course}
           </Typography>
-          <IconButton onClick={onNext} aria-label="Next course">
-            <Typography variant="h6" sx={{ color: '#8061C3' }}>&gt;</Typography> {/* Violet color */}
-          </IconButton>
         </Stack>
         <Box
           sx={{
