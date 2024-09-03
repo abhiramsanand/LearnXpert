@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,25 +13,27 @@ import { Box, TextField, Typography } from "@mui/material";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const BarChart: React.FC = () => {
-  const data = {
-    labels: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
+  const [data, setData] = useState<any>({
+    labels: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"], // Default labels
     datasets: [
       {
         label: "Actual Watch Time",
         backgroundColor: "#DB5461",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [],
         borderRadius: 30,
-        barThickness: 20, // Reduced bar thickness
+        barThickness: 20, 
       },
       {
         label: "Trainee Watch Time",
         backgroundColor: "#5B8C5A",
-        data: [28, 48, 40, 19, 86, 27, 90],
+        data: [],
         borderRadius: 30,
-        barThickness: 20, // Reduced bar thickness
+        barThickness: 20, 
       },
     ],
-  };
+  });
+
+  const [courseNames, setCourseNames] = useState<string[]>([]); // To store course names for tooltips
 
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const today = new Date();
@@ -40,6 +42,50 @@ const BarChart: React.FC = () => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const traineeId = localStorage.getItem("traineeId");
+      const courseDate = `${selectedDate} 00:00:00`;
+      const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/actualVsEstimateDuration?courseDate=${courseDate}&traineeId=${traineeId}`;
+
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+
+        const labels = result.map((_, index: number) => `C${index + 1}`); // C1, C2, etc.
+        const courseNames = result.map((item: any) => item.courseName); // Full course names
+        const traineeData = result.map((item: any) => item.duration); // Convert seconds to minutes
+        const actualData = result.map((item: any) => item.estimatedDuration);
+
+        setCourseNames(courseNames); // Store course names for tooltips
+
+        setData({
+          labels,
+          datasets: [
+            {
+              label: "Actual Watch Time",
+              backgroundColor: "#DB5461",
+              data: actualData,
+              borderRadius: 30,
+              barThickness: 20, 
+            },
+            {
+              label: "Trainee Watch Time",
+              backgroundColor: "#5B8C5A",
+              data: traineeData,
+              borderRadius: 30,
+              barThickness: 20, 
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedDate]);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(event.target.value);
@@ -58,11 +104,19 @@ const BarChart: React.FC = () => {
     },
     plugins: {
       legend: {
-        display: true, // Display legend
-        position: "top", // Position legend at the top
+        display: true, 
+        position: "top", 
         labels: {
           font: {
             size: 12,
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems: any) => {
+            const index = tooltipItems[0].dataIndex;
+            return courseNames[index]; // Display courseName on hover
           },
         },
       },

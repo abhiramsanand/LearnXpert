@@ -131,7 +131,7 @@ const AssessmentAverageScoreTrack: React.FC = () => {
             <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
               Average Percipio Assessment Score
             </Typography>
-            <Box width="250px" height="70%">
+            <Box width="250px" height="70%" mt={-1}>
               <Doughnut data={data} options={options} />
             </Box>
             <Box

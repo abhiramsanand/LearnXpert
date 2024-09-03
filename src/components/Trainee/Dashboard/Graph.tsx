@@ -3,6 +3,7 @@ import { Container, Box } from "@mui/material";
 import BarChart from "./BarChart";
 import ILPexavg from "./ILPexavg";
 import PercipioScore from "./PercipioScore";
+import DaysComplete from "./Days";
 
 const Graph: React.FC = () => {
   return (
@@ -16,10 +17,17 @@ const Graph: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            justifyContent: "space-between",
+          }}
+        >
           <ILPexavg />
           <PercipioScore />
-          <PercipioScore />
+          <DaysComplete />
         </Box>
         <Box>
           <BarChart />

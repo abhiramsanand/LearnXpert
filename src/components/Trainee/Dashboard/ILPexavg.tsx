@@ -5,12 +5,12 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const AssessmentScoreTrack: React.FC = () => {
+const AssessmentScoreTrackILPex: React.FC = () => {
   const [averageScore, setAverageScore] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const cacheKey = "assessmentScoreTrack";
+    const cacheKey = "IlpexassessmentScoreTrack";
     const cachedData = localStorage.getItem(cacheKey);
     const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
 
@@ -135,7 +135,7 @@ const AssessmentScoreTrack: React.FC = () => {
             <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
               Average ILPex Assessment Score
             </Typography>
-            <Box width="250px" height="70%">
+            <Box width="250px" height="70%" mt={-1}>
               <Doughnut data={data} options={options} />
             </Box>
             <Box
@@ -160,4 +160,4 @@ const AssessmentScoreTrack: React.FC = () => {
   );
 };
 
-export default AssessmentScoreTrack;
+export default AssessmentScoreTrackILPex;
