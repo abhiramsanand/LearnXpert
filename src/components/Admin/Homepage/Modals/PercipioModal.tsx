@@ -14,6 +14,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  Box,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
@@ -26,57 +28,57 @@ interface TraineeScoreModalProps {
 
 // Custom styles for the dialog
 const CustomDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogTitle-root': {
-    backgroundColor: '#4A148C',
+  "& .MuiDialogTitle-root": {
+    backgroundColor: "#4A148C",
     color: theme.palette.primary.contrastText,
-    position: 'relative',
+    position: "relative",
     padding: theme.spacing(2),
   },
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
-    maxHeight: 'calc(100vh - 250px)', // Adjusted to avoid overlap with footer
-    overflow: 'auto',
-    '&::-webkit-scrollbar': {
-      width: '8px', // Customize scrollbar width
+    maxHeight: "calc(100vh - 250px)", // Adjusted to avoid overlap with footer
+    overflow: "auto",
+    "&::-webkit-scrollbar": {
+      width: "8px", // Customize scrollbar width
     },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#E6E6FA', // Color for scrollbar thumb
-      borderRadius: '4px', // Rounded corners for the thumb
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#E6E6FA", // Color for scrollbar thumb
+      borderRadius: "4px", // Rounded corners for the thumb
     },
-    '&::-webkit-scrollbar-track': {
-      backgroundColor: '#f0f0f0', // Background color for the track
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "#f0f0f0", // Background color for the track
     },
   },
 }));
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  backgroundColor: '#4A148C',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  backgroundColor: "#4A148C",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
   padding: theme.spacing(2),
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontWeight: 'bold',
-  fontSize: '0.9rem',
+  fontWeight: "bold",
+  fontSize: "0.9rem",
   color: theme.palette.text.primary,
   padding: theme.spacing(1),
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: "#FFFFFF",
   },
-  '&:nth-of-type(even)': {
+  "&:nth-of-type(even)": {
     backgroundColor: "#E6E6FA",
   },
 }));
 
-const FilterContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  paddingTop: '10px',
+const FilterContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  paddingTop: "10px",
   marginBottom: theme.spacing(2),
   gap: theme.spacing(2),
 }));
@@ -85,29 +87,29 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled('div')(({ theme }) => ({
-  maxHeight: '300px', // Adjusted to ensure space for footer
-  overflowY: 'auto',
-  paddingLeft: '20px',
-  paddingRight: '20px',
-  '&::-webkit-scrollbar': {
-    width: '8px',
+const TableContainer = styled("div")(({ theme }) => ({
+  maxHeight: "300px", // Adjusted to ensure space for footer
+  overflowY: "auto",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+  "&::-webkit-scrollbar": {
+    width: "8px",
   },
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: '#E6E6FA',
-    borderRadius: '4px',
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "#E6E6FA",
+    borderRadius: "4px",
   },
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: '#f0f0f0',
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "#f0f0f0",
   },
 }));
 
-const Footer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'flex-end',
+const Footer = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "flex-end",
   padding: theme.spacing(1),
   borderTop: `1px solid ${theme.palette.divider}`,
-  backgroundColor: '#F5F5F5',
+  backgroundColor: "#F5F5F5",
 }));
 
 const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
@@ -116,10 +118,14 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
   traineeData,
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<keyof { name: string; score: number }>("name");
-  const [filterScore, setFilterScore] = useState<string>('All');
+  const [orderBy, setOrderBy] =
+    useState<keyof { name: string; score: number }>("name");
+  const [filterScore, setFilterScore] = useState<string>("All");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const handleRequestSort = (property: keyof { name: string; score: number }) => {
+  const handleRequestSort = (
+    property: keyof { name: string; score: number }
+  ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -129,13 +135,21 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
     setFilterScore(event.target.value as string);
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
   const filteredTrainees = Object.entries(traineeData)
     .map(([name, score]) => ({ name, score }))
-    .filter(trainee => {
-      if (filterScore === 'All') return true;
-      if (filterScore === '<60') return trainee.score < 60;
-      if (filterScore === '<80') return trainee.score < 80;
-      return true;
+    .filter((trainee) => {
+      const matchesScoreFilter =
+        filterScore === "All" ||
+        (filterScore === "<60" && trainee.score < 60) ||
+        (filterScore === "<80" && trainee.score < 80);
+
+      const matchesSearch = trainee.name.toLowerCase().includes(searchTerm);
+
+      return matchesScoreFilter && matchesSearch;
     });
 
   const sortedTrainees = filteredTrainees.sort((a, b) => {
@@ -150,25 +164,52 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
 
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CustomDialogTitle>
-        Percipio Assessment Scores
-      </CustomDialogTitle>
+      <CustomDialogTitle>Percipio Assessment Scores</CustomDialogTitle>
       <DialogContent>
-        <FilterContainer>
-          <FilterLabel>Filter by Score:</FilterLabel>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <Select
-              value={filterScore}
-              onChange={handleFilterChange}
-              displayEmpty
-              inputProps={{ 'aria-label': 'Filter by Score' }}
-            >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="<60">Less than 60</MenuItem>
-              <MenuItem value="<80">Less than 80</MenuItem>
-            </Select>
-          </FormControl>
-        </FilterContainer>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <FilterContainer>
+            <FilterLabel>Filter by Score:</FilterLabel>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select
+                value={filterScore}
+                onChange={handleFilterChange}
+                displayEmpty
+                inputProps={{ "aria-label": "Filter by Score" }}
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="<60">Less than 60</MenuItem>
+                <MenuItem value="<80">Less than 80</MenuItem>
+              </Select>
+            </FormControl>
+          </FilterContainer>
+          <TextField
+            size="small"
+            variant="outlined"
+            placeholder="Search by Name"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{
+              marginRight: "16px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#000000", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#000000", // Hover border color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3", // Focus border color
+                },
+              },
+            }}
+          />
+        </Box>
         <TableContainer>
           <Table>
             <TableHead>
@@ -212,9 +253,9 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
           onClick={onClose}
           sx={{
             color: "white",
-            backgroundColor: '#4A148C',
-            '&:hover': {
-              backgroundColor: '#6A1B9A',
+            backgroundColor: "#4A148C",
+            "&:hover": {
+              backgroundColor: "#6A1B9A",
             },
           }}
         >

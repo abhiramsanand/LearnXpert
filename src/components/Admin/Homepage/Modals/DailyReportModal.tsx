@@ -16,6 +16,8 @@ import {
   Select,
   MenuItem,
   styled,
+  TextField,
+  Box,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 
@@ -125,6 +127,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<keyof Trainee>("traineeName");
   const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleRequestSort = (property: keyof Trainee) => {
     if (property === "totalCourses") return; // Prevent sorting on "totalCourses"
@@ -137,14 +140,21 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
     setFilterStatus(event.target.value as string);
   };
 
-  const filteredTrainees =
-    filterStatus === "All"
-      ? trainees
-      : trainees.filter((trainee) =>
-          filterStatus === "On Track"
-            ? trainee.totalDailyReports === trainee.totalCourses
-            : trainee.totalDailyReports !== trainee.totalCourses
-        );
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredTrainees = trainees
+    .filter((trainee) =>
+      trainee.traineeName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((trainee) =>
+      filterStatus === "All"
+        ? true
+        : filterStatus === "On Track"
+        ? trainee.totalDailyReports === trainee.totalCourses
+        : trainee.totalDailyReports !== trainee.totalCourses
+    );
 
   const sortedTrainees = filteredTrainees.slice().sort((a, b) => {
     if (orderBy === "totalCourses") return 0; // Skip sorting on "totalCourses"
@@ -166,24 +176,48 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
           onClick={handleClose}
           sx={{ color: "white" }}
         >
+          {/* Add an icon for close if needed */}
         </IconButton>
       </CustomDialogTitle>
       <DialogContent>
-        <FilterContainer >
-          <FilterLabel>Filter by Status:</FilterLabel>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <Select
-              value={filterStatus}
-              onChange={handleFilterChange}
-              displayEmpty
-              inputProps={{ "aria-label": "Filter by Status" }}
-            >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="On Track">On Track</MenuItem>
-              <MenuItem value="Behind">Behind</MenuItem>
-            </Select>
-          </FormControl>
-        </FilterContainer>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+          <FilterContainer>
+            <FilterLabel>Filter by Status:</FilterLabel>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select
+                value={filterStatus}
+                onChange={handleFilterChange}
+                displayEmpty
+                inputProps={{ "aria-label": "Filter by Status" }}
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="On Track">On Track</MenuItem>
+                <MenuItem value="Behind">Behind</MenuItem>
+              </Select>
+            </FormControl>
+          </FilterContainer>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search by Name"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            sx={{
+              marginRight: "16px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#000000", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#000000", // Hover border color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3", // Focus border color
+                },
+              },
+            }}
+          />
+        </Box>
         <TableContainer>
           <Table>
             <TableHead>
