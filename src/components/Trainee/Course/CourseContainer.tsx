@@ -233,7 +233,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ traineeId }) => {
                                 borderRadius: '4px',
                                 backgroundColor: '#F0F0F0',
                                 '& .MuiLinearProgress-bar': {
-                                  backgroundColor: '#DB5461',
+                                  backgroundColor: '#5B8C5A',
                                 },
                               }}
                             />
@@ -241,7 +241,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ traineeId }) => {
                               variant="body2"
                               sx={{
                                 fontSize: '12px',
-                                color: '#DB5461',
+                                color: '#5B8C5A',
                                 marginLeft: '10px',
                                 fontWeight: 'bold',
                               }}

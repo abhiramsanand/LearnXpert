@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
@@ -20,7 +20,6 @@ interface Assessment {
   traineeId: number;
 }
 
-// Custom styled components
 const StyledContainer = styled(Container)({
   textAlign: 'center',
   marginTop: '16px',
@@ -49,11 +48,13 @@ const StyledButton = styled(Button)({
 
 const AssessmentDisplayPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const assessmentName = queryParams.get('name') || '';
 
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [responses, setResponses] = useState<{ [questionId: number]: string }>({});
@@ -118,21 +119,52 @@ const AssessmentDisplayPage: React.FC = () => {
       questionResponses: validResponses,
     };
 
+    setSubmitting(true); // Start loading animation
+
     try {
       await axios.post('http://localhost:8080/api/v1/assessments/submit', data);
       setSuccessDialogOpen(true); // Open the success dialog on successful submission
     } catch (err) {
       console.error('Failed to submit assessment:', err);
       setError('Failed to submit assessment.');
+    } finally {
+      setSubmitting(false); // Stop loading animation
     }
   };
 
   const handleCloseDialog = () => {
     setSuccessDialogOpen(false);
-    // Optionally, redirect or perform other actions after closing the dialog
+    navigate('/Trainee-Assessments'); // Redirect after closing the dialog
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading || submitting) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
+
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (

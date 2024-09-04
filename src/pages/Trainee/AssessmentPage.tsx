@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
 import CompletedAssessmentCard from '../../components/Trainee/Assessment/CompletedAssessmentCard';
 import PendingAssessmentCard from '../../components/Trainee/Assessment/PendingAssessmentCard';
 import AssessmentList from '../../components/Trainee/Assessment/AssessmentList';
@@ -43,30 +44,27 @@ const NewAssessmentPage: React.FC = () => {
   const navigate = useNavigate();
   const [completedAssessments, setCompletedAssessments] = useState<Assessment[]>([]);
   const [pendingAssessments, setPendingAssessments] = useState<Assessment[]>([]);
-  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending');
   const [filteredCompletedAssessments, setFilteredCompletedAssessments] = useState<Assessment[]>([]);
   const [filteredPendingAssessments, setFilteredPendingAssessments] = useState<Assessment[]>([]);
+  const [selectedCard, setSelectedCard] = useState<'completed' | 'pending'>('pending');
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const traineeId = localStorage.getItem('traineeId'); // Retrieve the stored traineeId
 
-    // Fetch completed assessments
-    fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setCompletedAssessments(data);
-        setFilteredCompletedAssessments(data);
+    // Fetch completed and pending assessments
+    Promise.all([
+      fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`).then((res) => res.json()),
+      fetch(`http://localhost:8080/api/v1/assessments/pending/${traineeId}`).then((res) => res.json()),
+    ])
+      .then(([completedData, pendingData]) => {
+        setCompletedAssessments(completedData);
+        setFilteredCompletedAssessments(completedData);
+        setPendingAssessments(pendingData);
+        setFilteredPendingAssessments(pendingData);
+        setLoading(false); // Set loading to false when data is loaded
       })
-      .catch((error) => console.error('Error loading completed assessments:', error));
-
-    // Fetch pending assessments
-    fetch(`http://localhost:8080/api/v1/assessments/pending/${traineeId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setPendingAssessments(data);
-        setFilteredPendingAssessments(data);
-      })
-      .catch((error) => console.error('Error loading pending assessments:', error));
+      .catch((error) => console.error('Error loading assessments:', error));
   }, []);
 
   const handleSearchChange = (searchTerm: string) => {
@@ -86,13 +84,40 @@ const NewAssessmentPage: React.FC = () => {
   };
 
   const handleCardClick = (assessmentName: string) => {
-    console.log(`Navigating to assessment with Name: ${assessmentName}`);
     navigate(`/Trainee-Assessments/assessment?name=${encodeURIComponent(assessmentName)}`);
   };
-  
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#8061C3",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: "bold",
+            animation: "flip 1s infinite",
+            "@keyframes flip": {
+              "0%": { transform: "rotateX(0)" },
+              "50%": { transform: "rotateX(180deg)" },
+              "100%": { transform: "rotateX(360deg)" },
+            },
+          }}
+        >
+          ILPex{" "}
+          <span style={{ fontSize: "8px", marginLeft: "-8px" }}>WEB</span>
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Container sx={{mt: "20px"}}>
+    <Container sx={{ mt: "20px" }}>
       <Sidebar>
         <SidebarHeader>
           <SearchBar onSearchChange={handleSearchChange} />
@@ -111,14 +136,14 @@ const NewAssessmentPage: React.FC = () => {
           <AssessmentList
             assessments={filteredCompletedAssessments}
             isCompleted={true}
-            onCardClick={handleCardClick} // Correctly pass only assessmentName
+            onCardClick={handleCardClick}
           />
         )}
         {selectedCard === 'pending' && (
           <AssessmentList
             assessments={filteredPendingAssessments}
             isCompleted={false}
-            onCardClick={handleCardClick} // Correctly pass only assessmentName
+            onCardClick={handleCardClick}
           />
         )}
       </Content>

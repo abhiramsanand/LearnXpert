@@ -15,6 +15,8 @@ import {
   Select,
   MenuItem,
   Typography,
+  TextField,
+  Box,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
@@ -23,7 +25,7 @@ interface TraineeModalProps {
   open: boolean;
   onClose: () => void;
   batchDayNumber: number;
-  trainees: Array<{ traineeName: string; traineeDayNumber: number }>; 
+  trainees: Array<{ traineeName: string; traineeDayNumber: number }>;
 }
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
@@ -118,13 +120,15 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
   open,
   onClose,
   batchDayNumber,
-  trainees = [], // Default to an empty array if not provided
+  trainees = [],
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<keyof typeof trainees[0]>("traineeName");
+  const [orderBy, setOrderBy] =
+    useState<keyof (typeof trainees)[0]>("traineeName");
   const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const handleRequestSort = (property: keyof typeof trainees[0]) => {
+  const handleRequestSort = (property: keyof (typeof trainees)[0]) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -134,19 +138,24 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
     setFilterStatus(event.target.value as string);
   };
 
-  const filteredTrainees =
-    filterStatus === "All"
-      ? trainees
-      : trainees.filter((trainee) => {
-          if (filterStatus === "Behind") {
-            return trainee.traineeDayNumber < batchDayNumber;
-          } else if (filterStatus === "Ahead") {
-            return trainee.traineeDayNumber > batchDayNumber;
-          } else if (filterStatus === "On Track") {
-            return trainee.traineeDayNumber === batchDayNumber;
-          }
-          return true;
-        });
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredTrainees = trainees
+    .filter((trainee) =>
+      trainee.traineeName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((trainee) => {
+      if (filterStatus === "Behind") {
+        return trainee.traineeDayNumber < batchDayNumber;
+      } else if (filterStatus === "Ahead") {
+        return trainee.traineeDayNumber > batchDayNumber;
+      } else if (filterStatus === "On Track") {
+        return trainee.traineeDayNumber === batchDayNumber;
+      }
+      return true;
+    });
 
   const sortedTrainees = filteredTrainees.slice().sort((a, b) => {
     if (a[orderBy] < b[orderBy]) {
@@ -160,7 +169,9 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
 
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CustomDialogTitle>Trainee Progress</CustomDialogTitle>
+      <CustomDialogTitle>
+        <Typography variant="h6">Trainee Progress</Typography>
+      </CustomDialogTitle>
       <DialogContent>
         <Typography
           variant="subtitle1"
@@ -174,22 +185,45 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
         >
           Batch Day Number: {batchDayNumber}
         </Typography>
-        <FilterContainer>
-          <FilterLabel>Filter by Status:</FilterLabel>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
-            <Select
-              value={filterStatus}
-              onChange={handleFilterChange}
-              displayEmpty
-              inputProps={{ "aria-label": "Filter by Status" }}
-            >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Behind">Behind</MenuItem>
-              <MenuItem value="On Track">On Track</MenuItem>
-              <MenuItem value="Ahead">Ahead</MenuItem>
-            </Select>
-          </FormControl>
-        </FilterContainer>
+        <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+          <FilterContainer>
+            <FilterLabel>Filter by Status:</FilterLabel>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select
+                value={filterStatus}
+                onChange={handleFilterChange}
+                displayEmpty
+                inputProps={{ "aria-label": "Filter by Status" }}
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="Behind">Behind</MenuItem>
+                <MenuItem value="On Track">On Track</MenuItem>
+                <MenuItem value="Ahead">Ahead</MenuItem>
+              </Select>
+            </FormControl>
+          </FilterContainer>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search by Name"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            sx={{
+              marginRight: "16px", // Adjust the spacing between input and button
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#000000", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#000000", // Hover border color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#8061C3", // Focus border color
+                },
+              },
+            }}
+          />
+        </Box>
         <TableContainer>
           <Table>
             <TableHead>
@@ -231,8 +265,8 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
         <Button
           variant="contained"
           onClick={(event) => {
-            event.stopPropagation(); 
-            onClose(); 
+            event.stopPropagation();
+            onClose();
           }}
           sx={{
             color: "white",
