@@ -62,10 +62,6 @@ const BarChart: React.FC = () => {
     // Calculate total seconds
     const totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
-    // Log intermediate and final values for debugging
-    console.log(`Hours: ${hours}, Minutes: ${minutes}, Seconds: ${seconds}`);
-    console.log(`Total Seconds: ${totalSeconds}`);
-
     return totalSeconds;
   };
 
