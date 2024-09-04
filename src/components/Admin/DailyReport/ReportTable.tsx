@@ -22,44 +22,51 @@ interface ReportsTableComponentProps {
 const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [selectedReportIndex, setSelectedReportIndex] = useState<number | null>(null);
+  const [selectedReportId, setSelectedReportId] = useState<number | null>(null);  // Use dailyReportId instead of index
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [reportDetails, setReportDetails] = useState<Report | null>(null); // State to hold detailed report data
 
   // Function to fetch detailed report data when the "eye" icon is clicked
-  const handleViewReport = async (index: number) => {
-    const selectedReport = reports[index];
-
+  const handleViewReport = async (dailyReportId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${selectedReport.dailyReportId}`
+        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
 
       const { keylearnings, planfortomorrow } = response.data;
 
-      const updatedReport = {
-        ...selectedReport,
+      const updatedReport = reports.find(report => report.dailyReportId === dailyReportId);
+      if (!updatedReport) return;
+
+      const detailedReport = {
+        ...updatedReport,
         keyLearnings: keylearnings,
         planForTomorrow: planfortomorrow,
       };
 
-      setSelectedReportIndex(index);
-      setReportDetails(updatedReport);
+      setSelectedReportId(dailyReportId);
+      setReportDetails(detailedReport);
     } catch (error) {
       console.error("Error fetching detailed report data:", error);
     }
   };
 
   const handlePrevious = () => {
-    if (selectedReportIndex !== null && selectedReportIndex > 0) {
-      setSelectedReportIndex(selectedReportIndex - 1);
+    if (reportDetails && selectedReportId !== null) {
+      const currentIndex = reports.findIndex(report => report.dailyReportId === selectedReportId);
+      if (currentIndex > 0) {
+        handleViewReport(reports[currentIndex - 1].dailyReportId);
+      }
     }
   };
 
   const handleNext = () => {
-    if (selectedReportIndex !== null && selectedReportIndex < reports.length - 1) {
-      setSelectedReportIndex(selectedReportIndex + 1);
+    if (reportDetails && selectedReportId !== null) {
+      const currentIndex = reports.findIndex(report => report.dailyReportId === selectedReportId);
+      if (currentIndex < reports.length - 1) {
+        handleViewReport(reports[currentIndex + 1].dailyReportId);
+      }
     }
   };
 
@@ -108,9 +115,9 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
           </TableRow>
         </TableHead>
         <TableBody>
-          {displayedReports.map((report, index) => (
+          {displayedReports.map((report) => (
             <TableRow
-              key={index}
+              key={report.dailyReportId}
               sx={{
                 height: 48,
                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', 
@@ -131,7 +138,7 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
                 {report.status}
               </TableCell>
               <TableCell sx={{ padding: '4px 8px' }}>
-                <IconButton onClick={() => handleViewReport(index)}>
+                <IconButton onClick={() => handleViewReport(report.dailyReportId)}>
                   <VisibilityIcon sx={{ color: 'blue' }} />
                 </IconButton>
               </TableCell>
@@ -170,10 +177,10 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
         <MenuItem onClick={() => handleFilterClose('completed')}>Completed</MenuItem>
         <MenuItem onClick={() => handleFilterClose(null)}>All</MenuItem>
       </Menu>
-      {selectedReportIndex !== null && reportDetails && (
+      {selectedReportId !== null && reportDetails && (
         <ReportModalComponent
-          open={selectedReportIndex !== null}
-          onClose={() => setSelectedReportIndex(null)}
+          open={selectedReportId !== null}
+          onClose={() => setSelectedReportId(null)}
           report={reportDetails}
           onPrevious={handlePrevious}
           onNext={handleNext}
