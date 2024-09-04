@@ -19,7 +19,8 @@ const NotificationPage: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   const fetchNotifications = async () => {
-    const traineeId = 1418; // Replace with dynamic ID as needed
+    const Id = localStorage.getItem("traineeId");
+    const traineeId = Id; 
     try {
       const response = await fetch(`http://localhost:8080/api/v1/notifications/trainee/${traineeId}`);
       const data: Notification[] = await response.json();
