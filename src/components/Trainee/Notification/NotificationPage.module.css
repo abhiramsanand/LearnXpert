@@ -20,14 +20,13 @@
   background-color: #5a3e9e;
 }
 
-
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Darker overlay for better focus */
+  background: rgba(0, 0, 0, 0.7); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +35,7 @@
 }
 
 .modalContent {
-  background:white;
+  background: white;
   padding: 20px;
   border-radius: 10px;
   width: 80%;
@@ -49,12 +48,11 @@
 
 .closeButton {
   position: absolute;
+  font-size: 25px;
   top: 10px;
   right: 10px;
-  background: #b5b3b3;
-  color: rgb(120, 35, 186);
+  color: #db5461;
   border: none;
-  padding: 5px 10px;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -76,10 +74,10 @@
 
 .notificationCloseButton {
   position: absolute;
+  font-size: 25px;
   top: 5px;
   right: 5px;
- background: #b5b3b3;
-  color: rgb(120, 35, 186);
+  color: #db5461;
   border: none;
   padding: 5px 8px;
   border-radius: 50%;
@@ -107,7 +105,7 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: #FF0000;
+  background: #ff0000;
   color: white;
   border-radius: 50%;
   padding: 5px 10px;

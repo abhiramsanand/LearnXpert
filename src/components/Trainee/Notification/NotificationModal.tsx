@@ -15,15 +15,19 @@ interface NotificationModalProps {
   onNotificationClose: (id: number) => void;
 }
 
-const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, notifications, onNotificationClose }) => {
-
+const NotificationModal: React.FC<NotificationModalProps> = ({
+  isOpen,
+  onClose,
+  notifications,
+  onNotificationClose,
+}) => {
   if (!isOpen) return null;
 
   const handleNotificationClose = async (id: number) => {
     try {
       // API call to mark notification as read
       await fetch(`http://localhost:8080/api/v1/notifications/${id}/mark-read`, {
-        method: 'POST', 
+        method: 'POST',
       });
       // Notify parent component to update the notification list
       onNotificationClose(id);
@@ -32,38 +36,40 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
     }
   };
 
-  const getRandomColor = () => {
-    const colors = ['#CBC3E3'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose}>X</button>
-        <h2>Notifications</h2>
+        <button className={styles.closeButton} onClick={onClose}>
+          &times;
+        </button>
+        <h2 className={styles.modalTitle}>Notifications</h2>
         <div className={styles.notificationContainer}>
           {notifications.length > 0 ? (
-            notifications.map((notification) => (
-              !notification.isRead && (
+            notifications.map((notification) =>
+              !notification.isRead ? (
                 <div
                   key={notification.id}
                   className={styles.notificationItem}
-                  style={{ backgroundColor: getRandomColor() }}
+                  style={{ backgroundColor: "transparent", border: "1px solid #5B8C5A"}}
                 >
                   <button
                     className={styles.notificationCloseButton}
                     onClick={() => handleNotificationClose(notification.id)}
                   >
-                    X
+                    &times;
                   </button>
-                  <h3>NEW ASSESSMENT: {notification.assessmentName}</h3>
-                  <p>Posted on: {new Date(notification.notificationTime).toLocaleString()}</p>
+                  <h3 className={styles.notificationTitle}>
+                    NEW ASSESSMENT: {notification.assessmentName}
+                  </h3>
+                  <p className={styles.notificationTime}>
+                    Posted on: {new Date(notification.notificationTime).toLocaleString()}
+                  </p>
                 </div>
-              )
-            ))
+              ) : null
+            )
           ) : (
-            <p>No new notifications.</p>
+            <p className={styles.noNotifications}>No new notifications.</p>
           )}
         </div>
       </div>

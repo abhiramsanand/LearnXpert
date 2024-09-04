@@ -39,11 +39,11 @@ const AdminReportPage: React.FC = () => {
           course: course.courseName,
           timeTaken: course.timeTaken.toString(),
           dailyReportId: course.dailyReportId,
-          status: "completed",
+          status: course.timeTaken > 0 ? "completed" : "pending", // Updated line
           keyLearnings: course.keyLearnings || "",
           planForTomorrow: course.planForTomorrow || "",
         }));
-        
+
         setFilteredReports(reports);
       } catch (error) {
         console.error("Error fetching reports:", error);
