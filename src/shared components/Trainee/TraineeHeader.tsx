@@ -39,9 +39,15 @@ const TraineeHeader = () => {
       <HeaderContainer position="fixed">
         <Container maxWidth="lg">
           <Box
-            sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: 4 }}
+            sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: "5px"}}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mt: -1, gap: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 3}}>
+              <NotificationPage />
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <LogoutIcon
+                  sx={{ color: "rgba(128, 97, 195, 1)", cursor: "pointer" }}
+                />
+              </Link>
               <Box
                 sx={{
                   display: "flex",
@@ -55,21 +61,8 @@ const TraineeHeader = () => {
                 >
                   {username}
                 </Typography>
-                {/* <Typography
-                  variant="caption"
-                  sx={{ textAlign: "center", color: "rgba(128, 97, 195, 0.7)" }}
-                >
-                  (Trainee)
-                </Typography> */}
               </Box>
             </Box>
-
-            <NotificationPage />
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <LogoutIcon
-                sx={{ color: "rgba(128, 97, 195, 1)", cursor: "pointer" }}
-              />
-            </Link>
             <Avatar
               sx={{
                 bgcolor: "rgba(128, 97, 195, 0.3)",
