@@ -293,7 +293,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
                 }}
                 sx={{
                   "& .MuiSelect-select": {
-                    padding: "10px 14px", 
+                    padding: "10px 14px",
                   },
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#000000", // Default border color
@@ -367,21 +367,21 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
               </Button>
             </Box>
             <Link to="/Admin-AssessmentCreation">
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Add />}
-            sx={{
-              borderRadius: "20px",
-              backgroundColor: "#8061C3",
-              "&:hover": {
-                backgroundColor: "#6A529D",
-              },
-            }}
-          >
-            Create Assessment
-          </Button>
-        </Link>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Add />}
+                sx={{
+                  borderRadius: "20px",
+                  backgroundColor: "#8061C3",
+                  "&:hover": {
+                    backgroundColor: "#6A529D",
+                  },
+                }}
+              >
+                Create Assessment
+              </Button>
+            </Link>
           </Box>
         </Box>
 
@@ -476,45 +476,46 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
 
       {/* Filter Dialog */}
       <Dialog open={openFilter} onClose={handleFilterClose}>
-        <DialogTitle>Filter</DialogTitle>
+        <DialogTitle>Filters</DialogTitle>
         <DialogContent>
-          {/* Score Filter */}
-          <Typography sx={{ mt: 1, mb: 1 }}>Score</Typography>
-          {["100", "90-100", "80-90", "below 80"].map((scoreRange) => (
+          <Typography variant="subtitle1">Score Range:</Typography>
+          {["100", "90-100", "80-90", "below 80"].map((range) => (
             <FormControlLabel
-              key={scoreRange}
+              key={range}
               control={
                 <Checkbox
-                  checked={selectedScores.includes(scoreRange)}
-                  onChange={() => handleScoreChange(scoreRange)}
+                  checked={selectedScores.includes(range)}
+                  onChange={() => handleScoreChange(range)}
+                  name={range}
                 />
               }
-              label={scoreRange}
+              label={range}
             />
           ))}
-          {/* Status Filter */}
-          <Typography sx={{ mt: 2, mb: 1 }}>Status</Typography>
-          {["Completed", "Pending"].map((status) => (
+
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Status:
+          </Typography>
+          {["completed", "pending"].map((status) => (
             <FormControlLabel
               key={status}
               control={
                 <Checkbox
-                  checked={selectedStatuses.includes(status.toLowerCase())}
-                  onChange={() => handleStatusChange(status.toLowerCase())}
+                  checked={selectedStatuses.includes(status)}
+                  onChange={() => handleStatusChange(status)}
+                  name={status}
                 />
               }
               label={status}
             />
           ))}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleFilterClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={applyFilters} color="primary">
-            Apply
-          </Button>
-        </DialogActions>
+        <Button
+          onClick={handleFilterClose}
+          sx={{ justifyContent: "right", mr: 2, mb: 1, olor: "#5B8C5A" }}
+        >
+          Done
+        </Button>
       </Dialog>
     </Container>
   );

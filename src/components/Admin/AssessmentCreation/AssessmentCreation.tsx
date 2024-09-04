@@ -340,7 +340,7 @@ const AssessmentCreation: React.FC = () => {
         <Button
           variant="outlined"
           component={RouterLink}
-          to="/admin/assessment-table"
+          to="/Admin-Assessments"
           size="small"
           sx={{
             width: "10%",
@@ -354,7 +354,6 @@ const AssessmentCreation: React.FC = () => {
           Cancel
         </Button>
       </Box>
-
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>{modalTitle}</DialogTitle>
         <DialogContent>

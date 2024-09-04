@@ -122,7 +122,7 @@ const TraineeReport: React.FC = () => {
   }));
 
   return (
-    <Container sx={{ mt: "-20px"}}>
+    <Container sx={{ mt: "-20px" }}>
       <Box
         sx={{
           display: "flex",
@@ -263,7 +263,10 @@ const TraineeReport: React.FC = () => {
                   }}
                   onClick={() => {
                     // Store the traineeId in localStorage
-                    localStorage.setItem("traineeId", trainee.traineeId.toString());
+                    localStorage.setItem(
+                      "traineeId",
+                      trainee.traineeId.toString()
+                    );
 
                     // Navigate to the next page
                     navigate("/Admin-WholeReport");
@@ -303,7 +306,10 @@ const TraineeReport: React.FC = () => {
           <FormControl component="fieldset">
             <RadioGroup
               value={filterCriteria}
-              onChange={(e) => setFilterCriteria(e.target.value)}
+              onChange={(e) => {
+                setFilterCriteria(e.target.value);
+                setFilterModalOpen(false); // Close modal on selection
+              }}
             >
               <FormControlLabel value="all" control={<Radio />} label="All" />
               <FormControlLabel
@@ -324,10 +330,7 @@ const TraineeReport: React.FC = () => {
             </RadioGroup>
           </FormControl>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-            <Button onClick={handleFilter}>Apply</Button>
-            <Button onClick={() => setFilterModalOpen(false)} sx={{ ml: 1 }}>
-              Close
-            </Button>
+            <Button onClick={() => setFilterModalOpen(false)}>Close</Button>
           </Box>
         </Box>
       </Modal>
