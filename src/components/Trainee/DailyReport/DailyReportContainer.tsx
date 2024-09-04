@@ -15,27 +15,37 @@ const DailyReportContainer: React.FC = () => {
   const [page, setPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [batchId] = useState(15); // Assuming a batchId of 15
-  const [traineeId] = useState(1307); // Assuming a traineeId of 1307
+  const [traineeId, setTraineeId] = useState<number | null>(null); // Fetch traineeId from local storage
   const coursesPerPage = 3;
 
   // State for holding course details for the modal
-  const [courseDetails, setCourseDetails] = useState<string>(null);
+  const [courseDetails, setCourseDetails] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const dateStr = formatDateToApiFormat(selectedDate);
-        const response = await fetch(
-          `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${batchId}&traineeId=${traineeId}`
-        );
-        const data = await response.json();
-        setCourses(data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
+    // Fetch traineeId from local storage
+    const storedTraineeId = localStorage.getItem("traineeId");
+    if (storedTraineeId) {
+      setTraineeId(Number(storedTraineeId));
+    }
+  }, []);
 
-    fetchCourses();
+  useEffect(() => {
+    if (traineeId) {
+      const fetchCourses = async () => {
+        try {
+          const dateStr = formatDateToApiFormat(selectedDate);
+          const response = await fetch(
+            `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${batchId}&traineeId=${traineeId}`
+          );
+          const data = await response.json();
+          setCourses(data);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        }
+      };
+
+      fetchCourses();
+    }
   }, [selectedDate, batchId, traineeId]);
 
   const handleOpenReportModal = async (
