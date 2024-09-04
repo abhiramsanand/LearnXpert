@@ -21,14 +21,14 @@ const BarChart: React.FC = () => {
         backgroundColor: "#DB5461",
         data: [],
         borderRadius: 30,
-        barThickness: 20,
+        barThickness: 20, 
       },
       {
         label: "Trainee Watch Time",
         backgroundColor: "#5B8C5A",
         data: [],
         borderRadius: 30,
-        barThickness: 20,
+        barThickness: 20, 
       },
     ],
   });
@@ -43,33 +43,11 @@ const BarChart: React.FC = () => {
     return `${year}-${month}-${day}`;
   });
 
-  // Function to convert various "h m s" formats to minutes
-  const convertToSeconds = (duration: string) => {
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-
-    // Regular expression to extract hours, minutes, and seconds
-    const durationRegex = /(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+)s)?/;
-    const match = duration.match(durationRegex);
-
-    if (match) {
-      hours = parseInt(match[1] || "0", 10);
-      minutes = parseInt(match[2] || "0", 10);
-      seconds = parseInt(match[3] || "0", 10);
-    }
-
-    // Calculate total seconds
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-    return totalSeconds;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const traineeId = localStorage.getItem("traineeId");
-      const courseDate = selectedDate; // Use the selectedDate directly in the API endpoint
-      const url = `http://localhost:8080/api/courses/coursesWithProgress?batchId=15&traineeId=${traineeId}&courseDate=${courseDate}`;
+      const courseDate = `${selectedDate} 00:00:00`;
+      const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/actualVsEstimateDuration?courseDate=${courseDate}&traineeId=${traineeId}`;
 
       try {
         const response = await fetch(url);
@@ -77,10 +55,8 @@ const BarChart: React.FC = () => {
 
         const labels = result.map((_, index: number) => `C${index + 1}`); // C1, C2, etc.
         const courseNames = result.map((item: any) => item.courseName); // Full course names
-        const traineeData = result.map((item: any) => item.duration); // Trainee watch time (in minutes)
-        const actualData = result.map((item: any) =>
-          convertToSeconds(item.courseDuration)
-        ); // Convert courseDuration to minutes
+        const traineeData = result.map((item: any) => item.duration); // Convert seconds to minutes
+        const actualData = result.map((item: any) => item.estimatedDuration);
 
         setCourseNames(courseNames); // Store course names for tooltips
 
@@ -92,14 +68,14 @@ const BarChart: React.FC = () => {
               backgroundColor: "#DB5461",
               data: actualData,
               borderRadius: 30,
-              barThickness: 20,
+              barThickness: 20, 
             },
             {
               label: "Trainee Watch Time",
               backgroundColor: "#5B8C5A",
               data: traineeData,
               borderRadius: 30,
-              barThickness: 20,
+              barThickness: 20, 
             },
           ],
         });
@@ -128,8 +104,8 @@ const BarChart: React.FC = () => {
     },
     plugins: {
       legend: {
-        display: true,
-        position: "top",
+        display: true, 
+        position: "top", 
         labels: {
           font: {
             size: 12,
