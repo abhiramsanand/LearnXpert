@@ -154,7 +154,7 @@ const CreateCourse: React.FC = () => {
 
               <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
-                <a href="/CourseCreationTemplate.xlsx" download style={{ color: "#6C63FF" }}>
+                <a href="/Course_Creation_Template.xlsx" download style={{ color: "#6C63FF" }}>
                   here
                 </a>
               </Typography>

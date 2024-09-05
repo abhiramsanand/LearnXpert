@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
@@ -42,9 +43,10 @@ const LoginPage: React.FC = () => {
           console.error("Unhandled roleId:", roleId);
         }
       } else {
-        console.error("Login failed:", response.statusText);
+        setErrorMessage("Bad credentials"); // Set error message if response is not ok
       }
     } catch (error) {
+      setErrorMessage("Bad credentials"); // Set error message for network or fetch errors
       console.error("An error occurred during login:", error);
     }
   };
@@ -123,6 +125,13 @@ const LoginPage: React.FC = () => {
             alt="Experion Technologies"
             style={{ marginBottom: 24, width: "60px" }}
           />
+
+          {errorMessage && (
+            <Typography color="error" sx={{ mb: 2 }}>
+              {errorMessage}
+            </Typography>
+          )}
+
           <Box
             component="form"
             sx={{
@@ -142,13 +151,6 @@ const LoginPage: React.FC = () => {
                 outline: "none",
                 borderColor: "#8061C3",
                 boxShadow: "0 0 5px rgba(128, 97, 195, 0.5)",
-              },
-              "& label": {
-                display: "block",
-                textAlign: "left",
-                color: "#8061C3",
-                fontFamily: "Montserrat, sans-serif",
-                marginBottom: "8px",
               },
             }}
             onSubmit={handleLogin}

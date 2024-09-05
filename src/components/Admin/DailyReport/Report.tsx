@@ -94,17 +94,27 @@ const TraineeReport: React.FC = () => {
     )
     .sort((a, b) => {
       if (sortConfig.key) {
-        if (
-          a[sortConfig.key as keyof Trainee] <
-          b[sortConfig.key as keyof Trainee]
-        ) {
-          return sortConfig.direction === "asc" ? -1 : 1;
-        }
-        if (
-          a[sortConfig.key as keyof Trainee] >
-          b[sortConfig.key as keyof Trainee]
-        ) {
-          return sortConfig.direction === "asc" ? 1 : -1;
+        if (sortConfig.key === "pendingReports") {
+          const pendingA = a.totalCourses - a.totalDailyReports;
+          const pendingB = b.totalCourses - b.totalDailyReports;
+          if (pendingA < pendingB)
+            return sortConfig.direction === "asc" ? -1 : 1;
+          if (pendingA > pendingB)
+            return sortConfig.direction === "asc" ? 1 : -1;
+          return 0;
+        } else {
+          if (
+            a[sortConfig.key as keyof Trainee] <
+            b[sortConfig.key as keyof Trainee]
+          ) {
+            return sortConfig.direction === "asc" ? -1 : 1;
+          }
+          if (
+            a[sortConfig.key as keyof Trainee] >
+            b[sortConfig.key as keyof Trainee]
+          ) {
+            return sortConfig.direction === "asc" ? 1 : -1;
+          }
         }
       }
       return 0;

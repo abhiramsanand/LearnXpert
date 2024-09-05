@@ -13,6 +13,12 @@ const DaysComplete: React.FC = () => {
     const cacheKey = "dayscomplete";
     const cachedData = localStorage.getItem(cacheKey);
     const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+    const traineeId = localStorage.getItem("traineeId"); // Retrieve traineeId from local storage
+
+    if (!traineeId) {
+      console.error("Trainee ID not found in local storage");
+      return;
+    }
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
@@ -28,7 +34,7 @@ const DaysComplete: React.FC = () => {
 
     setLoading(true);
 
-    const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/1404`;
+    const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`;
 
     fetch(url)
       .then((response) => response.json())
@@ -113,7 +119,8 @@ const DaysComplete: React.FC = () => {
               position: "absolute",
               width: "200px",
               height: "100%",
-              background: "linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)",
+              background:
+                "linear-gradient(90deg, transparent, rgba(128, 97, 195, 0.3), transparent)",
               animation: "slide 1.5s infinite",
             }}
           />

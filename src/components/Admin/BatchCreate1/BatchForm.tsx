@@ -16,13 +16,11 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  InputAdornment,
 } from "@mui/material";
 import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import * as XLSX from "xlsx";
 import SuccessModal from "./SuccessModal";
-import SearchIcon from "@mui/icons-material/Search";
 
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
@@ -169,15 +167,9 @@ const BatchForm: React.FC = () => {
         "&::-webkit-scrollbar": {
           width: "8px",
         },
-        "&::-webkit-scrollbar-track": {
-          background: "#f1f1f1",
-        },
         "&::-webkit-scrollbar-thumb": {
-          background: "#888",
+          background: "#8061C3",
           borderRadius: "4px",
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          background: "#555",
         },
       }}
     >
@@ -316,9 +308,8 @@ const BatchForm: React.FC = () => {
               <Typography variant="caption" color="textSecondary" ml={1}>
                 Don’t have a template? Download it from{" "}
                 <a
-                  href="https://example.com/template.xlsx"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/Batch_Creation_Template.xlsx"
+                  download
                   style={{
                     color: "#3f51b5",
                     textDecoration: "none",
@@ -344,15 +335,9 @@ const BatchForm: React.FC = () => {
                     "&::-webkit-scrollbar": {
                       width: "8px",
                     },
-                    "&::-webkit-scrollbar-track": {
-                      background: "#f1f1f1",
-                    },
                     "&::-webkit-scrollbar-thumb": {
-                      background: "#888",
+                      background: "#8061C3",
                       borderRadius: "4px",
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                      background: "#555",
                     },
                   }}
                 >
