@@ -136,7 +136,7 @@ const DaysComplete: React.FC = () => {
       ) : (
         <>
           <Typography sx={{ color: "#8061C3", fontSize: "12px" }}>
-            Total Training Days Completed
+            Percentage of Training Completed
           </Typography>
           <Box width="250px" height="70%" mt={-1}>
             <Doughnut data={data} options={options} />

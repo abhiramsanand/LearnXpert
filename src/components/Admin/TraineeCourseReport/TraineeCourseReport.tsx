@@ -278,7 +278,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                   fontSize: "14px",
                 }}
               >
-                Total Duration
+                Total Course Duration
               </TableCell>
               <TableCell
                 sx={{
@@ -290,7 +290,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
                 onClick={() => handleSort("estimatedDuration")}
               >
                 <Box display="flex" alignItems="center" gap="4px">
-                  Estimated Duration
+                  Total Trainee Watchtime
                   <SwapVertIcon fontSize="small" />
                 </Box>
               </TableCell>
