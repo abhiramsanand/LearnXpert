@@ -173,18 +173,6 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
         <Typography variant="h6">Trainee Progress</Typography>
       </CustomDialogTitle>
       <DialogContent>
-        <Typography
-          variant="subtitle1"
-          sx={{
-            mb: 0,
-            mt: 0,
-            color: "#4A148C",
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          Batch Day Number: {batchDayNumber}
-        </Typography>
         <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
           <FilterContainer>
             <FilterLabel>Filter by Status:</FilterLabel>
@@ -221,6 +209,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
                   borderColor: "#8061C3", // Focus border color
                 },
               },
+              mt: 1
             }}
           />
         </Box>

@@ -175,7 +175,7 @@ const AcceleratedTraineesModal: React.FC<AcceleratedTraineesModalProps> = ({
   return (
     <CustomDialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <CustomDialogTitle>
-        Trainees who are falling behind
+        Course Viewing Speeds
       </CustomDialogTitle>
       <DialogContent>
         <Box
