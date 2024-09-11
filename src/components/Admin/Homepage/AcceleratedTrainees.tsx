@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import AcceleratedTraineesModal from "./Modals/AcceleratedModal"; // Import the modal component
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -24,7 +24,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 0 * 60 * 1000;
+      const oneHour = 0 * 60 * 60 * 1000; // 1 hour
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
         setSpeedData(JSON.parse(cachedData));
@@ -33,13 +33,27 @@ const AcceleratedTraineesTrack: React.FC = () => {
       }
     }
 
-    setLoading(true);
+    const fetchData = async () => {
+      setLoading(true);
 
-    fetch(
-      "http://localhost:8080/api/v1/ilpex/traineeprogress/duration?batchId=15"
-    )
-      .then((response) => response.json())
-      .then((traineeData) => {
+      try {
+        // Fetch all batches
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
+
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
+
+        // Fetch trainee progress data for the active batch
+        const traineeResponse = await fetch(
+          `http://localhost:8080/api/v1/ilpex/traineeprogress/duration?batchId=${activeBatch.id}`
+        );
+        const traineeData = await traineeResponse.json();
+
         const speedCounts = {
           "1x": 0,
           "1.25x": 0,
@@ -80,11 +94,13 @@ const AcceleratedTraineesTrack: React.FC = () => {
           new Date().getTime().toString()
         );
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching accelerated trainee data:", error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleOpenModal = () => {
