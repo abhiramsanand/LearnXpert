@@ -123,9 +123,8 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
   trainees = [],
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] =
-    useState<keyof (typeof trainees)[0]>("traineeName");
-  const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [orderBy, setOrderBy] = useState<keyof (typeof trainees)[0]>("traineeDayNumber"); // Set initial sorting by traineeDayNumber
+  const [filterStatus, setFilterStatus] = useState<string>("Behind"); // Set initial filter to "Behind"
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleRequestSort = (property: keyof (typeof trainees)[0]) => {
@@ -173,7 +172,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
         <Typography variant="h6">Trainee Progress</Typography>
       </CustomDialogTitle>
       <DialogContent>
-        <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
           <FilterContainer>
             <FilterLabel>Filter by Status:</FilterLabel>
             <FormControl size="small" sx={{ minWidth: 120 }}>
@@ -197,16 +196,16 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
             value={searchQuery}
             onChange={handleSearchChange}
             sx={{
-              marginRight: "16px", // Adjust the spacing between input and button
+              marginRight: "16px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "#000000", // Default border color
+                  borderColor: "#000000",
                 },
                 "&:hover fieldset": {
-                  borderColor: "#000000", // Hover border color
+                  borderColor: "#000000",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "#8061C3", // Focus border color
+                  borderColor: "#8061C3",
                 },
               },
               mt: 1
