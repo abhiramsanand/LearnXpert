@@ -20,7 +20,7 @@ interface Trainee {
 }
 
 const TraineeTable: React.FC = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(15); 
+  const [selectedBatch, setSelectedBatch] = useState<number>(3); 
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [page, setPage] = useState(0); 
   const navigate = useNavigate();

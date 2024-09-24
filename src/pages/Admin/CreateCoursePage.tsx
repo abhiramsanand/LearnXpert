@@ -52,7 +52,7 @@ const CreateCourse: React.FC = () => {
 
     try {
       await axios.post(
-        "http://localhost:8080/api/v1/courses/create",
+        "http://localhost:8080/api/courses/create",
         formData,
         {
           headers: {

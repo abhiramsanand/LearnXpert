@@ -14,7 +14,7 @@ const DailyReportContainer: React.FC = () => {
   const [openPendingModal, setOpenPendingModal] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [batchId] = useState(15); // Assuming a batchId of 15
+  const [batchId] = useState(3); 
   const [traineeId, setTraineeId] = useState<number | null>(null); // Fetch traineeId from local storage
   const coursesPerPage = 3;
 

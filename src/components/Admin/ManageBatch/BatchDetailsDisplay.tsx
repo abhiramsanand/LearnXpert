@@ -31,7 +31,7 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/batches/15/update-end-date`,
+        `http://localhost:8080/api/v1/batches/3/update-end-date`,
         {
           method: "PUT",
           headers: {

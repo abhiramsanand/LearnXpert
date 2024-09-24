@@ -54,7 +54,7 @@ const TraineeReport: React.FC = () => {
     const fetchTraineeData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/trainees/reports?batchId=15"
+          "http://localhost:8080/api/trainees/reports?batchId=3"
         );
         setTrainees(response.data);
       } catch (error) {

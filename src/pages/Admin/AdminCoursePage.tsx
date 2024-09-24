@@ -9,7 +9,7 @@ import { Add } from "@mui/icons-material";
 const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
 
 const AdminCoursePage = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number | null>(15);
+  const [selectedBatch, setSelectedBatch] = useState<number | null>(3);
   const [loading, setLoading] = useState(true);
   const [batchDetails, setBatchDetails] = useState<any>(null);
 

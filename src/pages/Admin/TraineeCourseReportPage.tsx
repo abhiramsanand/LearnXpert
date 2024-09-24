@@ -4,7 +4,7 @@ import BatchSelect from '../../shared components/Admin/BatchSelect';
 import { Box, Typography } from '@mui/material';
 
 const TraineeCourseReportPage = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(15); // Default batch ID
+  const [selectedBatch, setSelectedBatch] = useState<number>(3); // Default batch ID
   const [loading, setLoading] = useState(true);
 
   const handleBatchSelect = (batchId: number) => {

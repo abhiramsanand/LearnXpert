@@ -131,7 +131,7 @@ const AdminHomePage = () => {
       </Box>
 
       {/* Settings Icon with Label */}
-      <Link to="/Admin-ManageBatch/15" style={{ textDecoration: "none" }}>
+      <Link to="/Admin-ManageBatch/3" style={{ textDecoration: "none" }}>
         <Box
           position="absolute"
           top="0px"

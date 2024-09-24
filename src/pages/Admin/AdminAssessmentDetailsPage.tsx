@@ -58,7 +58,7 @@ const AdminAssessmentDetailsPage = () => {
       >
         ASSESSMENTS
       </Typography>
-      <AssignmentDetails batchId={15} />
+      <AssignmentDetails batchId={3} />
     </Container>
   );
 };
