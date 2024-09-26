@@ -52,32 +52,23 @@ const ProgressTracker: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const storedData = localStorage.getItem("traineeProgressData");
-      const currentTime = new Date().getTime();
-
-      if (storedData) {
-        const { data, timestamp } = JSON.parse(storedData);
-        if (currentTime - timestamp < 0) { 
-          setBatchDayNumber(data.batchDayNumber);
-          setProgressData(data.progress);
-          setTrainees(data.trainees);
-          setLoading(false);
+      try {
+        // Fetch all batches
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchData = await batchResponse.json();
+        
+        // Find the active batch
+        const activeBatch = batchData.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
           return;
         }
-      }
 
-      setLoading(true);
+        setBatchDayNumber(activeBatch.dayNumber);  // Correctly set batchDayNumber from active batch
 
-      try {
-        const [traineeResponse, batchResponse] = await Promise.all([
-          fetch("http://localhost:8080/api/trainees/batch/15/currentday"),
-          fetch("http://localhost:8080/api/trainees/1400/currentdaynumber"),
-        ]);
-
+        // Fetch progress data for trainees in the active batch
+        const traineeResponse = await fetch(`http://localhost:8080/api/trainees/batch/${activeBatch.id}/currentday`);
         const traineeData = await traineeResponse.json();
-        const batchData = await batchResponse.json();
-
-        const batchDayNumber = batchData;
 
         let behind = 0;
         let onTrack = 0;
@@ -86,9 +77,9 @@ const ProgressTracker: React.FC = () => {
         for (const trainee of traineeData) {
           const { lastDayNumber } = trainee;
 
-          if (lastDayNumber < batchDayNumber) {
+          if (lastDayNumber < activeBatch.dayNumber) {
             behind++;
-          } else if (lastDayNumber === batchDayNumber) {
+          } else if (lastDayNumber === activeBatch.dayNumber) {
             onTrack++;
           } else {
             ahead++;
@@ -107,8 +98,8 @@ const ProgressTracker: React.FC = () => {
         localStorage.setItem(
           "traineeProgressData",
           JSON.stringify({
-            data: { progress, trainees: traineeData, batchDayNumber },
-            timestamp: currentTime,
+            data: { progress, trainees: traineeData, batchDayNumber: activeBatch.dayNumber },
+            timestamp: new Date().getTime(),
           })
         );
       } catch (error) {

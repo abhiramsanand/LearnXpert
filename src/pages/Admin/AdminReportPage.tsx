@@ -22,7 +22,7 @@ const AdminReportPage: React.FC = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const batchId = 15;
+        const batchId = 3;
         const traineeId = localStorage.getItem("traineeId");
 
         if (!traineeId) {

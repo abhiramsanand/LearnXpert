@@ -3,7 +3,6 @@ import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import ReportModal from "./Modals/DailyReportModal"; // Import the modal component
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { BorderColor } from "@mui/icons-material";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,11 +30,27 @@ const DailyReportTrack: React.FC = () => {
       }
     }
 
-    setLoading(true);
+    const fetchData = async () => {
+      setLoading(true);
 
-    fetch("http://localhost:8080/api/trainees/reports?batchId=15")
-      .then((response) => response.json())
-      .then((traineeData) => {
+      try {
+        // Fetch all batches
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
+
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
+
+        // Fetch trainee report data for the active batch
+        const traineeResponse = await fetch(
+          `http://localhost:8080/api/trainees/reports?batchId=${activeBatch.id}`
+        );
+        const traineeData = await traineeResponse.json();
+
         const totalTrainees = traineeData.length;
         let laggingCount = 0;
 
@@ -54,16 +69,15 @@ const DailyReportTrack: React.FC = () => {
           cacheKey,
           JSON.stringify({ percentage: Math.round(percentage), data: traineeData })
         );
-        localStorage.setItem(
-          `${cacheKey}_timestamp`,
-          new Date().getTime().toString()
-        );
-        setLoading(false);
-      })
-      .catch((error) => {
+        localStorage.setItem(`${cacheKey}_timestamp`, new Date().getTime().toString());
+      } catch (error) {
         console.error("Error fetching trainee data:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleModalOpen = () => setModalOpen(true);

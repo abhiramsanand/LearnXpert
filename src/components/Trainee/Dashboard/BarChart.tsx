@@ -21,14 +21,14 @@ const BarChart: React.FC = () => {
         backgroundColor: "#DB5461",
         data: [],
         borderRadius: 30,
-        barThickness: 20, 
+        barThickness: 20,
       },
       {
         label: "Trainee Watch Time",
         backgroundColor: "#5B8C5A",
         data: [],
         borderRadius: 30,
-        barThickness: 20, 
+        barThickness: 20,
       },
     ],
   });
@@ -55,8 +55,14 @@ const BarChart: React.FC = () => {
 
         const labels = result.map((_, index: number) => `C${index + 1}`); // C1, C2, etc.
         const courseNames = result.map((item: any) => item.courseName); // Full course names
-        const traineeData = result.map((item: any) => item.duration); // Convert seconds to minutes
-        const actualData = result.map((item: any) => item.estimatedDuration);
+
+        // Convert seconds to hours with one decimal place
+        const traineeData = result.map((item: any) =>
+          (item.duration / 3600).toFixed(1)
+        );
+        const actualData = result.map((item: any) =>
+          (item.estimatedDuration / 3600).toFixed(1)
+        );
 
         setCourseNames(courseNames); // Store course names for tooltips
 
@@ -68,14 +74,14 @@ const BarChart: React.FC = () => {
               backgroundColor: "#DB5461",
               data: actualData,
               borderRadius: 30,
-              barThickness: 20, 
+              barThickness: 20,
             },
             {
               label: "Trainee Watch Time",
               backgroundColor: "#5B8C5A",
               data: traineeData,
               borderRadius: 30,
-              barThickness: 20, 
+              barThickness: 20,
             },
           ],
         });
@@ -100,12 +106,17 @@ const BarChart: React.FC = () => {
       },
       y: {
         display: true,
+        ticks: {
+          callback: function (value: any) {
+            return `${value}h`; // Format y-axis labels to show hours
+          },
+        },
       },
     },
     plugins: {
       legend: {
-        display: true, 
-        position: "top", 
+        display: true,
+        position: "top",
         labels: {
           font: {
             size: 12,
@@ -117,6 +128,9 @@ const BarChart: React.FC = () => {
           title: (tooltipItems: any) => {
             const index = tooltipItems[0].dataIndex;
             return courseNames[index]; // Display courseName on hover
+          },
+          label: (tooltipItem: any) => {
+            return `${tooltipItem.raw}h`; // Show hours in tooltip
           },
         },
       },

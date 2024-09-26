@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
           localStorage.setItem("traineeId", traineeId); // Store traineeId in local storage
         }
   
-        if (roleId === "2") {
+        if (roleId === "3") {
           navigate("/Trainee-Dashboard");
         } else if (roleId === "1") {
           navigate("/Admin-Home");

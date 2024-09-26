@@ -27,21 +27,6 @@ const PercipioAssessment: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cacheKey = `assessmentData`;
-      const cachedData = localStorage.getItem(cacheKey);
-
-      if (cachedData) {
-        const { scoreData, traineeData, timestamp } = JSON.parse(cachedData);
-        const currentTime = new Date().getTime();
-
-        // Check if cached data is older than 1 hour (3600000 ms)
-        if (currentTime - timestamp < 3600000) {
-          setScoreData(scoreData);
-          setTraineeData(traineeData);
-          return;
-        }
-      }
-
       try {
         const response = await axios.get<{ [traineeName: string]: number }>(
           "http://localhost:8080/api/v1/assessments/averageScore"
@@ -74,16 +59,6 @@ const PercipioAssessment: React.FC = () => {
 
         setScoreData(newScoreData);
         setTraineeData(scores);
-
-        // Cache the data with the current timestamp
-        localStorage.setItem(
-          cacheKey,
-          JSON.stringify({
-            scoreData: newScoreData,
-            traineeData: scores,
-            timestamp: new Date().getTime(),
-          })
-        );
       } catch (error) {
         console.error("Error fetching assessment scores:", error);
       }

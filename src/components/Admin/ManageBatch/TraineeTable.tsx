@@ -224,7 +224,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
       <TableContainer
         component={Paper}
         sx={{
-          maxHeight: "350px",
+          maxHeight: "calc(100vh - 335px)",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F1EDEE",
