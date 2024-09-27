@@ -51,7 +51,8 @@ const NewAssessmentPage: React.FC = () => {
 
   useEffect(() => {
     const traineeId = localStorage.getItem('traineeId'); // Retrieve the stored traineeId
-
+    console.log('Trainee ID:', traineeId); // Log the traineeId to the console
+  
     // Fetch completed and pending assessments
     Promise.all([
       fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`).then((res) => res.json()),
@@ -66,6 +67,7 @@ const NewAssessmentPage: React.FC = () => {
       })
       .catch((error) => console.error('Error loading assessments:', error));
   }, []);
+  
 
   const handleSearchChange = (searchTerm: string) => {
     if (selectedCard === 'completed') {

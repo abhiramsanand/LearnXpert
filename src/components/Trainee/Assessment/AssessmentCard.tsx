@@ -10,6 +10,9 @@ interface AssessmentCardProps {
   date?: string;
   dateLabel?: string;
   score?: number;
+  correctAnswers?: number;  // Add correctAnswers
+  incorrectAnswers?: number;
+  
   onClick: () => void;
 }
  
@@ -41,6 +44,8 @@ const AssessmentCard: React.FC<AssessmentCardProps> = ({
   date,
   dateLabel,
   score,
+  correctAnswers,  // Destructure correctAnswers
+  incorrectAnswers,
   onClick,
 }) => {
   const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format the date to 'YYYY-MM-DD'
@@ -61,6 +66,11 @@ const AssessmentCard: React.FC<AssessmentCardProps> = ({
           )}
           {score !== undefined && (
             <StyledTypography variant="body2">Score: {score}</StyledTypography>
+          )}
+           {correctAnswers !== undefined && incorrectAnswers !== undefined && (
+            <StyledTypography variant="body2">
+              Correct: {correctAnswers} | Incorrect: {incorrectAnswers}
+            </StyledTypography>
           )}
         </StyledCardContent>
       </CardActionArea>

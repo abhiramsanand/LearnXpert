@@ -5,6 +5,8 @@ import AssessmentCard from "./AssessmentCard";
 interface Assessment {
   assessmentName: string;
   score?: number;
+  correctAnswers?: number;  // Add correctAnswers
+  incorrectAnswers?: number;
   dueDate?: string;
   traineeId: number;
   id: number;
@@ -46,6 +48,8 @@ const AssessmentList: React.FC<AssessmentListProps> = ({
               date={isCompleted ? assessment.dateTaken : assessment.dueDate}
               dateLabel={isCompleted ? "Date of Submission" : "Due Date"}
               score={assessment.score}
+              correctAnswers={assessment.correctAnswers}  // Pass correctAnswers
+            incorrectAnswers={assessment.incorrectAnswers}
               onClick={() => onCardClick(assessment.assessmentName)} // Correctly pass assessmentName
             />
           </Grid>
