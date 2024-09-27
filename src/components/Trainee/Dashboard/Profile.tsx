@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
                 `http://localhost:8080/api/v1/profiles/${traineeId}`
               ),
               axios.get<number>(
-                `http://localhost:8080/api/trainees/1400/currentdaynumber`
+                `http://localhost:8080/api/trainees/${traineeId}/currentdaynumber`
               ),
               axios.get<{ lastDayNumber: number }>(
                 `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`
