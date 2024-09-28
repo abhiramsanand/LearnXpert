@@ -61,7 +61,7 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
 
       // Fetch trainee's last day completed
       const lastDayCompletedResponse = await fetch(
-        `http://localhost:8080/api/trainees/batch/15/currentday`
+        `http://localhost:8080/api/trainees/batch/${batchId}/currentday`
       );
       const lastDayCompletedData = await lastDayCompletedResponse.json();
 

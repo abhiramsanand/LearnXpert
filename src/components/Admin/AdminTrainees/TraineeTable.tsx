@@ -20,13 +20,41 @@ interface Trainee {
 }
 
 const TraineeTable: React.FC = () => {
-  const [selectedBatch, setSelectedBatch] = useState<number>(3); 
+  const [selectedBatch, setSelectedBatch] = useState<number | null>(null); // Start with null
   const [trainees, setTrainees] = useState<Trainee[]>([]);
-  const [page, setPage] = useState(0); 
+  const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchActiveBatch = async () => {
+      try {
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        if (!batchResponse.ok) {
+          throw new Error('Failed to fetch batch data');
+        }
+        const batches = await batchResponse.json();
+
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
+
+        // Set the active batch as the selected batch
+        setSelectedBatch(activeBatch.batchId); // Assuming batchId is the identifier
+      } catch (error) {
+        console.error('Failed to fetch batch data:', error);
+      }
+    };
+
+    fetchActiveBatch();
+  }, []);
+
+  useEffect(() => {
     const fetchTrainees = async () => {
+      if (selectedBatch === null) return; // Do nothing if no batch is selected
+
       try {
         const response = await fetch(`http://localhost:8080/api/trainees/batch/${selectedBatch}`);
         if (!response.ok) {
@@ -69,7 +97,7 @@ const TraineeTable: React.FC = () => {
           marginTop: '-20px'
         }}
       >
-        <BatchSelect selectedBatch={selectedBatch} onBatchSelect={handleBatchSelect} />
+        <BatchSelect selectedBatch={selectedBatch ?? 0} onBatchSelect={handleBatchSelect} /> {/* Default to 0 if selectedBatch is null */}
       </Box>
       <TableContainer component={Paper}>
         <Table>
