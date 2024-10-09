@@ -125,7 +125,7 @@ const AdminReportPage: React.FC = () => {
             variant="h4"
             sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
           >
-            Daily Report
+            Whole Report
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1, ml: "auto", mt: 1 }}>

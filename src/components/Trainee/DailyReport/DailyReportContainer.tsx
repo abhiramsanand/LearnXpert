@@ -16,7 +16,7 @@ const DailyReportContainer: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [batchId, setBatchId] = useState<number | null>(null); // No longer hardcoded
   const [traineeId, setTraineeId] = useState<number | null>(null); // Fetch traineeId from local storage
-  const coursesPerPage = 3;
+  const coursesPerPage = 5;
 
   // State for holding course details for the modal
   const [courseDetails, setCourseDetails] = useState<string | null>(null);
