@@ -49,20 +49,43 @@ const TraineeReport: React.FC = () => {
   });
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [filterCriteria, setFilterCriteria] = useState<string>("all");
+  const [activeBatchId, setActiveBatchId] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchTraineeData = async () => {
+    // Fetch active batch
+    const fetchActiveBatch = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/trainees/reports?batchId=3"
-        );
-        setTrainees(response.data);
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (activeBatch) {
+          setActiveBatchId(activeBatch.batchId);  // Set the active batch ID
+        } else {
+          console.error("No active batch found");
+        }
       } catch (error) {
-        console.error("Error fetching trainee data:", error);
+        console.error("Error fetching active batch:", error);
       }
     };
-    fetchTraineeData();
+
+    fetchActiveBatch();
   }, []);
+
+  useEffect(() => {
+    if (activeBatchId !== null) {
+      const fetchTraineeData = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/api/trainees/reports?batchId=${activeBatchId}`
+          );
+          setTrainees(response.data);
+        } catch (error) {
+          console.error("Error fetching trainee data:", error);
+        }
+      };
+      fetchTraineeData();
+    }
+  }, [activeBatchId]); // Only fetch trainees when activeBatchId is set
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -104,7 +127,7 @@ const TraineeReport: React.FC = () => {
           return 0;
         } else {
           if (
-            a[sortConfig.key as keyof Trainee] <
+            a[sortConfig.key as keyof Trainee] < 
             b[sortConfig.key as keyof Trainee]
           ) {
             return sortConfig.direction === "asc" ? -1 : 1;
