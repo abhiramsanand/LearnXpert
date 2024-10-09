@@ -18,33 +18,11 @@ interface Report {
 const AdminReportPage: React.FC = () => {
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
-  const [batchId, setBatchId] = useState<number | null>(null); // Dynamic batch ID
 
-  // Fetch the active batch
-  useEffect(() => {
-    const fetchActiveBatch = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/v1/batches");
-        const batches = response.data;
-        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
-
-        if (activeBatch) {
-          setBatchId(activeBatch.batchId); // Set active batch ID
-        } else {
-          console.error("No active batch found");
-        }
-      } catch (error) {
-        console.error("Error fetching active batch:", error);
-      }
-    };
-
-    fetchActiveBatch();
-  }, []);
-
-  // Fetch reports based on traineeId and active batchId
   useEffect(() => {
     const fetchReports = async () => {
       try {
+        const batchId = 15;
         const traineeId = localStorage.getItem("traineeId");
 
         if (!traineeId) {
@@ -52,23 +30,21 @@ const AdminReportPage: React.FC = () => {
           return;
         }
 
-        if (batchId !== null) {
-          const response = await axios.get(
-            `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
-          );
+        const response = await axios.get(
+          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
+        );
 
-          const reports: Report[] = response.data.map((course: any) => ({
-            day: new Date(course.courseDate).toISOString().slice(0, 10),
-            course: course.courseName,
-            timeTaken: course.timeTaken.toString(),
-            dailyReportId: course.dailyReportId,
-            status: course.timeTaken > 0 ? "completed" : "pending",
-            keyLearnings: course.keyLearnings || "",
-            planForTomorrow: course.planForTomorrow || "",
-          }));
+        const reports: Report[] = response.data.map((course: any) => ({
+          day: new Date(course.courseDate).toISOString().slice(0, 10), // Updated line
+          course: course.courseName,
+          timeTaken: course.timeTaken.toString(),
+          dailyReportId: course.dailyReportId,
+          status: course.timeTaken > 0 ? "completed" : "pending", // Updated line
+          keyLearnings: course.keyLearnings || "",
+          planForTomorrow: course.planForTomorrow || "",
+        }));
 
-          setFilteredReports(reports);
-        }
+        setFilteredReports(reports);
       } catch (error) {
         console.error("Error fetching reports:", error);
       } finally {
@@ -76,10 +52,8 @@ const AdminReportPage: React.FC = () => {
       }
     };
 
-    if (batchId !== null) {
-      fetchReports(); // Fetch reports only after batchId is available
-    }
-  }, [batchId]); // Dependency on batchId
+    fetchReports();
+  }, []);
 
   const handleSortChange = (sortBy: keyof Report) => {
     const sortedReports = [...filteredReports].sort((a, b) =>

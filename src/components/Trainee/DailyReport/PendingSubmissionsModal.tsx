@@ -32,12 +32,10 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Set the number of items per page
 
-  const traineeId = localStorage.getItem("traineeId");
-
   useEffect(() => {
     const fetchPendingCourses = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/courses/pending-submissions?batchId=15&traineeId=${traineeId}`);
+        const response = await axios.get("http://localhost:8080/api/courses/pending-submissions?batchId=15&traineeId=1307");
         setPendingCourses(response.data);
       } catch (error) {
         console.error("Failed to fetch pending courses", error);

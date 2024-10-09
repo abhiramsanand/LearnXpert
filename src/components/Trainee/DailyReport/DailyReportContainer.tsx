@@ -14,32 +14,12 @@ const DailyReportContainer: React.FC = () => {
   const [openPendingModal, setOpenPendingModal] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [batchId, setBatchId] = useState<number | null>(null); // No longer hardcoded
+  const [batchId] = useState(15); // Assuming a batchId of 15
   const [traineeId, setTraineeId] = useState<number | null>(null); // Fetch traineeId from local storage
   const coursesPerPage = 5;
 
   // State for holding course details for the modal
   const [courseDetails, setCourseDetails] = useState<string | null>(null);
-
-  // Fetch the active batch ID
-  useEffect(() => {
-    const fetchActiveBatch = async () => {
-      try {
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
-        const batches = await batchResponse.json();
-        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
-        if (activeBatch) {
-          setBatchId(activeBatch.batchId); // Set the active batch ID
-        } else {
-          console.error("No active batch found");
-        }
-      } catch (error) {
-        console.error("Error fetching active batch:", error);
-      }
-    };
-
-    fetchActiveBatch();
-  }, []);
 
   useEffect(() => {
     // Fetch traineeId from local storage
@@ -50,7 +30,7 @@ const DailyReportContainer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (traineeId && batchId !== null) {
+    if (traineeId) {
       const fetchCourses = async () => {
         try {
           const dateStr = formatDateToApiFormat(selectedDate);
