@@ -43,49 +43,33 @@ const TraineeReport: React.FC = () => {
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc" | null;
-  }>({
-    key: "",
-    direction: null,
-  });
+  }>({ key: "", direction: null });
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [filterCriteria, setFilterCriteria] = useState<string>("all");
-  const [activeBatchId, setActiveBatchId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Fetch active batch
-    const fetchActiveBatch = async () => {
+    const fetchTraineeData = async () => {
       try {
         const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
         const batches = await batchResponse.json();
+
+        // Find the active batch
         const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
-        if (activeBatch) {
-          setActiveBatchId(activeBatch.batchId);  // Set the active batch ID
-        } else {
+        if (!activeBatch) {
           console.error("No active batch found");
+          return;
         }
+        const response = await axios.get(
+          `http://localhost:8080/api/trainees/reports?batchId=${activeBatch.id}`
+        );
+        setTrainees(response.data);
       } catch (error) {
-        console.error("Error fetching active batch:", error);
+        console.error("Error fetching trainee data:", error);
       }
     };
-
-    fetchActiveBatch();
-  }, []);
-
-  useEffect(() => {
-    if (activeBatchId !== null) {
-      const fetchTraineeData = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/trainees/reports?batchId=${activeBatchId}`
-          );
-          setTrainees(response.data);
-        } catch (error) {
-          console.error("Error fetching trainee data:", error);
-        }
-      };
-      fetchTraineeData();
-    }
-  }, [activeBatchId]); // Only fetch trainees when activeBatchId is set
+    
+    fetchTraineeData();
+  }, []); // Fetch trainees on component mount
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -120,10 +104,8 @@ const TraineeReport: React.FC = () => {
         if (sortConfig.key === "pendingReports") {
           const pendingA = a.totalCourses - a.totalDailyReports;
           const pendingB = b.totalCourses - b.totalDailyReports;
-          if (pendingA < pendingB)
-            return sortConfig.direction === "asc" ? -1 : 1;
-          if (pendingA > pendingB)
-            return sortConfig.direction === "asc" ? 1 : -1;
+          if (pendingA < pendingB) return sortConfig.direction === "asc" ? -1 : 1;
+          if (pendingA > pendingB) return sortConfig.direction === "asc" ? 1 : -1;
           return 0;
         } else {
           if (

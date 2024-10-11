@@ -14,7 +14,6 @@ const DailyReportContainer: React.FC = () => {
   const [openPendingModal, setOpenPendingModal] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [batchId] = useState(15); // Assuming a batchId of 15
   const [traineeId, setTraineeId] = useState<number | null>(null); // Fetch traineeId from local storage
   const coursesPerPage = 5;
 
@@ -33,9 +32,18 @@ const DailyReportContainer: React.FC = () => {
     if (traineeId) {
       const fetchCourses = async () => {
         try {
+          const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+          const batches = await batchResponse.json();
+  
+          // Find the active batch
+          const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+          if (!activeBatch) {
+            console.error("No active batch found");
+            return;
+          }
           const dateStr = formatDateToApiFormat(selectedDate);
           const response = await fetch(
-            `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${batchId}&traineeId=${traineeId}`
+            `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${activeBatch.id}&traineeId=${traineeId}`
           );
           const data = await response.json();
           setCourses(data);
@@ -46,7 +54,7 @@ const DailyReportContainer: React.FC = () => {
 
       fetchCourses();
     }
-  }, [selectedDate, batchId, traineeId]);
+  }, [selectedDate, traineeId]);
 
   const handleOpenReportModal = async (
     courseId: number,

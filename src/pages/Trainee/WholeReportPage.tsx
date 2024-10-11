@@ -22,16 +22,23 @@ const AdminReportPage: React.FC = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const batchId = 15;
         const traineeId = localStorage.getItem("traineeId");
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
 
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
         if (!traineeId) {
           console.error("No traineeId found in localStorage");
           return;
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
+          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${activeBatch.id}`
         );
 
         const reports: Report[] = response.data.map((course: any) => ({

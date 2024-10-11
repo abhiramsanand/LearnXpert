@@ -18,27 +18,6 @@ interface Report {
 const AdminReportPage: React.FC = () => {
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
-  const [batchId, setBatchId] = useState<number | null>(null); // Dynamic batchId
-
-  useEffect(() => {
-    const fetchActiveBatch = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/v1/batches");
-        const batches = response.data;
-        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
-
-        if (activeBatch) {
-          setBatchId(activeBatch.batchId); // Set the active batch ID
-        } else {
-          console.error("No active batch found");
-        }
-      } catch (error) {
-        console.error("Error fetching active batch:", error);
-      }
-    };
-
-    fetchActiveBatch();
-  }, []);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -49,24 +28,30 @@ const AdminReportPage: React.FC = () => {
           console.error("No traineeId found in localStorage");
           return;
         }
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
 
-        if (batchId !== null) { // Ensure batchId is fetched before making API call
-          const response = await axios.get(
-            `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${batchId}`
-          );
-
-          const reports: Report[] = response.data.map((course: any) => ({
-            day: new Date(course.courseDate).toISOString().slice(0, 10), // Format the date
-            course: course.courseName,
-            timeTaken: course.timeTaken.toString(),
-            dailyReportId: course.dailyReportId,
-            status: course.timeTaken > 0 ? "completed" : "pending", // Define the status
-            keyLearnings: course.keyLearnings || "",
-            planForTomorrow: course.planForTomorrow || "",
-          }));
-
-          setFilteredReports(reports);
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
         }
+        const response = await axios.get(
+          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${activeBatch.id}`
+        );
+
+        const reports: Report[] = response.data.map((course: any) => ({
+          day: new Date(course.courseDate).toISOString().slice(0, 10), // Format the date
+          course: course.courseName,
+          timeTaken: course.timeTaken.toString(),
+          dailyReportId: course.dailyReportId,
+          status: course.timeTaken > 0 ? "completed" : "pending", // Define the status
+          keyLearnings: course.keyLearnings || "",
+          planForTomorrow: course.planForTomorrow || "",
+        }));
+
+        setFilteredReports(reports);
       } catch (error) {
         console.error("Error fetching reports:", error);
       } finally {
@@ -74,10 +59,8 @@ const AdminReportPage: React.FC = () => {
       }
     };
 
-    if (batchId !== null) {
-      fetchReports(); // Fetch reports only after batchId is set
-    }
-  }, [batchId]); // Dependency on batchId
+    fetchReports(); 
+  }); 
 
   const handleSearch = (searchValue: string) => {
     setFilteredReports((prevReports) =>

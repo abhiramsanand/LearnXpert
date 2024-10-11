@@ -35,7 +35,22 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
   useEffect(() => {
     const fetchPendingCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/courses/pending-submissions?batchId=15&traineeId=1307");
+        const traineeId = localStorage.getItem("traineeId");
+
+        if (!traineeId) {
+          console.error("No traineeId found in localStorage");
+          return;
+        }
+        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batches = await batchResponse.json();
+
+        // Find the active batch
+        const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
+        const response = await axios.get(`http://localhost:8080/api/courses/pending-submissions?batchId=${activeBatch.id}&traineeId=${traineeId}`);
         setPendingCourses(response.data);
       } catch (error) {
         console.error("Failed to fetch pending courses", error);
