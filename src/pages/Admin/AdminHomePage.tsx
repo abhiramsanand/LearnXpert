@@ -9,7 +9,6 @@ import PercipioAssessment from "../../components/Admin/Homepage/PercipioAssessme
 import ILPexAssessment from "../../components/Admin/Homepage/ILPexAssessment";
 import AcceleratedTraineesTrack from "../../components/Admin/Homepage/AcceleratedTrainees";
 
-// Assuming batch details are stored in JSON at this URL
 const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
 
 const AdminHomePage = () => {
@@ -19,15 +18,22 @@ const AdminHomePage = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const response = await fetch(BATCH_DETAILS_URL);
-        const data = await response.json();
-        const batch = data[0]; // Adjust this if you want to fetch a specific batch
+        const response = await fetch(BATCH_DETAILS_URL); // Fetch all batches
+        const batchData = await response.json();
 
-        setBatchDetails(batch);
+        // Find the active batch
+        const activeBatch = batchData.find((batch: { isActive: boolean }) => batch.isActive);
+
+        if (!activeBatch) {
+          console.error("No active batch found");
+          return;
+        }
+
+        setBatchDetails(activeBatch); // Set the active batch details
       } catch (error) {
         console.error("Error fetching batch details:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading after fetch attempt
       }
     };
 
@@ -69,6 +75,7 @@ const AdminHomePage = () => {
       alignItems="center"
       position="relative"
     >
+      {/* Display Active Batch Details */}
       <Box
         position="absolute"
         top="0px"
@@ -126,37 +133,39 @@ const AdminHomePage = () => {
             </Typography>
           </>
         ) : (
-          <Typography>No batch details available.</Typography>
+          <Typography>No active batch details available.</Typography>
         )}
       </Box>
 
       {/* Settings Icon with Label */}
-      <Link to="/Admin-ManageBatch/3" style={{ textDecoration: "none" }}>
-        <Box
-          position="absolute"
-          top="0px"
-          right="30px"
-          display="flex"
-          alignItems="center"
-          zIndex={10}
-          sx={{
-            transition: "transform 0.3s ease-in-out",
-            "&:hover": {
-              transform: "scale(1.05)",
-            },
-          }}
-        >
-          <IconButton
-            aria-label="Manage Batch"
-            sx={{ marginRight: "5px", color: "#8061C3" }}
+      {batchDetails && (
+        <Link to={`/Admin-ManageBatch/${batchDetails.id}`} style={{ textDecoration: "none" }}>
+          <Box
+            position="absolute"
+            top="0px"
+            right="30px"
+            display="flex"
+            alignItems="center"
+            zIndex={10}
+            sx={{
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
+            }}
           >
-            <SettingsIcon />
-          </IconButton>
-          <Typography sx={{ color: "#8061C3", fontWeight: "bold" }}>
-            Manage Batch
-          </Typography>
-        </Box>
-      </Link>
+            <IconButton
+              aria-label="Manage Batch"
+              sx={{ marginRight: "5px", color: "#8061C3" }}
+            >
+              <SettingsIcon />
+            </IconButton>
+            <Typography sx={{ color: "#8061C3", fontWeight: "bold" }}>
+              Manage Batch
+            </Typography>
+          </Box>
+        </Link>
+      )}
 
       {/* Main Content */}
       <Box
