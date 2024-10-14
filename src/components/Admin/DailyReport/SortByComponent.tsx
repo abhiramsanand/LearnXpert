@@ -1,23 +1,24 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Report } from '../../../shared components/Types'; // Importing the Report type
 
 interface SortByProps {
-  onSortChange: (value: string) => void;
+  onSortChange: (value: keyof Report) => void; // Use keyof Report
 }
 
 const SortByComponent: React.FC<SortByProps> = ({ onSortChange }) => {
-  const handleSortChange = (event: SelectChangeEvent) => {
-    onSortChange(event.target.value);
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
+    onSortChange(event.target.value as keyof Report); // Cast value to keyof Report
   };
 
   return (
-    <FormControl variant="outlined" fullWidth sx={{minWidth: "120px"}}>
+    <FormControl variant="outlined" fullWidth sx={{ minWidth: "120px" }}>
       <InputLabel id="sort-by-label">Sort By</InputLabel>
       <Select
         labelId="sort-by-label"
         onChange={handleSortChange}
         label="Sort By"
-        defaultValue="day" // Set default value to "day"
+        defaultValue="day"
       >
         <MenuItem value="day">Day</MenuItem>
         <MenuItem value="course">Course</MenuItem>

@@ -1,19 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography } from "@mui/material";
 import SortByComponent from "../../components/Admin/DailyReport/SortByComponent";
 import ReportsTableComponent from "../../components/Admin/DailyReport/ReportTable";
 import BackButtonComponent from "../../components/Admin/DailyReport/BackButtonComponent";
 import axios from "axios";
-
-interface Report {
-  day: string;
-  course: string;
-  timeTaken: string;
-  status: string;
-  dailyReportId: number;
-  keyLearnings: string;
-  planForTomorrow: string;
-}
+import { Report } from '../../shared components/Types'; // Importing the Report type
 
 const AdminReportPage: React.FC = () => {
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
@@ -23,11 +15,6 @@ const AdminReportPage: React.FC = () => {
     const fetchReports = async () => {
       try {
         const traineeId = localStorage.getItem("traineeId");
-
-        if (!traineeId) {
-          console.error("No traineeId found in localStorage");
-          return;
-        }
         const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
         const batches = await batchResponse.json();
 
@@ -37,16 +24,21 @@ const AdminReportPage: React.FC = () => {
           console.error("No active batch found");
           return;
         }
+        if (!traineeId) {
+          console.error("No traineeId found in localStorage");
+          return;
+        }
+
         const response = await axios.get(
           `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${activeBatch.id}`
         );
 
         const reports: Report[] = response.data.map((course: any) => ({
-          day: new Date(course.courseDate).toISOString().slice(0, 10), // Format the date
+          day: new Date(course.courseDate).toISOString().slice(0, 10), // Convert to ISO string
           course: course.courseName,
           timeTaken: course.timeTaken.toString(),
           dailyReportId: course.dailyReportId,
-          status: course.timeTaken > 0 ? "completed" : "pending", // Define the status
+          status: course.timeTaken > 0 ? "completed" : "pending", // Conditionally set status
           keyLearnings: course.keyLearnings || "",
           planForTomorrow: course.planForTomorrow || "",
         }));
@@ -59,32 +51,29 @@ const AdminReportPage: React.FC = () => {
       }
     };
 
-    fetchReports(); 
-  }); 
-
-  const handleSearch = (searchValue: string) => {
-    setFilteredReports((prevReports) =>
-      prevReports.filter((report) =>
-        report.course.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  };
+    fetchReports();
+  }, []);
 
   const handleSortChange = (sortBy: keyof Report) => {
-    const sortedReports = [...filteredReports].sort((a, b) =>
-      a[sortBy].localeCompare(b[sortBy])
-    );
+    const sortedReports = [...filteredReports].sort((a, b) => {
+      const aValue = a[sortBy];
+      const bValue = b[sortBy];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return aValue.localeCompare(bValue); // String comparison
+      } else if (typeof aValue === "number" && typeof bValue === "number") {
+        return aValue - bValue; // Numeric comparison
+      }
+
+      return 0; // Default return if types are mixed or uncomparable
+    });
+
     setFilteredReports(sortedReports);
   };
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="70vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
         <Typography
           sx={{
             fontSize: "30px",
@@ -107,20 +96,16 @@ const AdminReportPage: React.FC = () => {
 
   return (
     <Container>
-      <Box sx={{ mb: 1, display: "flex", alignItems: "center", mt: "-20px" }}>
+      <Box sx={{ mb: 1, display: "flex", alignItems: "center", mt: "20px" }}>
         <BackButtonComponent />
         <Box sx={{ ml: 1 }}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "bold", fontSize: "1.25rem" }}
-          >
-            Daily Report
+          <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "1.25rem" }}>
+            Whole Report
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1, ml: "auto", mt: 1 }}>
           <SortByComponent
-            onSortChange={handleSortChange}
-            sx={{ width: 50, height: 40 }}
+            onSortChange={handleSortChange} // Pass the correct sorting function
           />
         </Box>
       </Box>
