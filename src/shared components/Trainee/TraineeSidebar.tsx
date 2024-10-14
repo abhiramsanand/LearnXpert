@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import {
   Drawer,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   IconButton,
   Toolbar,
   Typography,
+  ListItemButton,
 } from "@mui/material";
 import {
   Home as HomeIcon,
   Class as ClassIcon,
   Assessment as AssessmentIcon,
   Report as ReportIcon,
-  HelpOutline as HelpOutlineIcon,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
@@ -61,11 +60,6 @@ const TraineeSidebar: React.FC = () => {
       icon: <ReportIcon />,
       to: "/Trainee-DailyReport",
     },
-    {
-      // text: "Enquiry",
-      // icon: <HelpOutlineIcon />,
-      // to: "/Trainee-Enquiry",
-    },
   ];
 
   return (
@@ -107,8 +101,7 @@ const TraineeSidebar: React.FC = () => {
       </Toolbar>
       <List>
         {menuItems.map((item) => (
-          <ListItem
-            button
+          <ListItemButton
             key={item.text}
             component={Link}
             to={item.to}
@@ -142,7 +135,7 @@ const TraineeSidebar: React.FC = () => {
                 color: location.pathname === item.to ? "#FFFFFF" : "#8061C3",
               }}
             />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
     </Drawer>

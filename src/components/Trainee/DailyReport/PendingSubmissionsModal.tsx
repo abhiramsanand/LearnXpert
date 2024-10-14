@@ -60,7 +60,7 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
     fetchPendingCourses();
   }, []);
 
-  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 

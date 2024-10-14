@@ -28,7 +28,7 @@ const AssessmentList: React.FC<AssessmentListProps> = ({
   const [page, setPage] = React.useState(1);
   const itemsPerPage = 3;
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 

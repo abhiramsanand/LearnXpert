@@ -1,15 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import {
   Modal,
   Box,
   Typography,
   IconButton,
-  Stack,
-  Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface Report {
   day: string;
@@ -32,8 +29,6 @@ const ReportModalComponent: React.FC<ReportModalComponentProps> = ({
   open,
   onClose,
   report,
-  onPrevious,
-  onNext,
 }) => {
   return (
     <Modal

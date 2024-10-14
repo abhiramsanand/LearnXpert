@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { Box, Container, Paper } from "@mui/material";
 import HeaderSection from "./HeaderSection";
@@ -7,8 +8,31 @@ import DailyReportModal from "./DailyReportModal";
 import PendingSubmissionsModal from "./PendingSubmissionsModal";
 import ReportModalComponent from "./ReportModalComponent";
 
+// Define types for CourseDetails and Report
+interface Course {
+  courseId: number;
+  courseName: string;
+  timeTaken: number; // Assuming timeTaken is a number representing minutes
+  id: number; // dailyReportId or unique identifier for the course report
+}
+
+interface CourseDetails {
+  courseId: number;
+  courseName: string;
+  // Add other properties if necessary
+}
+
+export interface Report { // Export the Report type for consistent use across components
+  day: string;
+  course: string;
+  timeTaken: string;
+  status: string;
+  keyLearnings: string;
+  planForTomorrow: string;
+}
+
 const DailyReportContainer: React.FC = () => {
-  const [courses, setCourses] = useState<string[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]); // Fix: changed from string[] to Course[]
   const [searchTerm, setSearchTerm] = useState("");
   const [openReportModal, setOpenReportModal] = useState(false);
   const [openPendingModal, setOpenPendingModal] = useState(false);
@@ -18,7 +42,7 @@ const DailyReportContainer: React.FC = () => {
   const coursesPerPage = 5;
 
   // State for holding course details for the modal
-  const [courseDetails, setCourseDetails] = useState<string | null>(null);
+  const [courseDetails, setCourseDetails] = useState<CourseDetails | null>(null);
 
   useEffect(() => {
     // Fetch traineeId from local storage
@@ -34,19 +58,29 @@ const DailyReportContainer: React.FC = () => {
         try {
           const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
           const batches = await batchResponse.json();
-  
+
           // Find the active batch
           const activeBatch = batches.find((batch: { isActive: boolean }) => batch.isActive);
           if (!activeBatch) {
             console.error("No active batch found");
             return;
           }
+
           const dateStr = formatDateToApiFormat(selectedDate);
           const response = await fetch(
             `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${activeBatch.id}&traineeId=${traineeId}`
           );
           const data = await response.json();
-          setCourses(data);
+
+          // Assuming the API returns an array of objects matching the `Course` interface
+          const mappedCourses: Course[] = data.map((course: any) => ({
+            courseId: course.courseId,
+            courseName: course.courseName,
+            timeTaken: course.timeTaken,
+            id: course.id, // Ensure this is correct based on your API response
+          }));
+
+          setCourses(mappedCourses); // Fix: Map data correctly to Course[]
         } catch (error) {
           console.error("Error fetching courses:", error);
         }
@@ -86,10 +120,7 @@ const DailyReportContainer: React.FC = () => {
     setSelectedDate(date);
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
@@ -104,7 +135,15 @@ const DailyReportContainer: React.FC = () => {
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
 
   const handleOpenReportViewModal = (report: Report) => {
-    setCurrentReport(report);
+    setCurrentReport({
+      ...report,
+      day: report.day || "",
+      course: report.course || "",
+      timeTaken: report.timeTaken || "",
+      status: report.status || "",
+      keyLearnings: report.keyLearnings || "",
+      planForTomorrow: report.planForTomorrow || "",
+    });
     setOpenReportViewModal(true);
   };
 
@@ -165,7 +204,7 @@ const DailyReportContainer: React.FC = () => {
         courseName={courseDetails?.courseName || ""}
         courseDetails={courseDetails}
         setCourseDetails={setCourseDetails}
-        traineeId={traineeId}
+        traineeId={traineeId ?? 0} // Provide fallback value if traineeId is null
         courseId={courseDetails?.courseId || 0}
       />
 
@@ -174,7 +213,6 @@ const DailyReportContainer: React.FC = () => {
         handleClose={handleClosePendingModal}
       />
 
-      {/* ReportModalComponent */}
       {currentReport && (
         <ReportModalComponent
           open={openReportViewModal}

@@ -1,13 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Grid, Card, CardContent, Typography, IconButton, Box } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-// import DailyReportModal from "./DailyReportModal"; // Make sure to import your modal
 import ReportModalComponent from "./ReportModalComponent";
+import { Report } from "./DailyReportContainer"; // Importing the Report type
+
+// Define Course type to avoid using 'any'
+interface Course {
+  courseId: number;
+  courseName: string;
+  timeTaken: number; // Assuming this is in minutes, as inferred from the formatTimeTaken function
+  id: number; // dailyReportId or unique identifier for the course report
+}
 
 interface CoursesListProps {
-  courses: any[];
+  courses: Course[];
   handleOpenReportModal: (
     courseId: number,
     courseName: string,
@@ -16,12 +26,9 @@ interface CoursesListProps {
   handleOpenReportViewModal: (report: Report) => void;
 }
 
-const CoursesList: React.FC<CoursesListProps> = ({
-  courses,
-  handleOpenReportModal,
-}) => {
+const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModal }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
 
   const formatTimeTaken = (time: number) => {
     if (time === null || time === undefined) return "No Data";
@@ -29,12 +36,12 @@ const CoursesList: React.FC<CoursesListProps> = ({
     const hours = Math.floor(time / 60);
     const minutes = time % 60;
 
-    return `${
-      hours > 0 ? `${hours} hour${hours > 1 ? "s" : ""} ` : ""
-    }${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    return `${hours > 0 ? `${hours} hour${hours > 1 ? "s" : ""} ` : ""}${minutes} minute${
+      minutes !== 1 ? "s" : ""
+    }`;
   };
 
-  const handleViewReport = async (dailyReportId: number, courseId: number) => {
+  const handleViewReport = async (dailyReportId: number, _courseId: number) => {
     try {
       const response = await axios.get(
         `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
@@ -44,15 +51,17 @@ const CoursesList: React.FC<CoursesListProps> = ({
       // Debugging log
       console.log("Fetched report data:", reportData);
 
-      setSelectedReport({ ...reportData, courseId });
+      setSelectedReport({
+        day: reportData.day || "", // Ensure fallback values
+        course: reportData.courseName || "",
+        timeTaken: formatTimeTaken(reportData.timeTaken),
+        status: reportData.status || "",
+        keyLearnings: reportData.keyLearnings || "",
+        planForTomorrow: reportData.planForTomorrow || "",
+      });
       setOpenModal(true);
     } catch (error) {
       console.error("Error fetching report details:", error);
-
-      // Further debugging
-      if (error.response) {
-        console.log("Server responded with:", error.response.data);
-      }
     }
   };
 
@@ -66,72 +75,44 @@ const CoursesList: React.FC<CoursesListProps> = ({
       <Grid container spacing={0.5}>
         {courses.length === 0 ? (
           <Grid item xs={12}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="100px"
-            >
+            <Box display="flex" justifyContent="center" alignItems="center" height="100px">
               <Typography variant="body1">No courses available for this date</Typography>
             </Box>
           </Grid>
         ) : (
-          courses.map((course, index) => (
-            <Grid item xs={12} key={index}>
+          courses.map((course) => (
+            <Grid item xs={12} key={course.courseId}>
               <Card>
                 <CardContent
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     backgroundColor: "#ffffff",
-                    p: "0 8px", // Set top and bottom padding to 0, and left-right padding to 8px
-                    minHeight: "0", // Ensure no fixed height
-                    "&:last-child": {
-                      paddingBottom: 0,
-                    },
+                    p: "0 8px",
+                    minHeight: "0",
+                    "&:last-child": { paddingBottom: 0 },
                   }}
                 >
                   <Grid container alignItems="center">
                     <Grid item xs={4}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          margin: 0, // Remove any margin
-                          padding: 0, // Remove any padding
-                          lineHeight: 1, // Ensure tight line height
-                        }}
-                      >
+                      <Typography variant="body2" sx={{ lineHeight: 1 }}>
                         {course.courseName}
                       </Typography>
                     </Grid>
-
                     <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography variant="body2">
                         {formatTimeTaken(course.timeTaken)}
                       </Typography>
                     </Grid>
-
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ display: "flex", justifyContent: "flex-end" }}
-                    >
+                    <Grid item xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
                       <IconButton
-                        onClick={() =>
-                          handleOpenReportModal(
-                            course.courseId,
-                            course.courseName,
-                            course.id
-                          )
-                        }
+                        onClick={() => handleOpenReportModal(course.courseId, course.courseName, course.id)}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton
                         disabled={!course.timeTaken}
-                        onClick={() =>
-                          handleViewReport(course.id, course.courseId)
-                        }
+                        onClick={() => handleViewReport(course.id, course.courseId)}
                       >
                         <VisibilityIcon />
                       </IconButton>
@@ -148,16 +129,9 @@ const CoursesList: React.FC<CoursesListProps> = ({
         <ReportModalComponent
           open={openModal}
           onClose={handleCloseModal}
-          report={{
-            course: selectedReport.courseName,
-            timeTaken: formatTimeTaken(selectedReport.timeTaken),
-            keyLearnings: selectedReport.keylearnings,
-            planForTomorrow: selectedReport.planfortomorrow,
-            status: "", // Add other necessary fields if available
-            day: "", // Add other necessary fields if available
-          }}
-          onPrevious={() => {}} // Implement if needed
-          onNext={() => {}} // Implement if needed
+          report={selectedReport}
+          onPrevious={() => {}}
+          onNext={() => {}}
         />
       )}
     </>

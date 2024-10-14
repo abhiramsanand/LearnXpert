@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppBar, Container, Box, Typography, Avatar } from "@mui/material";
 import { Logout as LogoutIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
