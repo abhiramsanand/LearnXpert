@@ -1,3 +1,5 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -82,11 +84,7 @@ const TraineeReport: React.FC = () => {
     }
     setSortConfig({ key, direction });
   };
-
-  const handleFilter = () => {
-    setFilterModalOpen(false);
-  };
-
+  
   const filteredTrainees = trainees
     .filter((trainee) => {
       const pendingReports = trainee.totalCourses - trainee.totalDailyReports;

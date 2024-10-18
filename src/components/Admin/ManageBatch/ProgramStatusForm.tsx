@@ -1,9 +1,10 @@
 import React from 'react';
 import BatchDetailsDisplay from './BatchDetailsDisplay'; // Adjust the import path as needed
 import { BatchDetails } from '../ManageBatch/BatchDetails';
-import { Box} from '@mui/material';
+import { Box } from '@mui/material';
+
 interface ProgramStatusFormProps {
-  batchDetails: BatchDetails;
+  batchDetails: BatchDetails; // Expecting non-null BatchDetails object
 }
 
 const ProgramStatusForm: React.FC<ProgramStatusFormProps> = ({ batchDetails }) => {

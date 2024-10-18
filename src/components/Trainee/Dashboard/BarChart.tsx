@@ -54,7 +54,7 @@ const BarChart: React.FC = () => {
         const response = await fetch(url);
         const result = await response.json();
 
-        const labels = result.map((_, index: number) => `C${index + 1}`); // C1, C2, etc.
+        const labels = result.map((_: any, index: number) => `C${index + 1}`); // C1, C2, etc.
         const courseNames = result.map((item: any) => item.courseName); // Full course names
 
         // Convert seconds to hours with one decimal place
@@ -117,7 +117,7 @@ const BarChart: React.FC = () => {
     plugins: {
       legend: {
         display: true,
-        position: "top",
+        position: "top" as const, // Specify a valid position value
         labels: {
           font: {
             size: 12,

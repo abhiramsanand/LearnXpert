@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Container, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import QuestionCard from '../../components/Trainee/AssessmentDisplay/QuestionCard';
-import { styled } from '@mui/system';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import QuestionCard from "../../components/Trainee/AssessmentDisplay/QuestionCard";
+import { styled } from "@mui/system";
 
 interface Question {
   questionId: number;
@@ -21,36 +30,36 @@ interface Assessment {
 }
 
 const StyledContainer = styled(Container)({
-  textAlign: 'center',
-  marginTop: '16px',
+  textAlign: "center",
+  marginTop: "16px",
 });
 
 const StyledTypography = styled(Typography)({
-  fontSize: '1.2rem',
-  marginBottom: '16px',
+  fontSize: "1.2rem",
+  marginBottom: "16px",
 });
 
 const StyledQuestionBox = styled(Box)({
-  borderRadius: '12px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  marginBottom: '16px',
-  padding: '16px',
-  backgroundColor: '#f5f5f5',
+  borderRadius: "12px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  marginBottom: "16px",
+  padding: "16px",
+  backgroundColor: "#f5f5f5",
 });
 
 const StyledButton = styled(Button)({
-  backgroundColor: '#917fb3',
-  color: '#fff',
-  fontSize: '0.75rem',
-  padding: '8px 16px',
-  margin: '0 4px',
+  backgroundColor: "#917fb3",
+  color: "#fff",
+  fontSize: "0.75rem",
+  padding: "8px 16px",
+  margin: "0 4px",
 });
 
 const AssessmentDisplayPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const assessmentName = queryParams.get('name') || '';
+  const assessmentName = queryParams.get("name") || "";
 
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,14 +69,16 @@ const AssessmentDisplayPage: React.FC = () => {
   const [responses, setResponses] = useState<{ [questionId: number]: string }>({});
   const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchAssessment = async () => {
       if (assessmentName) {
         try {
-          const response = await axios.get<Assessment>(`http://localhost:8080/api/v1/assessments/name/${assessmentName}`);
+          const response = await axios.get<Assessment>(
+            `http://localhost:8080/api/v1/assessments/name/${assessmentName}`
+          );
           setAssessment(response.data);
         } catch (err) {
-          setError('Failed to fetch assessment data.');
+          setError("Failed to fetch assessment data.");
         } finally {
           setLoading(false);
         }
@@ -90,7 +101,7 @@ const AssessmentDisplayPage: React.FC = () => {
   };
 
   const handleResponseChange = (questionId: number, responseContent: string) => {
-    setResponses(prevResponses => ({
+    setResponses((prevResponses) => ({
       ...prevResponses,
       [questionId]: responseContent,
     }));
@@ -100,7 +111,7 @@ const AssessmentDisplayPage: React.FC = () => {
     if (!assessment) return;
 
     const validResponses: { [key: number]: string } = {};
-    assessment.questions.forEach(question => {
+    assessment.questions.forEach((question) => {
       const response = responses[question.questionId];
       if (response) {
         validResponses[question.questionId] = response;
@@ -108,11 +119,11 @@ const AssessmentDisplayPage: React.FC = () => {
     });
 
     if (Object.keys(validResponses).length === 0) {
-      setError('Please provide responses to all questions.');
+      setError("Please provide responses to all questions.");
       return;
     }
 
-    const Id = localStorage.getItem('traineeId');
+    const Id = localStorage.getItem("traineeId");
     const data = {
       assessmentName: assessment.assessmentName,
       traineeId: Id,
@@ -122,11 +133,11 @@ const AssessmentDisplayPage: React.FC = () => {
     setSubmitting(true); // Start loading animation
 
     try {
-      await axios.post('http://localhost:8080/api/v1/assessments/submit', data);
+      await axios.post("http://localhost:8080/api/v1/assessments/submit", data);
       setSuccessDialogOpen(true); // Open the success dialog on successful submission
     } catch (err) {
-      console.error('Failed to submit assessment:', err);
-      setError('Failed to submit assessment.');
+      console.error("Failed to submit assessment:", err);
+      setError("Failed to submit assessment.");
     } finally {
       setSubmitting(false); // Stop loading animation
     }
@@ -134,7 +145,7 @@ const AssessmentDisplayPage: React.FC = () => {
 
   const handleCloseDialog = () => {
     setSuccessDialogOpen(false);
-    navigate('/Trainee-Assessments'); // Redirect after closing the dialog
+    navigate("/Trainee-Assessments"); // Redirect after closing the dialog
   };
 
   if (loading || submitting) {
@@ -185,19 +196,19 @@ const AssessmentDisplayPage: React.FC = () => {
                 optionC: assessment.questions[currentQuestionIndex].optionC,
                 optionD: assessment.questions[currentQuestionIndex].optionD,
               }}
-              selectedOption={
-                Object.entries(assessment.questions[currentQuestionIndex]).find(
-                  ([key, value]) => value === responses[assessment.questions[currentQuestionIndex].questionId]
-                )?.[0] || ''
-              }
+              selectedOption={responses[assessment.questions[currentQuestionIndex].questionId] || ""}
               onResponseChange={(questionId, selectedOptionKey) => {
-                const optionContent = assessment.questions[currentQuestionIndex][selectedOptionKey as keyof typeof assessment.questions[currentQuestionIndex]];
+                const optionContent = String(
+                  assessment.questions[currentQuestionIndex][
+                    selectedOptionKey as keyof Question // Use keyof Question for type safety
+                  ]
+                );
                 handleResponseChange(questionId, optionContent);
               }}
             />
           </StyledQuestionBox>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <StyledButton
               variant="contained"
               onClick={handlePreviousQuestion}
@@ -206,17 +217,11 @@ const AssessmentDisplayPage: React.FC = () => {
               Previous
             </StyledButton>
             {currentQuestionIndex === assessment.questions.length - 1 ? (
-              <StyledButton
-                variant="contained"
-                onClick={handleSubmit}
-              >
+              <StyledButton variant="contained" onClick={handleSubmit}>
                 Submit
               </StyledButton>
             ) : (
-              <StyledButton
-                variant="contained"
-                onClick={handleNextQuestion}
-              >
+              <StyledButton variant="contained" onClick={handleNextQuestion}>
                 Next
               </StyledButton>
             )}
@@ -228,7 +233,9 @@ const AssessmentDisplayPage: React.FC = () => {
       <Dialog open={successDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Submission Successful</DialogTitle>
         <DialogContent>
-          <Typography>Your assessment has been submitted successfully.</Typography>
+          <Typography>
+            Your assessment has been submitted successfully.
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">

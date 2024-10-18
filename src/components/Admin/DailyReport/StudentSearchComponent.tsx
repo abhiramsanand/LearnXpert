@@ -15,7 +15,7 @@ const StudentSearchComponent: React.FC<StudentSearchComponentProps> = ({ student
     <Autocomplete
       options={students.map(student => student.name)}
       renderInput={(params) => <TextField {...params} label="Select Student" variant="outlined" />}
-      onChange={(event, value) => onStudentSelect(value || '')}
+      onChange={(_event, value) => onStudentSelect(value || '')}
     />
   );
 };

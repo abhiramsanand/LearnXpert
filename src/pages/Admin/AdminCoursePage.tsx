@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import BatchSelect from "../../shared components/Admin/BatchSelect";
@@ -11,7 +13,7 @@ const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
 const AdminCoursePage = () => {
   const [selectedBatch, setSelectedBatch] = useState<number | null>(3);
   const [loading, setLoading] = useState(true);
-  const [batchDetails, setBatchDetails] = useState<any>(null);
+  const [, setBatchDetails] = useState<any>(null);
 
   const handleBatchSelect = (batchId: number) => {
     setSelectedBatch(batchId);

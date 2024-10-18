@@ -18,9 +18,11 @@ import {
   TableRow,
 } from "@mui/material";
 import axios from "axios";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import * as XLSX from "xlsx";
 import SuccessModal from "./SuccessModal";
+
+// Define the type for the Excel data
+type ExcelRow = (string | number | null)[]; // Adjust this based on the expected data types in your Excel file
 
 const BatchForm: React.FC = () => {
   const navigate = useNavigate();
@@ -28,17 +30,15 @@ const BatchForm: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(
-    null
-  );
+  const [, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const [programs, setPrograms] = useState<string[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [fileSelected, setFileSelected] = useState<boolean>(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const [excelData, setExcelData] = useState<any[][]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [excelData, setExcelData] = useState<ExcelRow[]>([]); // Update state type here
+  const [searchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -68,12 +68,18 @@ const BatchForm: React.FC = () => {
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        const data = new Uint8Array(e.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setExcelData(json);
-        setFilePreview(e.target?.result);
+        const result = e.target?.result; // Can be string or ArrayBuffer
+        if (result) {
+          // Ensure result is defined
+          const data = new Uint8Array(result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(worksheet, {
+            header: 1,
+          }) as ExcelRow[]; // Cast the type here
+          setExcelData(json);
+          setFilePreview(result);
+        }
       };
       reader.readAsArrayBuffer(selectedFile);
     }
@@ -105,15 +111,11 @@ const BatchForm: React.FC = () => {
     formData.append("batchData", batchData);
 
     if (file) {
-      // Convert the updated excelData back to a workbook
       const ws = XLSX.utils.aoa_to_sheet(excelData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
-      // Convert workbook to a binary array
       const updatedFile = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-
-      // Convert the binary array to a Blob
       const updatedBlob = new Blob([updatedFile], {
         type: "application/octet-stream",
       });
@@ -139,8 +141,9 @@ const BatchForm: React.FC = () => {
       setSuccessMessage("Batch created successfully!");
       setSuccessModalOpen(true);
       navigate(`/Admin-BatchAdd2/${batchId}`);
-    } catch (error) {
-      if (error.response && error.response.data) {
+    } catch (error: unknown) {
+      // Specify the error type as 'unknown'
+      if (axios.isAxiosError(error) && error.response) {
         setErrorMessages([error.response.data]);
       } else {
         setErrorMessages(["There was an error creating the batch."]);
@@ -152,12 +155,12 @@ const BatchForm: React.FC = () => {
     setSuccessModalOpen(false);
   };
 
-  // Filtered data based on the search term
   const filteredExcelData = excelData.filter((row) =>
     row.some((cell) =>
-      cell.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      cell?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
   return (
     <Container
       sx={{
@@ -280,143 +283,103 @@ const BatchForm: React.FC = () => {
                   height: "46px",
                   fontSize: "16px",
                   marginRight: "26px",
-                  borderColor: "#8061C3",
-                  "&:hover": {
-                    bgcolor: "#D0C7FF",
-                  },
                 }}
               >
-                + UPLOAD FILE
+                Upload File
                 <input
                   type="file"
-                  hidden
                   accept=".xlsx"
+                  hidden
                   onChange={handleFileChange}
                 />
               </Button>
-
               {fileSelected && (
-                <CheckCircleIcon
-                  sx={{
-                    color: "#4caf50",
-                    ml: 1,
-                    fontSize: "24px",
-                  }}
-                />
+                <Typography variant="body1">{file?.name}</Typography>
               )}
-
-              <Typography variant="caption" color="textSecondary" ml={1}>
-                Don’t have a template? Download it from{" "}
-                <a
-                  href="/Batch_Creation_Template.xlsx"
-                  download
-                  style={{
-                    color: "#3f51b5",
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                  }}
-                >
-                  here
-                </a>
-              </Typography>
             </Grid>
 
-            {excelData.length > 0 && (
-              <Grid item xs={12} mt={2}>
-                <Typography variant="h6" mb={2}>
-                  Excel File Content
-                </Typography>
-                <Grid container spacing={2} mb={2}></Grid>
-
+            {errorMessages.length > 0 && (
+              <Grid item xs={12}>
                 <Box
                   sx={{
-                    maxHeight: "300px",
-                    overflowY: "auto",
-                    "&::-webkit-scrollbar": {
-                      width: "8px",
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                      background: "#8061C3",
-                      borderRadius: "4px",
-                    },
+                    backgroundColor: "#F8D7DA",
+                    borderColor: "#F5C6CB",
+                    color: "#721C24",
+                    p: 2,
+                    borderRadius: "4px",
                   }}
                 >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Sl. No</TableCell>
-                        {excelData[0].map((cell: any, index: number) => (
-                          <TableCell key={index}>{cell}</TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredExcelData.slice(1).map((row, rowIndex) => (
-                        <TableRow key={rowIndex}>
-                          <TableCell>{rowIndex + 1}</TableCell>
-                          {row.map((cell, cellIndex) => (
-                            <TableCell key={cellIndex}>
-                              <TextField
-                                value={cell}
-                                onChange={(e) =>
-                                  handleExcelDataChange(
-                                    e.target.value,
-                                    rowIndex + 1,
-                                    cellIndex
-                                  )
-                                }
-                                variant="standard"
-                              />
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                  {errorMessages.map((error, index) => (
+                    <Typography key={index} variant="body1">
+                      {error}
+                    </Typography>
+                  ))}
                 </Box>
               </Grid>
             )}
           </Grid>
-
-          {errorMessages.length > 0 && (
-            <Box mt={2}>
-              {errorMessages.map((message, index) => (
-                <Typography key={index} color="error">
-                  {message}
-                </Typography>
-              ))}
-            </Box>
-          )}
-
-          <Box mt={4} display="flex" justifyContent="center">
-            <Button
-              variant="contained"
-              sx={{
-                borderRadius: "24px",
-                width: "225px",
-                height: "52px",
-                bgcolor: "#8061C3",
-                fontSize: "18px",
-                fontWeight: "bold",
-                "&:hover": {
-                  bgcolor: "#8061C3",
-                },
-              }}
-              onClick={handleSubmit}
-            >
-              Create Batch
-            </Button>
-          </Box>
         </form>
+
+        {excelData.length > 0 && (
+          <Box mt={3}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {excelData[0].map((_, index) => (
+                    <TableCell key={index}>Column {index + 1}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredExcelData.map((row, rowIndex) => (
+                  <TableRow key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <TableCell key={cellIndex}>
+                        <TextField
+                          value={cell || ""}
+                          onChange={(e) =>
+                            handleExcelDataChange(
+                              e.target.value,
+                              rowIndex,
+                              cellIndex
+                            )
+                          }
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        )}
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          sx={{
+            mt: 2,
+            color: "#FFF",
+            borderRadius: "24px",
+            padding: "10px 24px",
+            bgcolor: "#8061C3",
+            "&:hover": {
+              bgcolor: "#5c42a8",
+            },
+          }}
+        >
+          Submit
+        </Button>
       </Box>
 
-      {successModalOpen && (
-        <SuccessModal
-          open={successModalOpen}
-          message={successMessage}
-          onClose={handleCloseSuccessModal}
-        />
-      )}
+      <SuccessModal
+        open={successModalOpen}
+        message={successMessage}
+        onClose={handleCloseSuccessModal}
+      />
     </Container>
   );
 };

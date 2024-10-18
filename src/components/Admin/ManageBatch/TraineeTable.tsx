@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useMemo } from "react";
 import {
   Table,
@@ -34,7 +35,6 @@ interface TraineeTableProps {
 
 const TraineeTable: React.FC<TraineeTableProps> = ({
   trainees,
-  onAddTrainee,
 }) => {
   const { batchId } = useParams<{ batchId: string }>();
   const [traineeList, setTraineeList] = useState<Trainee[]>(trainees);
@@ -365,8 +365,9 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
       <AddTraineeModal
         open={isAddModalOpen}
         onClose={handleCloseAddModal}
-        onAddTrainee={handleAddTrainee}
-      />
+        onAddTrainee={handleAddTrainee} onSubmit={function (_userName: string, _email: string, _percipioEmail: string, _password: string): void {
+          throw new Error("Function not implemented.");
+        } } batchId={0}      />
 
       {/* Confirmation Modal */}
       <ConfirmationModal

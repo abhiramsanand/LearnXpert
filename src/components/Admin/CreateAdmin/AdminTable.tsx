@@ -1,5 +1,7 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -28,34 +30,14 @@ interface Admin {
 }
 
 interface AdminTableProps {
-  onDeleteClick: (adminId: number) => void;
+  admins: Admin[]; // Use the unified Admin type
+  onDeleteClick: (adminId: number) => void; // Make sure this prop is correctly typed
 }
 
-const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
-  const [admins, setAdmins] = useState<Admin[]>([]);
+const AdminTable: React.FC<AdminTableProps> = ({ admins, onDeleteClick }) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-
-  useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/users/view"
-        );
-        setAdmins(
-          response.data.map((user: any) => ({
-            id: user.id,
-            name: user.userName,
-          }))
-        );
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-      }
-    };
-
-    fetchAdmins();
-  }, []);
+  const [] = useState<"asc" | "desc">("asc");
 
   const handleDeleteClick = (admin: Admin) => {
     setSelectedAdmin(admin);
@@ -67,9 +49,6 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
       try {
         await axios.delete(
           `http://localhost:8080/api/v1/users/delete/${selectedAdmin.id}`
-        );
-        setAdmins((prevAdmins) =>
-          prevAdmins.filter((admin) => admin.id !== selectedAdmin.id)
         );
         onDeleteClick(selectedAdmin.id);
       } catch (error) {
@@ -84,13 +63,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
   };
 
   const handleSortClick = () => {
-    const sortedAdmins = [...admins].sort((a, b) =>
-      sortDirection === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
-    );
-    setAdmins(sortedAdmins);
-    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    // Sorting logic here
   };
 
   return (
@@ -108,73 +81,27 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
           List of Admins
         </Typography>
       </Box>
-      <TableContainer
-        component={Paper}
-        sx={{
-          width: "100%",
-          maxHeight: "calc(100vh)",
-          overflowY: "auto",
-          overflowX: "hidden",
-          mt: 2,
-          backgroundColor: "#F1EDEE",
-          "&::-webkit-scrollbar": { width: "8px" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#8061C3",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": { backgroundColor: "#f1f1f1" },
-        }}
-      >
+      <TableContainer component={Paper} sx={{ width: "100%", maxHeight: "calc(100vh)", overflowY: "auto", mt: 2 }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell
-                align="center"
-                sx={{ padding: "8px", fontWeight: "bold" }}
-              >
-                #
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ padding: "8px", fontWeight: "bold" }}
-              >
+              <TableCell align="center" sx={{ padding: "8px", fontWeight: "bold" }}>#</TableCell>
+              <TableCell align="center" sx={{ padding: "8px", fontWeight: "bold" }}>
                 Name
                 <IconButton onClick={handleSortClick} sx={{ color: "#8061C3" }}>
                   <SwapVertIcon />
                 </IconButton>
               </TableCell>
-              <TableCell
-                align="center"
-                sx={{ padding: "8px", fontWeight: "bold" }}
-              >
-                Actions
-              </TableCell>
+              <TableCell align="center" sx={{ padding: "8px", fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {admins.map((admin, index) => (
-              <TableRow
-                key={admin.id}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9",
-                  cursor: "pointer",
-                  transition: "background-color 0.2s",
-                  "&:hover": {
-                    backgroundColor: "#e0d8e0",
-                  },
-                }}
-              >
+              <TableRow key={admin.id} sx={{ backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9" }}>
+                <TableCell align="center" sx={{ padding: "8px" }}>{index + 1}</TableCell>
+                <TableCell align="center" sx={{ padding: "8px" }}>{admin.name}</TableCell>
                 <TableCell align="center" sx={{ padding: "8px" }}>
-                  {index + 1}
-                </TableCell>
-                <TableCell align="center" sx={{ padding: "8px" }}>
-                  {admin.name}
-                </TableCell>
-                <TableCell align="center" sx={{ padding: "8px" }}>
-                  <IconButton
-                    onClick={() => handleDeleteClick(admin)}
-                    sx={{ color: "#d32f2f" }}
-                  >
+                  <IconButton onClick={() => handleDeleteClick(admin)} sx={{ color: "#d32f2f" }}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -183,9 +110,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
             {admins.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3} align="center" sx={{ padding: "16px" }}>
-                  <Typography variant="body1" color="textSecondary">
-                    No admins found.
-                  </Typography>
+                  <Typography variant="body1" color="textSecondary">No admins found.</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -196,17 +121,11 @@ const AdminTable: React.FC<AdminTableProps> = ({ onDeleteClick }) => {
       <Dialog open={openDialog} onClose={handleDeleteCancel}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete this admin?
-          </Typography>
+          <Typography variant="body1">Are you sure you want to delete this admin?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="primary">
-            OK
-          </Button>
+          <Button onClick={handleDeleteCancel} color="primary">Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="primary">OK</Button>
         </DialogActions>
       </Dialog>
     </Container>

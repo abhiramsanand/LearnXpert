@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -14,23 +15,16 @@ import AddIcon from "@mui/icons-material/Add";
 import TraineeTable from "../../components/Admin/BatchCreate1/TraineeTable";
 import AddTraineeModal from "../../components/Admin/BatchCreate1/AddTraineeModal";
 import { useNavigate, useParams } from "react-router-dom";
-
-interface Trainee {
-  id: number;
-  userName: string;
-  email: string;
-  percipioEmail: string;
-  password: string;
-}
+import { Trainee } from "./types"; // Import the Trainee type
 
 const BatchAdd2: React.FC = () => {
-  const { batchId } = useParams<{ batchId: string }>(); // Get batchId from URL params
+  const { batchId } = useParams<{ batchId: string }>(); 
   const [trainees, setTrainees] = useState<Trainee[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
-  const [loading, setLoading] = useState(true); // Loading state
+  const [searchQuery, setSearchQuery] = useState<string>(""); 
+  const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,7 +40,7 @@ const BatchAdd2: React.FC = () => {
         .catch((error) =>
           console.error("There was a problem with the fetch operation:", error)
         )
-        .finally(() => setLoading(false)); // Set loading to false after data is fetched
+        .finally(() => setLoading(false));
     }
   }, [batchId]);
 
@@ -57,7 +51,7 @@ const BatchAdd2: React.FC = () => {
     password: string
   ) => {
     const newTrainee: Trainee = {
-      id: trainees.length + 1,
+      traineeId: trainees.length + 1, // Change id to traineeId
       userName,
       email,
       percipioEmail,
@@ -68,10 +62,17 @@ const BatchAdd2: React.FC = () => {
   };
 
   const handleDeleteTrainee = (id: number) => {
-    setTrainees(trainees.filter((trainee) => trainee.id !== id));
+    setTrainees(trainees.filter((trainee) => trainee.traineeId !== id)); // Change id to traineeId
   };
 
   const handleSubmit = () => {
+    if (trainees.length === 0) {
+      alert("Please add at least one trainee before submitting.");
+      return;
+    }
+
+    setLoading(true);
+
     fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
       method: "PUT",
       headers: {
@@ -83,21 +84,25 @@ const BatchAdd2: React.FC = () => {
         if (!response.ok) {
           throw new Error("Failed to submit trainee data");
         }
-        return response.json(); // Parse response as JSON
+        return response.json();
       })
       .then((data) => {
         console.log("Trainee data updated successfully:", data);
-        setSuccessMessage(data.message); // Set success message for the modal
-        setSuccessModalOpen(true); // Open success modal
+        setSuccessMessage(data.message);
+        setSuccessModalOpen(true);
       })
-      .catch((error) =>
-        console.error("There was a problem with the submission:", error)
-      );
+      .catch((error) => {
+        console.error("There was a problem with the submission:", error);
+        alert("Error submitting data: " + error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleCloseSuccessModal = () => {
     setSuccessModalOpen(false);
-    navigate(-1); // Navigate back after closing the success modal
+    navigate(-1); 
   };
 
   const filteredTrainees = trainees.filter(
@@ -109,12 +114,7 @@ const BatchAdd2: React.FC = () => {
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="70vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
         <Typography
           sx={{
             fontSize: "30px",
@@ -148,12 +148,7 @@ const BatchAdd2: React.FC = () => {
         }}
       >
         <Box sx={{ paddingLeft: 3 }}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
-          >
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
             <Typography
               variant="h5"
               component="h2"
@@ -181,9 +176,10 @@ const BatchAdd2: React.FC = () => {
 
           <TraineeTable
             trainees={filteredTrainees} // Use filtered trainees here
-            batchId={Number(batchId)} // Ensure this is a valid number
-            onDeleteTrainee={handleDeleteTrainee} // Ensure this function is defined
-          />
+            batchId={Number(batchId)}
+            onDeleteTrainee={handleDeleteTrainee} onEditTrainee={function (_id: number): void {
+              throw new Error("Function not implemented.");
+            } }          />
 
           <Box
             sx={{
@@ -203,7 +199,7 @@ const BatchAdd2: React.FC = () => {
                   bgcolor: "white",
                 },
               }}
-              onClick={() => navigate(-1)} // Navigate back
+              onClick={() => navigate(-1)} 
             >
               Go Back
             </Button>
@@ -232,7 +228,7 @@ const BatchAdd2: React.FC = () => {
                   backgroundColor: "#6a4bc3",
                 },
               }}
-              onClick={handleSubmit} // Submit data to the backend
+              onClick={handleSubmit}
             >
               Submit
             </Button>
@@ -244,7 +240,7 @@ const BatchAdd2: React.FC = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleAddTrainee}
-        batchId={Number(batchId)} // Ensure batchId is passed as a number
+        batchId={Number(batchId)} 
       />
 
       <Dialog open={successModalOpen} onClose={handleCloseSuccessModal}>

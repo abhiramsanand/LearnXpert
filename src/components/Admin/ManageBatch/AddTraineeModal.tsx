@@ -1,17 +1,23 @@
-import React from 'react';
-import { Modal, Box, TextField, Button, IconButton, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Modal, Box, TextField, Button, IconButton, Typography, CircularProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
- 
+
 interface AddTraineeModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (userName: string, email: string, percipioEmail: string, password: string) => void;
   batchId: number;
+  onAddTrainee: (userName: string, email: string, percipioEmail: string, password: string) => Promise<void>;
 }
- 
+
 const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubmit, batchId }) => {
+  const [loading, setLoading] = useState(false); // Loading state for submit button
+  const [error, setError] = useState<string | null>(null); // Error state to show errors during submission
+
+  const emailDomainValidation = /^[a-zA-Z][\w.%+-]*@experionglobal\.com$/; // Common validation for emails
+
   const validationSchema = Yup.object({
     userName: Yup.string()
       .required('User name is required')
@@ -19,16 +25,15 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
       .test('no-only-spaces', 'Name cannot be only spaces', (value) => value?.trim().length > 0),
     email: Yup.string()
       .required('Email is required')
-      .matches(/^[a-zA-Z][\w.%+-]*@experionglobal\.com$/, 'Email must start with a letter and end with @experionglobal.com'),
+      .matches(emailDomainValidation, 'Email must start with a letter and end with @experionglobal.com'),
     percipioEmail: Yup.string()
       .required('Percipio email is required')
-      .matches(/^[a-zA-Z][\w.%+-]*@experionglobal\.com$/, 'Percipio email must start with a letter and end with @experionglobal.com'),
+      .matches(emailDomainValidation, 'Percipio email must start with a letter and end with @experionglobal.com'),
     password: Yup.string()
       .required('Password is required')
       .min(6, 'Password should be at least 6 characters long'),
   });
- 
- 
+
   const formik = useFormik({
     initialValues: {
       userName: '',
@@ -38,6 +43,9 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
     },
     validationSchema,
     onSubmit: (values) => {
+      setLoading(true);
+      setError(null);
+
       const newTrainee = {
         userName: values.userName,
         role: 'Trainee',
@@ -45,7 +53,7 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
         percipioEmail: values.percipioEmail,
         password: values.password,
       };
- 
+
       fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
         method: 'POST',
         headers: {
@@ -59,18 +67,21 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
           }
           return response.json();
         })
-        .then((data) => {
-          console.log('Trainee added successfully:', data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .then(() => {
           onSubmit(values.userName, values.email, values.percipioEmail, values.password);
           formik.resetForm();
-          onClose(); // Close the modal after successful submission
+          onClose();
         })
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
+        .catch(() => {
+          setError('Failed to add trainee. Please try again.');
+        })
+        .finally(() => {
+          setLoading(false);
         });
     },
   });
- 
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -102,6 +113,7 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
         <Typography variant="h6" component="h2" align="center" sx={{ mb: 1, fontWeight: 'bold' }}>
           Add New Trainee
         </Typography>
+        {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
         <form onSubmit={formik.handleSubmit}>
           <TextField
             fullWidth
@@ -144,15 +156,15 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
             margin="normal"
             type="password"
           />
-          <Box sx={{ textAlign: 'center' }}>
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Button
               variant="contained"
               type="submit"
-              sx={{
-                bgcolor: '#8061C3',
-              }}
+              sx={{ bgcolor: '#8061C3' }}
+              disabled={loading}
+              startIcon={loading && <CircularProgress size={20} />}
             >
-              Submit
+              {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </Box>
         </form>
@@ -160,5 +172,5 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
     </Modal>
   );
 };
- 
+
 export default AddTraineeModal;

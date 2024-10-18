@@ -5,7 +5,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography }
 interface SuccessModalProps {
     open: boolean;
     onClose: () => void;
-    message: string;
+    message: string | null;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ open, onClose, message }) => {

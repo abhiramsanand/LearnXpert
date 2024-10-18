@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -20,16 +22,15 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Checkbox,
   FormControlLabel,
-  Skeleton,
 } from "@mui/material";
 import { Add, FilterList } from "@mui/icons-material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import { SelectChangeEvent } from '@mui/material';
 
 interface Assessment {
   assessmentName: string;
@@ -48,14 +49,12 @@ interface Trainee {
 
 const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
-  const [traineeAssessments, setTraineeAssessments] = useState<
-    TraineeAssessment[]
-  >([]);
+  const [, setTraineeAssessments] = useState<TraineeAssessment[]>([]);
   const [allTrainees, setAllTrainees] = useState<Trainee[]>([]);
   const [mergedTraineeAssessments, setMergedTraineeAssessments] = useState<
     TraineeAssessment[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -120,7 +119,8 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
       // Merge with all trainees to ensure all are listed
       const mergedData = allTrainees.map((trainee) => {
         const matchingAssessment = completedAssessments.find(
-          (assessment) => assessment.traineeName === trainee.traineeName
+          (assessment: { traineeName: string }) =>
+            assessment.traineeName === trainee.traineeName
         );
 
         return matchingAssessment
@@ -143,9 +143,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
     }
   };
 
-  const handleAssessmentChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleAssessmentChange = (event: SelectChangeEvent<string>) => {
     const assessmentName = event.target.value as string;
     setSelectedAssessment(assessmentName);
     setError(null);
@@ -173,10 +171,6 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
         ? prevStatuses.filter((s) => s !== status)
         : [...prevStatuses, status]
     );
-  };
-
-  const applyFilters = () => {
-    handleFilterClose();
   };
 
   const handleSort = (key: string) => {
@@ -222,7 +216,8 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
     )
     .filter((trainee) => {
       if (selectedScores.length === 0) return true;
-      const score = trainee.traineeScore === "N/A" ? 0 : trainee.traineeScore;
+      const score =
+        typeof trainee.traineeScore === "number" ? trainee.traineeScore : 0;
       if (selectedScores.includes("100") && score === 100) return true;
       if (selectedScores.includes("90-100") && score >= 90 && score < 100)
         return true;

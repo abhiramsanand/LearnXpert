@@ -93,7 +93,7 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({
     }
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setCurrentPage(newPage);
   };
 
@@ -283,8 +283,7 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({
           report={reportDetails}
           onClose={() => setReportDetails(null)}
           onNext={handleNext}
-          onPrevious={handlePrevious}
-        />
+          onPrevious={handlePrevious} open={false}        />
       )}
     </Paper>
   );

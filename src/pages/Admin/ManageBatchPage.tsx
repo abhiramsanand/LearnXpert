@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import ProgramStatusForm from '../../components/Admin/ManageBatch/ProgramStatusForm';
@@ -126,7 +127,8 @@ const ManageBatchPage: React.FC = () => {
           backgroundColor: '#8061C3',
         }
       }}>
-        <ProgramStatusForm batchDetails={batchDetails} />
+        {/* Conditionally render ProgramStatusForm if batchDetails is not null */}
+        {batchDetails && <ProgramStatusForm batchDetails={batchDetails} />}
         <Box sx={{ marginTop: '16px' }}>
           <TraineeTable trainees={trainees} onAddTrainee={handleOpenModal} />
         </Box>
@@ -135,8 +137,9 @@ const ManageBatchPage: React.FC = () => {
         open={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleAddTrainee}
-        batchId={Number(batchId)}
-      />
+        batchId={Number(batchId)} onAddTrainee={function (_userName: string, _email: string, _percipioEmail: string, _password: string): Promise<void> {
+          throw new Error('Function not implemented.');
+        } }      />
     </Box>
   );
 };

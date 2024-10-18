@@ -9,6 +9,11 @@ interface CourseData {
   courseDuration: string;
 }
 
+interface Course {
+  title: string;
+  courseDuration: string; // Ensure this matches with your CourseDetails prop type
+}
+
 interface CourseContainerProps {
   selectedBatch: number | null;
 }
@@ -17,7 +22,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [daysData, setDaysData] = useState<Record<
     number,
-    { totalDuration: number; sessions: { title: string }[] }
+    { totalDuration: number; sessions: Course[] }
   > | null>(null);
 
   useEffect(() => {
@@ -36,13 +41,12 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
               };
             }
             acc[item.dayNumber].totalDuration += durationInMinutes;
-            acc[item.dayNumber].sessions.push({ 
-              title: item.courseName, 
-              courseDuration: item.courseDuration  // Include courseDuration here
+            acc[item.dayNumber].sessions.push({
+              title: item.courseName,
+              courseDuration: item.courseDuration, // Ensure courseDuration is included
             });
             return acc;
-          }, {} as Record<number, { totalDuration: number; sessions: { title: string; courseDuration: string }[] }>);
-          
+          }, {} as Record<number, { totalDuration: number; sessions: Course[] }>);
 
           setDaysData(transformedData);
           // Set Day 1 as selected if it exists
@@ -73,6 +77,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
     return `${hours}h ${minutes}m`;
   };
 
+  // If daysData is null, days will be an empty array
   const days = daysData ? Object.keys(daysData).map(Number) : [];
 
   return (
@@ -81,7 +86,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
         display: "flex",
         height: "calc(80vh - 70px)",
         width: "100%",
-        backgroundColor: "transparent", // Background color for the container
+        backgroundColor: "transparent",
       }}
     >
       {/* Left Column: Days List */}
@@ -92,7 +97,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
           borderRight: "1px solid #ddd",
           padding: "8px",
           position: "relative",
-          backgroundColor: "transparent", // Background color for the left column
+          backgroundColor: "transparent",
           "&::-webkit-scrollbar": {
             width: "8px",
           },
@@ -111,7 +116,10 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
                 onClick={() => setSelectedDay(day)}
                 sx={{
                   marginBottom: "8px",
-                  backgroundColor: selectedDay === day ? "rgba(128, 97, 195, 0.2)" : "transparent",
+                  backgroundColor:
+                    selectedDay === day
+                      ? "rgba(128, 97, 195, 0.2)"
+                      : "transparent",
                   borderRadius: "4px",
                   transition: "background-color 0.3s ease",
                   "&:hover": {
@@ -121,9 +129,11 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
               >
                 <ListItemText
                   primary={`Day ${day}`}
-                  secondary={daysData[day]?.totalDuration
-                    ? formatDuration(daysData[day].totalDuration)
-                    : "No Duration"}
+                  secondary={
+                    daysData?.[day]?.totalDuration
+                      ? formatDuration(daysData[day].totalDuration)
+                      : "No Duration"
+                  }
                   primaryTypographyProps={{
                     sx: {
                       fontWeight: "600",
@@ -161,9 +171,12 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
         }}
       >
         {selectedDay && daysData ? (
-          <CourseDetails courses={daysData[selectedDay].sessions} />
+          <CourseDetails courses={daysData[selectedDay]?.sessions ?? []} />
         ) : (
-          <Typography variant="body2" sx={{ textAlign: "center", color: "#DB5461" }}>
+          <Typography
+            variant="body2"
+            sx={{ textAlign: "center", color: "#DB5461" }}
+          >
             Select a day to see course details
           </Typography>
         )}

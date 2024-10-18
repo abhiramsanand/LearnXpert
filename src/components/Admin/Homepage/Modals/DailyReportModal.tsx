@@ -1,3 +1,5 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Dialog,
@@ -20,6 +22,7 @@ import {
   Box,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 // Custom styles for the modal
 const CustomDialog = styled(Dialog)(({ theme }) => ({
@@ -61,7 +64,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({ }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: "#FFFFFF",
   },
@@ -82,7 +85,7 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled("div")(({ theme }) => ({
+const TableContainer = styled("div")(({ }) => ({
   maxHeight: "300px", // Adjusted to ensure space for footer
   overflowY: "auto",
   paddingLeft: "20px",
@@ -136,7 +139,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
     setOrderBy(property);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     setFilterStatus(event.target.value as string);
   };
 

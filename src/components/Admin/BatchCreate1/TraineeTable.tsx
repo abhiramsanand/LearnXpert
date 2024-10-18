@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Table,
@@ -42,7 +43,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
 
   const displayedTrainees = trainees.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
@@ -91,10 +92,17 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
   };
 
   const handleModalSubmit = (userName: string, email: string, percipioEmail: string, password: string) => {
+    if (!userName || !email || !percipioEmail || !password) {
+      alert("All fields must be filled out.");
+      return;
+    }
+  
     if (selectedTraineeId !== null) {
       const updatedTrainee = { userName, email, percipioEmail, password };
       const url = `http://localhost:8080/api/v1/batches/${batchId}/trainees/${selectedTraineeId}`;
-      
+  
+      setLoading(true); // Show loading state
+  
       fetch(url, {
         method: 'PUT',
         headers: {
@@ -107,14 +115,19 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
           throw new Error('Failed to update trainee');
         }
         console.log('Trainee updated successfully');
-        onEditTrainee(selectedTraineeId);
+        onEditTrainee(selectedTraineeId); // Callback function to update parent component
         setModalOpen(false);
       })
       .catch((error) => {
         console.error('There was a problem with the update operation:', error);
+        alert("Error updating trainee: " + error.message);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after update
       });
     }
   };
+  
 
   return (
     <>
@@ -199,3 +212,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
 };
 
 export default TraineeTable;
+function setLoading(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+

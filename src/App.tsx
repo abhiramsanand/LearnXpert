@@ -9,7 +9,6 @@ import CoursePage from "./pages/Trainee/CoursePage";
 import AssessmentPage from "./pages/Trainee/AssessmentPage";
 import DailyReport from "./pages/Trainee/DailyReportPage";
 import WholeReportPage from "./pages/Trainee/WholeReportPage";
-import EnquiryPage from "./pages/Trainee/EnquiryPage";
 import TraineeDashboardPage from "./pages/Trainee/DashboardPage";
 import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage";
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
@@ -66,7 +65,6 @@ function App() {
           <Route path="Trainee-Assessments" element={<AssessmentPage />} />
           <Route path="Trainee-Dailyreport" element={<DailyReport />} />
           <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
-          <Route path="Trainee-Enquiry" element={<EnquiryPage />} />
           <Route
             path="/Trainee-Assessments/assessment"
             element={<AssessmentDisplayPage />}

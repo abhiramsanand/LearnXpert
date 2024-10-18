@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import TraineeCourseReport from '../../components/Admin/TraineeCourseReport/TraineeCourseReport';
 import BatchSelect from '../../shared components/Admin/BatchSelect';
 import { Box, Typography } from '@mui/material';

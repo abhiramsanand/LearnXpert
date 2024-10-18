@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Dialog,
@@ -17,6 +18,7 @@ import {
   styled,
   TextField,
   Box,
+  SelectChangeEvent, // Import SelectChangeEvent
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 
@@ -65,7 +67,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
   "&:nth-of-type(odd)": {
     backgroundColor: "#FFFFFF",
   },
@@ -86,7 +88,7 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled("div")(({ theme }) => ({
+const TableContainer = styled("div")(() => ({
   maxHeight: "300px",
   overflowY: "auto",
   paddingLeft: "20px",
@@ -127,8 +129,8 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
     setOrderBy(property);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setFilterScore(event.target.value as string);
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
+    setFilterScore(event.target.value);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,7 +172,7 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <Select
                 value={filterScore}
-                onChange={handleFilterChange}
+                onChange={handleFilterChange} // No error now
                 displayEmpty
                 inputProps={{ "aria-label": "Filter by Score" }}
               >

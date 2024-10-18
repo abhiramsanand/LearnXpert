@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -5,6 +7,11 @@ import AcceleratedTraineesModal from "./Modals/AcceleratedModal"; // Import the 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+interface LocalTrainee {
+  username: string;
+  speed: string;
+}
 
 const AcceleratedTraineesTrack: React.FC = () => {
   const [speedData, setSpeedData] = useState<{ [key: string]: number }>({
@@ -15,7 +22,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [traineeDetails, setTraineeDetails] = useState<Trainee[]>([]);
+  const [traineeDetails, setTraineeDetails] = useState<LocalTrainee[]>([]);
 
   useEffect(() => {
     const cacheKey = `acceleratedTraineesTrack_allBatches`;
@@ -24,7 +31,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 0 * 60 * 60 * 1000; // 1 hour
+      const oneHour = 1 * 60 * 60 * 1000; // 1 hour
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
         setSpeedData(JSON.parse(cachedData));
@@ -61,7 +68,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
           "2x": 0,
         };
 
-        const details: Trainee[] = traineeData.map((trainee: any) => {
+        const details: LocalTrainee[] = traineeData.map((trainee: any) => {
           const { username, totalDuration, totalEstimatedDuration } = trainee;
           const watchTimeRatio = totalEstimatedDuration / totalDuration;
 
@@ -84,7 +91,6 @@ const AcceleratedTraineesTrack: React.FC = () => {
         });
 
         setTraineeDetails(details);
-
         setSpeedData(speedCounts); // Set counts instead of percentages
 
         // Cache the data

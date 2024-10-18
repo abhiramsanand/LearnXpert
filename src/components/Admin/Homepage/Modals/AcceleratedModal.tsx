@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Dialog,
@@ -17,6 +18,7 @@ import {
   styled,
   TextField,
   Box,
+  SelectChangeEvent,
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 
@@ -29,17 +31,17 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   },
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
-    maxHeight: "calc(100vh - 250px)", // Adjusted to avoid overlap with footer
+    maxHeight: "calc(100vh - 250px)",
     overflow: "auto",
     "&::-webkit-scrollbar": {
-      width: "8px", // Customize scrollbar width
+      width: "8px",
     },
     "&::-webkit-scrollbar-thumb": {
-      backgroundColor: "#E6E6FA", // Color for scrollbar thumb
-      borderRadius: "4px", // Rounded corners for the thumb
+      backgroundColor: "#E6E6FA",
+      borderRadius: "4px",
     },
     "&::-webkit-scrollbar-track": {
-      backgroundColor: "#f0f0f0", // Background color for the track
+      backgroundColor: "#f0f0f0",
     },
   },
 }));
@@ -59,7 +61,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
   "&:nth-of-type(odd)": {
     backgroundColor: "#FFFFFF",
   },
@@ -80,8 +82,8 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled("div")(({ theme }) => ({
-  maxHeight: "300px", // Adjusted to ensure space for footer
+const TableContainer = styled("div")(() => ({
+  maxHeight: "300px",
   overflowY: "auto",
   paddingLeft: "20px",
   paddingRight: "20px",
@@ -105,7 +107,7 @@ const Footer = styled("div")(({ theme }) => ({
   backgroundColor: "#F5F5F5",
 }));
 
-interface Trainee {
+interface LocalTrainee {
   username: string;
   speed: string;
 }
@@ -113,7 +115,7 @@ interface Trainee {
 interface AcceleratedTraineesModalProps {
   open: boolean;
   onClose: () => void;
-  traineeDetails: Trainee[];
+  traineeDetails: LocalTrainee[];
 }
 
 const speedPriority: Record<string, number> = {
@@ -129,18 +131,18 @@ const AcceleratedTraineesModal: React.FC<AcceleratedTraineesModalProps> = ({
   traineeDetails,
 }) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<keyof Trainee>("username");
+  const [orderBy, setOrderBy] = useState<keyof LocalTrainee>("username");
   const [filterSpeed, setFilterSpeed] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const handleRequestSort = (property: keyof Trainee) => {
+  const handleRequestSort = (property: keyof LocalTrainee) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setFilterSpeed(event.target.value as string);
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
+    setFilterSpeed(event.target.value);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,13 +210,13 @@ const AcceleratedTraineesModal: React.FC<AcceleratedTraineesModalProps> = ({
               marginRight: "16px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "#000000", // Default border color
+                  borderColor: "#000000",
                 },
                 "&:hover fieldset": {
-                  borderColor: "#000000", // Hover border color
+                  borderColor: "#000000",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "#8061C3", // Focus border color
+                  borderColor: "#8061C3",
                 },
               },
             }}

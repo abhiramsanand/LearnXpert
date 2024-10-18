@@ -1,3 +1,5 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Dialog,
@@ -19,6 +21,8 @@ import {
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { TableRow as MUITableRow, TableRowProps } from "@mui/material"; // Import TableRow and TableRowProps
 
 interface TraineeScoreModalProps {
   open: boolean;
@@ -66,7 +70,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(MUITableRow)<TableRowProps>(() => ({ // Use TableRow here and pass TableRowProps
   "&:nth-of-type(odd)": {
     backgroundColor: "#FFFFFF",
   },
@@ -87,7 +91,7 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled("div")(({ theme }) => ({
+const TableContainer = styled("div")(() => ({
   maxHeight: "300px", // Adjusted to ensure space for footer
   overflowY: "auto",
   paddingLeft: "20px",
@@ -131,7 +135,7 @@ const TraineeScoreModal: React.FC<TraineeScoreModalProps> = ({
     setOrderBy(property);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     setFilterScore(event.target.value as string);
   };
 

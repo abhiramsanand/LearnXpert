@@ -223,12 +223,12 @@ const AssessmentCreation: React.FC = () => {
             <DatePicker
               value={startDate}
               onChange={(newValue) => setStartDate(newValue)}
-              components={{
-                OpenPickerIcon: () => (
+              slots={{
+                openPickerIcon: () => (
                   <CalendarTodayIcon className={styles.icon} />
                 ),
               }}
-              componentsProps={{
+              slotProps={{
                 textField: {
                   fullWidth: true,
                   size: "small",
@@ -250,12 +250,12 @@ const AssessmentCreation: React.FC = () => {
             <DatePicker
               value={endDate}
               onChange={(newValue) => setEndDate(newValue)}
-              components={{
-                OpenPickerIcon: () => (
+              slots={{
+                openPickerIcon: () => (
                   <CalendarTodayIcon className={styles.icon} />
                 ),
               }}
-              componentsProps={{
+              slotProps={{
                 textField: {
                   fullWidth: true,
                   size: "small",
@@ -280,10 +280,13 @@ const AssessmentCreation: React.FC = () => {
             <Input
               id="upload-file"
               type="file"
-              accept=".xlsx"
+              inputProps={{
+                accept: ".xlsx",
+              }}
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
+
             <Button
               variant="outlined"
               component="span"

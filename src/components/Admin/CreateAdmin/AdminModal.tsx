@@ -1,20 +1,14 @@
-// src/components/Admin/CreateAdmin/AdminModal.tsx
-
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent,  IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AdminTable from './AdminTable';
-
-interface Admin {
-  username: string;
-  email: string;
-}
+import { Admin } from './Admin'; // Import the shared Admin interface
 
 interface AdminModalProps {
   open: boolean;
-  admins: Admin[];
+  admins: Admin[]; // Use the unified Admin type
   onClose: () => void;
-  onDeleteAdmin: (index: number) => void;
+  onDeleteAdmin: (adminId: number) => void; // Changed to adminId
 }
 
 const AdminModal: React.FC<AdminModalProps> = ({ open, admins, onClose, onDeleteAdmin }) => {
@@ -36,9 +30,8 @@ const AdminModal: React.FC<AdminModalProps> = ({ open, admins, onClose, onDelete
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <AdminTable admins={admins} onDeleteAdmin={onDeleteAdmin} />
+        <AdminTable admins={admins} onDeleteClick={onDeleteAdmin} />
       </DialogContent>
-     
     </Dialog>
   );
 };

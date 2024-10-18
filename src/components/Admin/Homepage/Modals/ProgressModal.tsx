@@ -1,3 +1,5 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Dialog,
@@ -20,6 +22,7 @@ import {
 } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { styled } from "@mui/material/styles";
+import { SelectChangeEvent } from "@mui/material/Select"; // Import SelectChangeEvent
 
 interface TraineeModalProps {
   open: boolean;
@@ -91,7 +94,7 @@ const FilterLabel = styled(InputLabel)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-const TableContainer = styled("div")(({ theme }) => ({
+const TableContainer = styled("div")(({ }) => ({
   maxHeight: "300px",
   overflowY: "auto",
   paddingLeft: "20px",
@@ -133,7 +136,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
     setOrderBy(property);
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     setFilterStatus(event.target.value as string);
   };
 
@@ -208,7 +211,7 @@ const TraineeModal: React.FC<TraineeModalProps> = ({
                   borderColor: "#8061C3",
                 },
               },
-              mt: 1
+              mt: 1,
             }}
           />
         </Box>
