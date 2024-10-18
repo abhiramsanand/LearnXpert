@@ -117,18 +117,18 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortBy(column);
     setSortOrder(newOrder);
-    const sortedReports = [...reports].sort((a, b) => {
+  
+    reports.sort((a, b) => {
       const valueA = a[column];
       const valueB = b[column];
-
+  
       if (newOrder === "asc") {
         return valueA > valueB ? 1 : -1;
       } else {
         return valueA < valueB ? 1 : -1;
       }
     });
-    setFilteredReports(sortedReports);
-  };
+  };  
 
   const filteredReports = statusFilter
     ? reports.filter((report) => report.status === statusFilter)
