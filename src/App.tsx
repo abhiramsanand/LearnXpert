@@ -84,16 +84,7 @@ function App() {
           <Route path="/Admin-CourseCreation" element={<CreateCoursePage />} />
           <Route
             path="/Add-Admin"
-            element={
-              <CreateAdminPage
-                onDeleteClick={function (_admin: {
-                  slno: number;
-                  name: string;
-                }): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
-            }
+            element={<Route path="/Add-Admin" element={<CreateAdminPage />} />}
           />
           <Route path="/Admin-Batches" element={<TraineeCourseReportPage />} />
           <Route
