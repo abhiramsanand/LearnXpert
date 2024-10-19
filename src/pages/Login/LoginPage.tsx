@@ -11,8 +11,24 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
   const navigate = useNavigate();
 
+  // Hardcoded credentials for development
+  const adminCredentials = {
+    username: "admin", // Change this to your preferred username
+    password: "admin123", // Change this to your preferred password
+    roleId: "1", // Admin role ID
+  };
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    // Check for hardcoded admin credentials
+    if (
+      username === adminCredentials.username &&
+      password === adminCredentials.password
+    ) {
+      navigate("/Admin-Home"); // Redirect to admin home
+      return;
+    }
   
     try {
       const response = await fetch("http://localhost:8080/api/v1/users/login", {
