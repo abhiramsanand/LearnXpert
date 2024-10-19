@@ -16,6 +16,7 @@ const LoginPage: React.FC = () => {
     username: "admin", // Change this to your preferred username
     password: "admin123", // Change this to your preferred password
     roleId: "1", // Admin role ID
+    traineeId: "12345", // Dummy trainee ID for testing
   };
 
   const handleLogin = async (event: React.FormEvent) => {
@@ -26,6 +27,7 @@ const LoginPage: React.FC = () => {
       username === adminCredentials.username &&
       password === adminCredentials.password
     ) {
+      localStorage.setItem("traineeId", adminCredentials.traineeId); // Store dummy traineeId in local storage
       navigate("/Admin-Home"); // Redirect to admin home
       return;
     }
