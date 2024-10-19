@@ -3,7 +3,7 @@ import { AppBar, Container, Box, Typography, Avatar } from "@mui/material";
 import { Logout as LogoutIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import NotificationPage from "../../pages/Trainee/NotificationPage";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate for redirection
 import axios from "axios";
 
 const HeaderContainer = styled(AppBar)({
@@ -18,6 +18,7 @@ const HeaderContainer = styled(AppBar)({
 const TraineeHeader = () => {
   const [username, setUsername] = useState("");
   const traineeId = localStorage.getItem("traineeId");
+  const navigate = useNavigate(); // For navigating on logout
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -34,20 +35,29 @@ const TraineeHeader = () => {
     fetchUsername();
   }, [traineeId]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("traineeId"); // Clear the stored traineeId
+    navigate("/"); // Navigate to login page
+
+    // Block access to previous protected pages using the back button
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", function () {
+      window.history.pushState(null, "", window.location.href);
+    });
+  };
+
   return (
     <>
       <HeaderContainer position="fixed">
         <Container maxWidth="lg">
-          <Box
-            sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: "5px"}}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 3}}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2, gap: "5px"}}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
               <NotificationPage />
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <LogoutIcon
-                  sx={{ color: "rgba(128, 97, 195, 1)", cursor: "pointer" }}
-                />
-              </Link>
+              {/* Handle logout on click */}
+              <LogoutIcon
+                sx={{ color: "rgba(128, 97, 195, 1)", cursor: "pointer" }}
+                onClick={handleLogout}
+              />
               <Box
                 sx={{
                   display: "flex",
