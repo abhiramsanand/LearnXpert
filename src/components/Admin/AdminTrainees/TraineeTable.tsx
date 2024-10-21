@@ -28,7 +28,7 @@ const TraineeTable: React.FC = () => {
   useEffect(() => {
     const fetchActiveBatch = async () => {
       try {
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         if (!batchResponse.ok) {
           throw new Error('Failed to fetch batch data');
         }
@@ -56,7 +56,7 @@ const TraineeTable: React.FC = () => {
       if (selectedBatch === null) return; // Do nothing if no batch is selected
 
       try {
-        const response = await fetch(`http://localhost:8080/api/trainees/batch/${selectedBatch}`);
+        const response = await fetch(`https://ilpex-backend.onrender.com/api/trainees/batch/${selectedBatch}`);
         if (!response.ok) {
           throw new Error('Failed to fetch trainee data');
         }

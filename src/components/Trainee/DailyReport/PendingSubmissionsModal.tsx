@@ -41,7 +41,7 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
           console.error("No traineeId found in localStorage");
           return;
         }
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         const batches = await batchResponse.json();
 
         // Find the active batch
@@ -50,7 +50,7 @@ const PendingSubmissionsModal: React.FC<PendingSubmissionsModalProps> = ({ open,
           console.error("No active batch found");
           return;
         }
-        const response = await axios.get(`http://localhost:8080/api/courses/pending-submissions?batchId=${activeBatch.id}&traineeId=${traineeId}`);
+        const response = await axios.get(`https://ilpex-backend.onrender.com/api/courses/pending-submissions?batchId=${activeBatch.id}&traineeId=${traineeId}`);
         setPendingCourses(response.data);
       } catch (error) {
         console.error("Failed to fetch pending courses", error);

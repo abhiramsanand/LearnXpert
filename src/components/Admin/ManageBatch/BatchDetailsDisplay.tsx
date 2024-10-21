@@ -30,7 +30,7 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
     });
 
     try {
-      const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+      const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         const batches = await batchResponse.json();
 
         // Find the active batch
@@ -40,7 +40,7 @@ const BatchDetailsDisplay: React.FC<BatchDetailsDisplayProps> = ({
           return;
         }
       const response = await fetch(
-        `http://localhost:8080/api/v1/batches/${activeBatch.id}/update-end-date`,
+        `https://ilpex-backend.onrender.com/api/v1/batches/${activeBatch.id}/update-end-date`,
         {
           method: "PUT",
           headers: {

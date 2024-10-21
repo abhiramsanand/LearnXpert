@@ -57,7 +57,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
   ) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/batches/${batchId}/trainees`,
+        `https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees`,
         {
           userName,
           email,
@@ -86,7 +86,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
     if (editingTrainee && editingIndex !== null) {
       try {
         await axios.put(
-          `http://localhost:8080/api/v1/batches/trainees/${editingTrainee.traineeId}`,
+          `https://ilpex-backend.onrender.com/api/v1/batches/trainees/${editingTrainee.traineeId}`,
           editingTrainee
         );
         const updatedList = [...traineeList];
@@ -115,7 +115,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({
 
     try {
       await axios.delete(
-        `http://localhost:8080/api/v1/batches/trainees/${traineeToDelete}`
+        `https://ilpex-backend.onrender.com/api/v1/batches/trainees/${traineeToDelete}`
       );
       setTraineeList((prevTrainees) =>
         prevTrainees.filter((trainee) => trainee.traineeId !== traineeToDelete)

@@ -35,7 +35,7 @@ const CustomCalendar: React.FC = () => {
   const fetchDates = () => {
     setLoading(true);
     axios
-      .get<DayNumberWithDateDTO[]>("http://localhost:8080/api/courses/dates/dayNumber")
+      .get<DayNumberWithDateDTO[]>("https://ilpex-backend.onrender.com/api/courses/dates/dayNumber")
       .then((response) => {
         setDates(response.data);
       })
@@ -54,7 +54,7 @@ const CustomCalendar: React.FC = () => {
   const handleMarkHoliday = () => {
     setLoadingMark(true);
     axios
-      .post("http://localhost:8080/api/courses/mark-holiday/day", {
+      .post("https://ilpex-backend.onrender.com/api/courses/mark-holiday/day", {
         holidayDate,
         description: "Holiday",
       })
@@ -73,7 +73,7 @@ const CustomCalendar: React.FC = () => {
   const handleUnmarkHoliday = () => {
     setLoadingUnmark(true);
     axios
-      .post("http://localhost:8080/api/courses/unmark-holiday", { holidayDate })
+      .post("https://ilpex-backend.onrender.com/api/courses/unmark-holiday", { holidayDate })
       .then(() => {
         alert("Holiday unmarked successfully.");
         fetchDates();

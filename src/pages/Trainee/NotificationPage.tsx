@@ -22,7 +22,7 @@ const NotificationPage: React.FC = () => {
     const Id = localStorage.getItem("traineeId");
     const traineeId = Id; 
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/notifications/trainee/${traineeId}`);
+      const response = await fetch(`https://ilpex-backend.onrender.com/api/v1/notifications/trainee/${traineeId}`);
       const data: Notification[] = await response.json();
       setNotifications(data);
       updateUnreadCount(data);
@@ -39,7 +39,7 @@ const NotificationPage: React.FC = () => {
   const handleNotificationClose = async (id: number) => {
     try {
       // Make API call to mark the notification as read
-      await fetch(`http://localhost:8080/api/v1/notifications/${id}/mark-read`, {
+      await fetch(`https://ilpex-backend.onrender.com/api/v1/notifications/${id}/mark-read`, {
         method: 'PATCH',
       });
       // Update UI by removing the closed notification

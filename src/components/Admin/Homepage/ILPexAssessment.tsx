@@ -47,7 +47,7 @@ const ILPexAssessment: React.FC = () => {
       } else {
         try {
           const response = await axios.get(
-            "http://localhost:8080/api/v1/trainee-scores/average/name"
+            "https://ilpex-backend.onrender.com/api/v1/trainee-scores/average/name"
           );
           const scores: Record<number, number> = response.data;
 
@@ -90,7 +90,7 @@ const ILPexAssessment: React.FC = () => {
   const fetchTraineeScores = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/trainee-scores/average/name"
+        "https://ilpex-backend.onrender.com/api/v1/trainee-scores/average/name"
       );
       setTraineeScores(response.data);
     } catch (error) {

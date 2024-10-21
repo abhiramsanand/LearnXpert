@@ -27,7 +27,7 @@ const EditTraineeModal: React.FC<EditTraineeModalProps> = ({ open, onClose, onSu
 
 const handleSubmit = async () => {
     try {
-        await axios.put(`http://localhost:8080/api/v1/batches/trainees/${trainee.traineeId}`, {
+        await axios.put(`https://ilpex-backend.onrender.com/api/v1/batches/trainees/${trainee.traineeId}`, {
             userName,
             email,
             percipioEmail,

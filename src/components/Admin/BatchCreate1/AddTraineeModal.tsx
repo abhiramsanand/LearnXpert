@@ -24,7 +24,7 @@ const AddTraineeModal: React.FC<AddTraineeModalProps> = ({ open, onClose, onSubm
       password,
     };
 
-    fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
+    fetch(`https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

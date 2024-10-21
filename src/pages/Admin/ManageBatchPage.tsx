@@ -34,7 +34,7 @@ const ManageBatchPage: React.FC = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         const batches = await batchResponse.json();
 
         // Find the active batch
@@ -43,7 +43,7 @@ const ManageBatchPage: React.FC = () => {
           console.error("No active batch found");
           return;
         }
-        const response = await fetch(`http://localhost:8080/api/v1/batches/${activeBatch.id}/details`);
+        const response = await fetch(`https://ilpex-backend.onrender.com/api/v1/batches/${activeBatch.id}/details`);
 
         if (!response.ok) {
           throw new Error(`Error fetching batch details: ${response.statusText}`);

@@ -14,7 +14,7 @@ const TraineeCourseReportPage = () => {
   useEffect(() => {
     const fetchActiveBatch = async () => {
       try {
-        const batches = await fetch('http://localhost:8080/api/v1/batches'); // Fetch all batches
+        const batches = await fetch('https://ilpex-backend.onrender.com/api/v1/batches'); // Fetch all batches
         const batchData = await batches.json();
 
         const activeBatch = batchData.find((batch: { isActive: boolean }) => batch.isActive);

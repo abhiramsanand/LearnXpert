@@ -15,7 +15,7 @@ const AdminReportPage: React.FC = () => {
     const fetchReports = async () => {
       try {
         const traineeId = localStorage.getItem("traineeId");
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         const batches = await batchResponse.json();
 
         // Find the active batch
@@ -30,7 +30,7 @@ const AdminReportPage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/courses/WholeReport/${traineeId}/batch/${activeBatch.id}`
+          `https://ilpex-backend.onrender.com/api/courses/WholeReport/${traineeId}/batch/${activeBatch.id}`
         );
 
         const reports: Report[] = response.data.map((course: any) => ({

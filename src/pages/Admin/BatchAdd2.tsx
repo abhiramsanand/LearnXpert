@@ -29,7 +29,7 @@ const BatchAdd2: React.FC = () => {
 
   useEffect(() => {
     if (batchId) {
-      fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`)
+      fetch(`https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -73,7 +73,7 @@ const BatchAdd2: React.FC = () => {
 
     setLoading(true);
 
-    fetch(`http://localhost:8080/api/v1/batches/${batchId}/trainees`, {
+    fetch(`https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

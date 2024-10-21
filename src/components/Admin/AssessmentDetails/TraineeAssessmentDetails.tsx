@@ -74,9 +74,9 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
       setLoading(true);
       try {
         const [traineesResponse, assessmentsResponse] = await Promise.all([
-          axios.get(`http://localhost:8080/api/trainees/batch/${batchId}`),
+          axios.get(`https://ilpex-backend.onrender.com/api/trainees/batch/${batchId}`),
           axios.get(
-            `http://localhost:8080/api/v1/ilpex/assessments/details?batchId=${batchId}`
+            `https://ilpex-backend.onrender.com/api/v1/ilpex/assessments/details?batchId=${batchId}`
           ),
         ]);
 
@@ -109,7 +109,7 @@ const AssessmentDetails: React.FC<{ batchId: number }> = ({ batchId }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/ilpex/trainee-assessments"
+        "https://ilpex-backend.onrender.com/api/v1/ilpex/trainee-assessments"
       );
       const completedAssessments = response.data.data.filter(
         (assessment: TraineeAssessment) =>

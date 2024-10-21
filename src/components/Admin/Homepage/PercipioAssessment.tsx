@@ -29,7 +29,7 @@ const PercipioAssessment: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<{ [traineeName: string]: number }>(
-          "http://localhost:8080/api/v1/assessments/averageScore"
+          "https://ilpex-backend.onrender.com/api/v1/assessments/averageScore"
         );
         const scores = response.data;
 

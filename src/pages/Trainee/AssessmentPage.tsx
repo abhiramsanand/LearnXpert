@@ -55,8 +55,8 @@ const NewAssessmentPage: React.FC = () => {
   
     // Fetch completed and pending assessments
     Promise.all([
-      fetch(`http://localhost:8080/api/v1/assessments/completed/${traineeId}`).then((res) => res.json()),
-      fetch(`http://localhost:8080/api/v1/assessments/pending/${traineeId}`).then((res) => res.json()),
+      fetch(`https://ilpex-backend.onrender.com/api/v1/assessments/completed/${traineeId}`).then((res) => res.json()),
+      fetch(`https://ilpex-backend.onrender.com/api/v1/assessments/pending/${traineeId}`).then((res) => res.json()),
     ])
       .then(([completedData, pendingData]) => {
         setCompletedAssessments(completedData);

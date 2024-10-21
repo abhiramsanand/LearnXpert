@@ -16,7 +16,7 @@ const CreateCourse: React.FC = () => {
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/batches");
+        const response = await axios.get("https://ilpex-backend.onrender.com/api/v1/batches");
         setBatches(response.data);
       } catch (error) {
         console.error("Error fetching batches", error);
@@ -52,7 +52,7 @@ const CreateCourse: React.FC = () => {
 
     try {
       await axios.post(
-        "http://localhost:8080/api/courses/create",
+        "https://ilpex-backend.onrender.com/api/courses/create",
         formData,
         {
           headers: {

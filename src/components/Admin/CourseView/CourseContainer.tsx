@@ -27,7 +27,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ selectedBatch }) => {
 
   useEffect(() => {
     if (selectedBatch !== null) {
-      fetch(`http://localhost:8080/api/courses/batch/${selectedBatch}`)
+      fetch(`https://ilpex-backend.onrender.com/api/courses/batch/${selectedBatch}`)
         .then((response) => response.json())
         .then((data: CourseData[]) => {
           console.log("Fetched data:", data);

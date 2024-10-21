@@ -74,7 +74,7 @@ const AssessmentDisplayPage: React.FC = () => {
       if (assessmentName) {
         try {
           const response = await axios.get<Assessment>(
-            `http://localhost:8080/api/v1/assessments/name/${assessmentName}`
+            `https://ilpex-backend.onrender.com/api/v1/assessments/name/${assessmentName}`
           );
           setAssessment(response.data);
         } catch (err) {
@@ -133,7 +133,7 @@ const AssessmentDisplayPage: React.FC = () => {
     setSubmitting(true); // Start loading animation
 
     try {
-      await axios.post("http://localhost:8080/api/v1/assessments/submit", data);
+      await axios.post("https://ilpex-backend.onrender.com/api/v1/assessments/submit", data);
       setSuccessDialogOpen(true); // Open the success dialog on successful submission
     } catch (err) {
       console.error("Failed to submit assessment:", err);

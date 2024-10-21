@@ -26,7 +26,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   const handleNotificationClose = async (id: number) => {
     try {
       // API call to mark notification as read
-      await fetch(`http://localhost:8080/api/v1/notifications/${id}/mark-read`, {
+      await fetch(`https://ilpex-backend.onrender.com/api/v1/notifications/${id}/mark-read`, {
         method: 'POST',
       });
       // Notify parent component to update the notification list

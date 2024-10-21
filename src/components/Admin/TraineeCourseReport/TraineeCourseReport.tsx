@@ -43,25 +43,25 @@ const TraineeCourseReport: React.FC<TraineeCourseReportProps> = ({
     try {
       // Fetch the total course duration
       const totalDurationResponse = await fetch(
-        `http://localhost:8080/api/courses/total-duration/${batchId}`
+        `https://ilpex-backend.onrender.com/api/courses/total-duration/${batchId}`
       );
       const totalDurationData = await totalDurationResponse.json();
 
       // Fetch the course duration per trainee
       const courseDurationResponse = await fetch(
-        `http://localhost:8080/api/v1/ilpex/traineeprogress/course-duration?batchId=${batchId}`
+        `https://ilpex-backend.onrender.com/api/v1/ilpex/traineeprogress/course-duration?batchId=${batchId}`
       );
       const courseDurationData = await courseDurationResponse.json();
 
       // Fetch the total days completed per batch
       const totalDaysCompletedResponse = await fetch(
-        `http://localhost:8080/api/courses/total-course-days-completed/${batchId}`
+        `https://ilpex-backend.onrender.com/api/courses/total-course-days-completed/${batchId}`
       );
       const totalDaysCompletedData = await totalDaysCompletedResponse.json();
 
       // Fetch trainee's last day completed
       const lastDayCompletedResponse = await fetch(
-        `http://localhost:8080/api/trainees/batch/${batchId}/currentday`
+        `https://ilpex-backend.onrender.com/api/trainees/batch/${batchId}/currentday`
       );
       const lastDayCompletedData = await lastDayCompletedResponse.json();
 

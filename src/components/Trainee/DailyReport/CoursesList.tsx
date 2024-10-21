@@ -44,7 +44,7 @@ const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModa
   const handleViewReport = async (dailyReportId: number, _courseId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
+        `https://ilpex-backend.onrender.com/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
       const reportData = response.data;
 

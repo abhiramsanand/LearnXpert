@@ -28,7 +28,7 @@ const BatchSelect: React.FC<BatchSelectProps> = ({
 
   useEffect(() => {
     // Fetch data from the backend API
-    fetch("http://localhost:8080/api/v1/batches")
+    fetch("https://ilpex-backend.onrender.com/api/v1/batches")
       .then((response) => response.json())
       .then((data) => {
         setBatches(data);

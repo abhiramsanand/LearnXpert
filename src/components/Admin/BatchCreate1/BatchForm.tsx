@@ -44,7 +44,7 @@ const BatchForm: React.FC = () => {
     const fetchPrograms = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/programs"
+          "https://ilpex-backend.onrender.com/api/v1/programs"
         );
         setPrograms(
           response.data.map(
@@ -129,7 +129,7 @@ const BatchForm: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/batches/create",
+        "https://ilpex-backend.onrender.com/api/v1/batches/create",
         formData,
         {
           headers: {

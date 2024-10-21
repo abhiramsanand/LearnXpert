@@ -8,7 +8,7 @@ import CourseContainer from "../../components/Admin/CourseView/CourseContainer";
 import { Add } from "@mui/icons-material";
 
 // Assume batch details URL or relevant API endpoint
-const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
+const BATCH_DETAILS_URL = "https://ilpex-backend.onrender.com/api/v1/batches";
 
 const AdminCoursePage = () => {
   const [selectedBatch, setSelectedBatch] = useState<number | null>(3);

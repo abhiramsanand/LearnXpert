@@ -27,13 +27,13 @@ const Profile: React.FC = () => {
           const [profileResponse, batchDayResponse, traineeDayResponse] =
             await Promise.all([
               axios.get<ProfileData>(
-                `http://localhost:8080/api/v1/profiles/${traineeId}`
+                `https://ilpex-backend.onrender.com/api/v1/profiles/${traineeId}`
               ),
               axios.get<number>(
-                `http://localhost:8080/api/trainees/${traineeId}/currentdaynumber`
+                `https://ilpex-backend.onrender.com/api/trainees/${traineeId}/currentdaynumber`
               ),
               axios.get<{ lastDayNumber: number }>(
-                `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`
+                `https://ilpex-backend.onrender.com/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`
               ),
             ]);
 

@@ -29,7 +29,7 @@ const AssessmentAverageScoreTrack: React.FC = () => {
     setLoading(true);
 
     const traineeId = localStorage.getItem("traineeId");
-    const url = `http://localhost:8080/api/v1/assessments/average/${traineeId}`;
+    const url = `https://ilpex-backend.onrender.com/api/v1/assessments/average/${traineeId}`;
 
     fetch(url)
       .then((response) => response.json())

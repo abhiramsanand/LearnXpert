@@ -34,7 +34,7 @@ const DaysComplete: React.FC = () => {
 
     setLoading(true);
 
-    const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`;
+    const url = `https://ilpex-backend.onrender.com/api/v1/ilpex/traineeprogress/currentdaynumber/${traineeId}`;
 
     fetch(url)
       .then((response) => response.json())

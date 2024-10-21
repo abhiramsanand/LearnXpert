@@ -12,7 +12,7 @@ const CreateAdminPage: React.FC = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/users");
+        const response = await axios.get("https://ilpex-backend.onrender.com/api/v1/users");
         setAdmins(response.data); // Assume response.data contains an array of Admin objects
       } catch (error) {
         console.error("Error fetching admins:", error);
@@ -30,7 +30,7 @@ const CreateAdminPage: React.FC = () => {
     password: string
   ) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/users/save", {
+      const response = await axios.post("https://ilpex-backend.onrender.com/api/v1/users/save", {
         username,
         email,
         password,
@@ -46,7 +46,7 @@ const CreateAdminPage: React.FC = () => {
   const handleDeleteClick = useCallback(
     async (adminId: number) => {
       try {
-        await axios.delete(`http://localhost:8080/api/v1/users/${adminId}`);
+        await axios.delete(`https://ilpex-backend.onrender.com/api/v1/users/${adminId}`);
         // Update the state to remove the deleted admin
         setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== adminId));
       } catch (error) {

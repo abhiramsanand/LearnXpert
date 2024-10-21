@@ -42,7 +42,7 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({ onCreate }) => {
     password: string;
   }) => {
     try {
-      await axios.post("http://localhost:8080/api/v1/users/save", {
+      await axios.post("https://ilpex-backend.onrender.com/api/v1/users/save", {
         userName: values.username,
         email: values.email,
         password: values.password,

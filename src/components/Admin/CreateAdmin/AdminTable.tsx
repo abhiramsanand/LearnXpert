@@ -48,7 +48,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ admins, onDeleteClick }) => {
     if (selectedAdmin) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/v1/users/delete/${selectedAdmin.id}`
+          `https://ilpex-backend.onrender.com/api/v1/users/delete/${selectedAdmin.id}`
         );
         onDeleteClick(selectedAdmin.id);
       } catch (error) {

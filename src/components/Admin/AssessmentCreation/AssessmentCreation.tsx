@@ -46,7 +46,7 @@ const AssessmentCreation: React.FC = () => {
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/v1/batches");
+        const response = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         if (response.ok) {
           const data = await response.json();
           setBatches(data);
@@ -100,7 +100,7 @@ const AssessmentCreation: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/v1/assessments/create",
+        "https://ilpex-backend.onrender.com/api/v1/assessments/create",
         {
           method: "POST",
           body: formData,

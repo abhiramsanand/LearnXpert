@@ -56,7 +56,7 @@ const DailyReportContainer: React.FC = () => {
     if (traineeId) {
       const fetchCourses = async () => {
         try {
-          const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+          const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
           const batches = await batchResponse.json();
 
           // Find the active batch
@@ -68,7 +68,7 @@ const DailyReportContainer: React.FC = () => {
 
           const dateStr = formatDateToApiFormat(selectedDate);
           const response = await fetch(
-            `http://localhost:8080/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${activeBatch.id}&traineeId=${traineeId}`
+            `https://ilpex-backend.onrender.com/api/v1/dailyreport/courseDetails?courseDate=${dateStr}&batchId=${activeBatch.id}&traineeId=${traineeId}`
           );
           const data = await response.json();
 
@@ -97,7 +97,7 @@ const DailyReportContainer: React.FC = () => {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
+        `https://ilpex-backend.onrender.com/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
       const data = await response.json();
       console.log("Fetched course details:", data);

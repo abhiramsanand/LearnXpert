@@ -31,7 +31,7 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
   const handleViewReport = async (dailyReportId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
+        `https://ilpex-backend.onrender.com/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
 
       const { keylearnings, planfortomorrow } = response.data;

@@ -48,7 +48,7 @@ const BarChart: React.FC = () => {
     const fetchData = async () => {
       const traineeId = localStorage.getItem("traineeId");
       const courseDate = `${selectedDate} 00:00:00`;
-      const url = `http://localhost:8080/api/v1/ilpex/traineeprogress/actualVsEstimateDuration?courseDate=${courseDate}&traineeId=${traineeId}`;
+      const url = `https://ilpex-backend.onrender.com/api/v1/ilpex/traineeprogress/actualVsEstimateDuration?courseDate=${courseDate}&traineeId=${traineeId}`;
 
       try {
         const response = await fetch(url);

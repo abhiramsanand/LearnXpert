@@ -35,7 +35,7 @@ const AssessmentScoreTrackILPex: React.FC = () => {
 
     setLoading(true);
 
-    fetch(`http://localhost:8080/api/v1/trainees/${traineeId}/average-score`)
+    fetch(`https://ilpex-backend.onrender.com/api/v1/trainees/${traineeId}/average-score`)
       .then((response) => response.json())
       .then((data) => {
         const roundedScore = Math.round(data.averageScore); // Round to nearest integer

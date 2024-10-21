@@ -9,7 +9,7 @@ import PercipioAssessment from "../../components/Admin/Homepage/PercipioAssessme
 import ILPexAssessment from "../../components/Admin/Homepage/ILPexAssessment";
 import AcceleratedTraineesTrack from "../../components/Admin/Homepage/AcceleratedTrainees";
 
-const BATCH_DETAILS_URL = "http://localhost:8080/api/v1/batches";
+const BATCH_DETAILS_URL = "https://ilpex-backend.onrender.com/api/v1/batches";
 
 const AdminHomePage = () => {
   const [batchDetails, setBatchDetails] = useState<any>(null);

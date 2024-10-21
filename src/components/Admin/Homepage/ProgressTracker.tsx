@@ -54,7 +54,7 @@ const ProgressTracker: React.FC = () => {
     const fetchData = async () => {
       try {
         // Fetch all batches
-        const batchResponse = await fetch("http://localhost:8080/api/v1/batches");
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
         const batchData = await batchResponse.json();
         
         // Find the active batch
@@ -67,7 +67,7 @@ const ProgressTracker: React.FC = () => {
         setBatchDayNumber(activeBatch.dayNumber);  // Correctly set batchDayNumber from active batch
 
         // Fetch progress data for trainees in the active batch
-        const traineeResponse = await fetch(`http://localhost:8080/api/trainees/batch/${activeBatch.id}/currentday`);
+        const traineeResponse = await fetch(`https://ilpex-backend.onrender.com/api/trainees/batch/${activeBatch.id}/currentday`);
         const traineeData = await traineeResponse.json();
 
         let behind = 0;

@@ -71,7 +71,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
 
   const handleDelete = () => {
     if (selectedTraineeId !== null) {
-      const url = `http://localhost:8080/api/v1/batches/${batchId}/trainees/${selectedTraineeId}`;
+      const url = `https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees/${selectedTraineeId}`;
       console.log("Deleting trainee at URL:", url);
       
       fetch(url, {
@@ -99,7 +99,7 @@ const TraineeTable: React.FC<TraineeTableProps> = ({ trainees, batchId, onDelete
   
     if (selectedTraineeId !== null) {
       const updatedTrainee = { userName, email, percipioEmail, password };
-      const url = `http://localhost:8080/api/v1/batches/${batchId}/trainees/${selectedTraineeId}`;
+      const url = `https://ilpex-backend.onrender.com/api/v1/batches/${batchId}/trainees/${selectedTraineeId}`;
   
       setLoading(true); // Show loading state
   

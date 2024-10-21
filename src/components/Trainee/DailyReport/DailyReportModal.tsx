@@ -62,7 +62,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/dailyreport/updateDetails?traineeId=${traineeId}&courseId=${courseId}`,
+        `https://ilpex-backend.onrender.com/api/v1/dailyreport/updateDetails?traineeId=${traineeId}&courseId=${courseId}`,
         {
           method: 'POST',
           headers: {
