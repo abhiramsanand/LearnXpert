@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     try {
       const response = await fetch("http://localhost:8080/api/v1/users/login", {
         method: "POST",
@@ -22,35 +22,35 @@ const LoginPage: React.FC = () => {
         },
         body: JSON.stringify({ userName: username, password }),
       });
-  
+
       if (response.ok) {
         const responseText = await response.text();
         const roleIdMatch = responseText.match(/RoleID: (\d+)/);
         const traineeIdMatch = responseText.match(/TraineeID: (\d+)/); // Assuming the response includes traineeId
-  
+
         const roleId = roleIdMatch ? roleIdMatch[1] : null;
         const traineeId = traineeIdMatch ? traineeIdMatch[1] : null;
-  
-        if (traineeId) {
-          localStorage.setItem("traineeId", traineeId); // Store traineeId in local storage
-        }
-  
-        if (roleId === "3") {
+
+        if (roleId === "3" && traineeId) {
+          // Store traineeId in localStorage for trainees
+          localStorage.setItem("traineeId", traineeId);
+          localStorage.setItem("roleId", "3"); // Store roleId for trainees
           navigate("/Trainee-Dashboard");
         } else if (roleId === "1") {
+          // Store roleId for admin
+          localStorage.setItem("roleId", "1");
           navigate("/Admin-Home");
         } else {
-          console.error("Unhandled roleId:", roleId);
+          setErrorMessage("Unhandled roleId.");
         }
       } else {
-        setErrorMessage("Bad credentials"); // Set error message if response is not ok
+        setErrorMessage("Bad credentials");
       }
     } catch (error) {
-      setErrorMessage("Bad credentials"); // Set error message for network or fetch errors
-      console.error("An error occurred during login:", error);
+      setErrorMessage("Bad credentials");
     }
   };
-  
+
   return (
     <Grid container sx={{ minHeight: "100vh" }}>
       <Grid

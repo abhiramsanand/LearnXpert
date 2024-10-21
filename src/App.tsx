@@ -14,7 +14,6 @@ import AdminAssessmentDetailsPage from "./pages/Admin/AdminAssessmentDetailsPage
 import AdminAssessmentCreationPage from "./pages/Admin/AdminAssessmentCreationPage";
 import AdminCoursePage from "./pages/Admin/AdminCoursePage";
 import TraineeCourseReportPage from "./pages/Admin/TraineeCourseReportPage";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,6 +38,7 @@ import CreateCoursePage from "./pages/Admin/CreateCoursePage";
 import Calendar from "./components/Admin/ManageBatch/Calendar";
 import DailyReportViewPage from "./pages/Admin/DailyReportViewPage";
 import AdminReportPage from "./pages/Admin/AdminReportPage";
+import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
 
 ChartJS.register(
   CategoryScale,
@@ -59,46 +59,41 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/" element={<TraineeLayout />}>
-          <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
-          <Route path="Trainee-Courses" element={<CoursePage />} />
-          <Route path="Trainee-Assessments" element={<AssessmentPage />} />
-          <Route path="Trainee-Dailyreport" element={<DailyReport />} />
-          <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
-          <Route
-            path="/Trainee-Assessments/assessment"
-            element={<AssessmentDisplayPage />}
-          />
-        </Route>
-        <Route path="/" element={<AdminLayout />}>
-          <Route path="Admin-Home" element={<AdminHomePage />} />
-          <Route
-            path="/Admin-Assessments"
-            element={<AdminAssessmentDetailsPage />}
-          />
 
-          <Route
-            path="/Admin-AssessmentCreation"
-            element={<AdminAssessmentCreationPage />}
-          />
-          <Route path="/Admin-CourseCreation" element={<CreateCoursePage />} />
-          <Route
-            path="/Add-Admin"
-            element={<Route path="/Add-Admin" element={<CreateAdminPage />} />}
-          />
-          <Route path="/Admin-Batches" element={<TraineeCourseReportPage />} />
-          <Route
-            path="/Admin-ManageBatch/:batchId"
-            element={<ManageBatchPage />}
-          />
-          <Route path="Admin-BatchAdd" element={<BatchForm />} />
-          <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
-          <Route path="/Admin-DailyReport" element={<DailyReportViewPage />} />
-          <Route path="/Admin-WholeReport" element={<AdminReportPage />} />
-          <Route path="/Admin-Trainees" element={<TraineesPage />} />
-          <Route path="/trainee/:id" element={<TraineeReport />} />
-          <Route path="/Admin-Courses" element={<AdminCoursePage />} />
-          <Route path="/Admin-Calendar" element={<Calendar />} />
+        {/* Trainee Layout Routes */}
+        <Route element={<ProtectedRoute />}> 
+          <Route path="/" element={<TraineeLayout />}>
+            <Route path="/Trainee-Dashboard" element={<TraineeDashboardPage />} />
+            <Route path="Trainee-Courses" element={<CoursePage />} />
+            <Route path="Trainee-Assessments" element={<AssessmentPage />} />
+            <Route path="Trainee-Dailyreport" element={<DailyReport />} />
+            <Route path="Trainee-Wholereport" element={<WholeReportPage />} />
+            <Route
+              path="/Trainee-Assessments/assessment"
+              element={<AssessmentDisplayPage />}
+            />
+          </Route>
+        </Route>
+
+        {/* Admin Layout Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<AdminLayout />}>
+            <Route path="Admin-Home" element={<AdminHomePage />} />
+            <Route path="/Admin-Assessments" element={<AdminAssessmentDetailsPage />} />
+            <Route path="/Admin-AssessmentCreation" element={<AdminAssessmentCreationPage />} />
+            <Route path="/Admin-CourseCreation" element={<CreateCoursePage />} />
+            <Route path="/Add-Admin" element={<CreateAdminPage />} />
+            <Route path="/Admin-Batches" element={<TraineeCourseReportPage />} />
+            <Route path="/Admin-ManageBatch/:batchId" element={<ManageBatchPage />} />
+            <Route path="Admin-BatchAdd" element={<BatchForm />} />
+            <Route path="Admin-BatchAdd2/:batchId" element={<BatchAdd2 />} />
+            <Route path="/Admin-DailyReport" element={<DailyReportViewPage />} />
+            <Route path="/Admin-WholeReport" element={<AdminReportPage />} />
+            <Route path="/Admin-Trainees" element={<TraineesPage />} />
+            <Route path="/trainee/:id" element={<TraineeReport />} />
+            <Route path="/Admin-Courses" element={<AdminCoursePage />} />
+            <Route path="/Admin-Calendar" element={<Calendar />} />
+          </Route>
         </Route>
       </Routes>
     </Router>
