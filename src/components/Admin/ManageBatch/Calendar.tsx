@@ -121,16 +121,21 @@ const CustomCalendar: React.FC = () => {
 
   const handleCalendarChange = (value: CalendarValue) => {
     if (value instanceof Date) {
-      const selectedDate = value.toISOString().split("T")[0];
+      // Use toISOString to ensure the date is properly normalized to UTC
+      const selectedDate = new Date(value.getTime() - value.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0];
       setHolidayDate(selectedDate);
     } else if (Array.isArray(value) && value[0]) {
-      const selectedDate = value[0].toISOString().split("T")[0];
+      const selectedDate = new Date(value[0].getTime() - value[0].getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0];
       setHolidayDate(selectedDate);
     } else {
       setHolidayDate(""); // Handle the case of null
     }
     setValue(value);
-  };
+  };  
 
   if (loading) {
     return (
