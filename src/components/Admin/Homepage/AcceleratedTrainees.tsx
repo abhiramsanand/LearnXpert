@@ -31,7 +31,7 @@ const AcceleratedTraineesTrack: React.FC = () => {
 
     if (cachedData && cachedTimestamp) {
       const now = new Date().getTime();
-      const oneHour = 1 * 60 * 60 * 1000; // 1 hour
+      const oneHour = 0 * 60 * 60 * 1000; 
 
       if (now - parseInt(cachedTimestamp) < oneHour) {
         setSpeedData(JSON.parse(cachedData));
