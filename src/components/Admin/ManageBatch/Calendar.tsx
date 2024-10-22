@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import {
@@ -20,11 +20,9 @@ interface DayNumberWithDateDTO {
   dayNumber: number;
 }
 
-type CalendarValue = Date | [Date, Date] | null;
-
 const CustomCalendar: React.FC = () => {
   const [dates, setDates] = useState<DayNumberWithDateDTO[]>([]);
-  const [value, setValue] = useState<CalendarValue>(new Date());
+  const [value, setValue] = useState<Date | [Date, Date]>(new Date());
   const [holidayDate, setHolidayDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [loadingMark, setLoadingMark] = useState(false);
@@ -32,6 +30,7 @@ const CustomCalendar: React.FC = () => {
   const [openMarkDialog, setOpenMarkDialog] = useState(false);
   const [openUnmarkDialog, setOpenUnmarkDialog] = useState(false);
 
+  // Function to fetch dates
   const fetchDates = () => {
     setLoading(true);
     axios
@@ -52,7 +51,7 @@ const CustomCalendar: React.FC = () => {
   }, []);
 
   const handleMarkHoliday = () => {
-    setLoadingMark(true);
+    setLoadingMark(true); // Start loading
     axios
       .post("https://ilpex-backend.onrender.com/api/courses/mark-holiday/day", {
         holidayDate,
@@ -60,35 +59,37 @@ const CustomCalendar: React.FC = () => {
       })
       .then(() => {
         alert("Holiday marked successfully.");
-        fetchDates();
+        fetchDates(); // Refresh dates after marking a holiday
       })
       .catch((error) => {
         console.error("Error marking holiday:", error);
       })
       .finally(() => {
-        setLoadingMark(false);
+        setLoadingMark(false); // Stop loading
       });
   };
 
   const handleUnmarkHoliday = () => {
-    setLoadingUnmark(true);
+    setLoadingUnmark(true); // Start loading
     axios
       .post("https://ilpex-backend.onrender.com/api/courses/unmark-holiday", { holidayDate })
       .then(() => {
         alert("Holiday unmarked successfully.");
-        fetchDates();
+        fetchDates(); // Refresh dates after unmarking a holiday
       })
       .catch((error) => {
         console.error("Error unmarking holiday:", error);
       })
       .finally(() => {
-        setLoadingUnmark(false);
+        setLoadingUnmark(false); // Stop loading
       });
   };
 
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === "month") {
-      const formattedDate = date.toISOString().split("T")[0];
+      const formattedDate = date.toLocaleDateString("en-CA", {
+        timeZone: "Asia/Kolkata",
+      });
       const dayData = dates.find((d) => d.date === formattedDate);
 
       const isWorkingDay = Boolean(dayData);
@@ -119,22 +120,22 @@ const CustomCalendar: React.FC = () => {
     return null;
   };
 
-  const handleCalendarChange = (value: CalendarValue) => {
+  const handleCalendarChange = (value: Date | [Date, Date] | null) => {
     if (value instanceof Date) {
-      const selectedDate = value.toISOString().split("T")[0];
-      setHolidayDate(selectedDate);
-    } else if (Array.isArray(value) && value[0]) {
-      const selectedDate = value[0].toISOString().split("T")[0];
-      setHolidayDate(selectedDate);
-    } else {
-      setHolidayDate(""); // Handle the case of null
+      const adjustedDate = new Date(value.getTime() + 24 * 60 * 60 * 1000);
+      setValue(adjustedDate);
+      setHolidayDate(adjustedDate.toISOString().split("T")[0]);
     }
-    setValue(value);
   };
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
         <Typography
           sx={{
             fontSize: "30px",
@@ -156,22 +157,71 @@ const CustomCalendar: React.FC = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <Typography align="center" sx={{ color: "#8061C3", mb: 2, fontWeight: "bold", fontSize: "20px" }}>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <Typography
+        align="center"
+        sx={{
+          color: "#8061C3",
+          mb: 2,
+          ml: "-3",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
         CALENDAR
       </Typography>
       <Calendar
         value={value}
-        onChange={handleCalendarChange as any} // Cast the function to any to bypass type checks temporarily
+        // @ts-ignore
+        onChange={handleCalendarChange}
         tileContent={tileContent}
-        prevLabel={<span style={{ fontSize: "15px", color: "#8061C3" }}>‹</span>}
-        nextLabel={<span style={{ fontSize: "15px", color: "#8061C3" }}>›</span>}
+        prevLabel={
+          <span style={{ fontSize: "15px", color: "#8061C3" }}>‹</span>
+        }
+        nextLabel={
+          <span style={{ fontSize: "15px", color: "#8061C3" }}>›</span>
+        }
         navigationLabel={({ date }) => (
-          <Typography sx={{ color: "#8061C3", fontWeight: "bold", fontSize: "15px" }}>
-            {date.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          <Typography
+            sx={{ color: "#8061C3", fontWeight: "bold", fontSize: "15px" }}
+          >
+            {date.toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}
           </Typography>
         )}
-        className="custom-calendar" // Custom class for styles
+        sx={{
+          width: "100%",
+          maxWidth: "1000px",
+          backgroundColor: "transparent",
+          borderRadius: "16px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          "& .react-calendar__tile": {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "10px",
+            height: "100px",
+            width: "100px",
+            borderRadius: "8px",
+          },
+          "& .react-calendar__navigation": {
+            display: "flex",
+            justifyContent: "center",
+          },
+          "& .react-calendar__month-view__weekdays": {
+            backgroundColor: "#e7e1f4",
+            color: "#8061C3",
+            fontSize: "10px",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            padding: "8px 0",
+            borderRadius: "8px",
+          },
+        }}
       />
       <Box sx={{ display: "flex", gap: 2, alignItems: "center", mt: 4 }}>
         <TextField
@@ -179,35 +229,64 @@ const CustomCalendar: React.FC = () => {
           type="date"
           value={holidayDate}
           onChange={(e) => setHolidayDate(e.target.value)}
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{
+            shrink: true,
+          }}
           sx={{
-            "& .MuiInputBase-input": { color: "#8061C5" },
-            "& .MuiFormLabel-root.Mui-focused": { color: "#8061C5", borderColor: "#8061C5" },
+            "& .MuiInputBase-input": {
+              color: "#8061C3",
+            },
+            "& .MuiFormLabel-root.Mui-focused": {
+              color: "#8061C3",
+              borderColor: "#8061C3",
+            },
           }}
         />
         <Button
           variant="contained"
-          sx={{ backgroundColor: "#DB5461", color: "#fff", "&:hover": { backgroundColor: "#C63C49" } }}
+          sx={{
+            backgroundColor: "#DB5461",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#C63C49" },
+          }}
           onClick={() => setOpenMarkDialog(true)}
-          disabled={loadingMark}
+          disabled={loadingMark} // Disable button while loading
         >
-          {loadingMark ? <CircularProgress size={20} color="inherit" /> : "Mark as Holiday"}
+          {loadingMark ? (
+            <CircularProgress size={20} sx={{ color: "#fff" }} />
+          ) : (
+            "Mark Holiday"
+          )}
         </Button>
         <Button
           variant="contained"
-          sx={{ backgroundColor: "#5B8C5A", color: "#fff", "&:hover": { backgroundColor: "#4A6B49" } }}
+          sx={{
+            backgroundColor: "#5B8C5A",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#416741" },
+          }}
           onClick={() => setOpenUnmarkDialog(true)}
-          disabled={loadingUnmark}
+          disabled={loadingUnmark} // Disable button while loading
         >
-          {loadingUnmark ? <CircularProgress size={20} color="inherit" /> : "Unmark as Holiday"}
+          {loadingUnmark ? (
+            <CircularProgress size={20} sx={{ color: "#fff" }} />
+          ) : (
+            "Unmark Holiday"
+          )}
         </Button>
       </Box>
 
-      {/* Mark Holiday Dialog */}
-      <Dialog open={openMarkDialog} onClose={() => setOpenMarkDialog(false)}>
-        <DialogTitle>Confirm Mark Holiday</DialogTitle>
+      <Dialog
+        open={openMarkDialog}
+        onClose={() => setOpenMarkDialog(false)}
+        aria-labelledby="mark-holiday-dialog-title"
+        aria-describedby="mark-holiday-dialog-description"
+      >
+        <DialogTitle id="mark-holiday-dialog-title">Mark Holiday</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to mark {holidayDate} as a holiday?</DialogContentText>
+          <DialogContentText id="mark-holiday-dialog-description">
+            Are you sure you want to mark this day as a holiday?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenMarkDialog(false)}>Cancel</Button>
@@ -216,18 +295,24 @@ const CustomCalendar: React.FC = () => {
               handleMarkHoliday();
               setOpenMarkDialog(false);
             }}
-            color="primary"
+            autoFocus
           >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Unmark Holiday Dialog */}
-      <Dialog open={openUnmarkDialog} onClose={() => setOpenUnmarkDialog(false)}>
-        <DialogTitle>Confirm Unmark Holiday</DialogTitle>
+      <Dialog
+        open={openUnmarkDialog}
+        onClose={() => setOpenUnmarkDialog(false)}
+        aria-labelledby="unmark-holiday-dialog-title"
+        aria-describedby="unmark-holiday-dialog-description"
+      >
+        <DialogTitle id="unmark-holiday-dialog-title">Unmark Holiday</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to unmark {holidayDate} as a holiday?</DialogContentText>
+          <DialogContentText id="unmark-holiday-dialog-description">
+            Are you sure you want to unmark this day as a holiday?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenUnmarkDialog(false)}>Cancel</Button>
@@ -236,25 +321,12 @@ const CustomCalendar: React.FC = () => {
               handleUnmarkHoliday();
               setOpenUnmarkDialog(false);
             }}
-            color="primary"
+            autoFocus
           >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Custom CSS for Calendar */}
-      <style>
-        {`
-          .custom-calendar {
-            width: 100%;
-            max-width: 1000px;
-            background-color: transparent;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-        `}
-      </style>
     </Box>
   );
 };
