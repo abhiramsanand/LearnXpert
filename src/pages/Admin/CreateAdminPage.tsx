@@ -12,7 +12,7 @@ const CreateAdminPage: React.FC = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("https://ilpex-backend.onrender.com/api/v1/users");
+        const response = await axios.get("https://ilpex-backend.onrender.com/api/v1/users/view");
         setAdmins(response.data); // Assume response.data contains an array of Admin objects
       } catch (error) {
         console.error("Error fetching admins:", error);

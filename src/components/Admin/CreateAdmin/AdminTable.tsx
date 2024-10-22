@@ -1,6 +1,4 @@
 /* eslint-disable no-empty-pattern */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Table,
@@ -26,7 +24,8 @@ import axios from "axios";
 
 interface Admin {
   id: number;
-  name: string;
+  userName: string; // Updated from name to userName
+  email: string; // Optional, can be added if needed
 }
 
 interface AdminTableProps {
@@ -87,7 +86,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ admins, onDeleteClick }) => {
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
               <TableCell align="center" sx={{ padding: "8px", fontWeight: "bold" }}>#</TableCell>
               <TableCell align="center" sx={{ padding: "8px", fontWeight: "bold" }}>
-                Name
+                User Name {/* Updated label */}
                 <IconButton onClick={handleSortClick} sx={{ color: "#8061C3" }}>
                   <SwapVertIcon />
                 </IconButton>
@@ -99,7 +98,7 @@ const AdminTable: React.FC<AdminTableProps> = ({ admins, onDeleteClick }) => {
             {admins.map((admin, index) => (
               <TableRow key={admin.id} sx={{ backgroundColor: index % 2 === 0 ? "#F9F6F7" : "#f9f9f9" }}>
                 <TableCell align="center" sx={{ padding: "8px" }}>{index + 1}</TableCell>
-                <TableCell align="center" sx={{ padding: "8px" }}>{admin.name}</TableCell>
+                <TableCell align="center" sx={{ padding: "8px" }}>{admin.userName}</TableCell> {/* Updated to userName */}
                 <TableCell align="center" sx={{ padding: "8px" }}>
                   <IconButton onClick={() => handleDeleteClick(admin)} sx={{ color: "#d32f2f" }}>
                     <DeleteIcon />
