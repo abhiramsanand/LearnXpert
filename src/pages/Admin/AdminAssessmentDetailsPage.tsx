@@ -1,20 +1,46 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import AssignmentDetails from "../../components/Admin/AssessmentDetails/TraineeAssessmentDetails";
 import { Box, Container, Typography } from "@mui/material";
 
+// Define Batch type interface
+interface Batch {
+  id: number;
+  name: string;
+  isActive: boolean;
+}
+
 const AdminAssessmentDetailsPage = () => {
   const [loading, setLoading] = useState(true);
+  const [activeBatch, setActiveBatch] = useState<Batch | null>(null); // Use Batch type or null
+  const [error, setError] = useState("");
 
-  // useEffect to set loading to false once the component is mounted
+  // Fetch active batch and set loading state
   useEffect(() => {
-    // Simulate data fetching or component preparation
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000); // Adjust the delay as needed
+    const fetchBatches = async () => {
+      try {
+        const batchResponse = await fetch("https://ilpex-backend.onrender.com/api/v1/batches");
+        const batches: Batch[] = await batchResponse.json(); // Expecting an array of Batch type
 
-    return () => clearTimeout(timer); // Cleanup the timer
+        // Find the active batch
+        const foundActiveBatch = batches.find((batch: Batch) => batch.isActive);
+        if (!foundActiveBatch) {
+          setError("No active batch found");
+        } else {
+          setActiveBatch(foundActiveBatch);
+        }
+      } catch (err) {
+        console.error("Failed to fetch batches", err);
+        setError("Failed to fetch batches");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBatches();
   }, []);
 
+  // Loading screen with animated text
   if (loading) {
     return (
       <Box
@@ -43,6 +69,15 @@ const AdminAssessmentDetailsPage = () => {
     );
   }
 
+  // Error handling
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
+        <Typography color="error" variant="h6">{error}</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Container sx={{ mt: 6, textAlign: "center" }}>
       <Typography
@@ -58,7 +93,11 @@ const AdminAssessmentDetailsPage = () => {
       >
         ASSESSMENTS
       </Typography>
-      <AssignmentDetails batchId={3} />
+      {activeBatch ? (
+        <AssignmentDetails batchId={activeBatch.id} />
+      ) : (
+        <Typography>No active batch available</Typography>
+      )}
     </Container>
   );
 };
