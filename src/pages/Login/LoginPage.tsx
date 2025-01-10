@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Button, Typography, Grid } from "@mui/material";
+import { Box, Button, Typography, Grid, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import leftBackgroundImage from "../../assets/Left Content.png";
 import rightBackgroundImage from "../../assets/Bg.png";
 import exp from "../../assets/exp.png";
@@ -8,36 +9,38 @@ import { useNavigate } from "react-router-dom";
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("https://ilpex-backend.onrender.com/api/v1/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userName: username, password }),
-      });
+      const response = await fetch(
+        "https://ilpex-backend.onrender.com/api/v1/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userName: username, password }),
+        }
+      );
 
       if (response.ok) {
         const responseText = await response.text();
         const roleIdMatch = responseText.match(/RoleID: (\d+)/);
-        const traineeIdMatch = responseText.match(/TraineeID: (\d+)/); // Assuming the response includes traineeId
+        const traineeIdMatch = responseText.match(/TraineeID: (\d+)/);
 
         const roleId = roleIdMatch ? roleIdMatch[1] : null;
         const traineeId = traineeIdMatch ? traineeIdMatch[1] : null;
 
         if (roleId === "3" && traineeId) {
-          // Store traineeId in localStorage for trainees
           localStorage.setItem("traineeId", traineeId);
-          localStorage.setItem("roleId", "3"); // Store roleId for trainees
+          localStorage.setItem("roleId", "3");
           navigate("/Trainee-Dashboard");
         } else if (roleId === "1") {
-          // Store roleId for admin
           localStorage.setItem("roleId", "1");
           navigate("/Admin-Home");
         } else {
@@ -164,15 +167,30 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-            <input
-              placeholder="password"
-              id="password"
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <Box
+              sx={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <input
+                placeholder="password"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ flex: 1 }}
+              />
+              <IconButton
+                onClick={() => setShowPassword(!showPassword)}
+                sx={{ position: "absolute", right: 10 }}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </Box>
             <Button
               variant="contained"
               color="primary"
@@ -192,7 +210,7 @@ const LoginPage: React.FC = () => {
             </Button>
           </Box>
           <a
-            href="#"
+            href="mailto:abhiram.anand@experionglobal.com.com?subject=Forgot%20Password&body=Hello,%20I%20need%20help%20resetting%20my%20password."
             style={{
               color: "#8061C3",
               textDecoration: "none",

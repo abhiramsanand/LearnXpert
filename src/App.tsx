@@ -38,7 +38,7 @@ import CreateCoursePage from "./pages/Admin/CreateCoursePage";
 import Calendar from "./components/Admin/ManageBatch/Calendar";
 import DailyReportViewPage from "./pages/Admin/DailyReportViewPage";
 import AdminReportPage from "./pages/Admin/AdminReportPage";
-import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
+import ProtectedRoute from "./ProtectedRoute"; 
 
 ChartJS.register(
   CategoryScale,

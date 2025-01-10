@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { enGB } from "date-fns/locale"; // Use enGB for dd-MM-yyyy format
 
 interface DateSelectorProps {
   selectedDate: Date | null;
@@ -13,7 +15,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   onDateChange,
 }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
       <DatePicker
         value={selectedDate}
         onChange={onDateChange}
@@ -30,8 +32,12 @@ const DateSelector: React.FC<DateSelectorProps> = ({
                 borderRadius: "20px",
               },
             },
+            inputProps: {
+              placeholder: "dd-MM-yyyy", // Show format as a placeholder
+            },
           },
         }}
+        views={["year", "month", "day"]} // Ensure day, month, and year are displayed
       />
     </LocalizationProvider>
   );

@@ -18,10 +18,9 @@ const AdminHomePage = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const response = await fetch(BATCH_DETAILS_URL); // Fetch all batches
+        const response = await fetch(BATCH_DETAILS_URL); 
         const batchData = await response.json();
 
-        // Find the active batch
         const activeBatch = batchData.find((batch: { isActive: boolean }) => batch.isActive);
 
         if (!activeBatch) {
@@ -29,11 +28,11 @@ const AdminHomePage = () => {
           return;
         }
 
-        setBatchDetails(activeBatch); // Set the active batch details
+        setBatchDetails(activeBatch); 
       } catch (error) {
         console.error("Error fetching batch details:", error);
       } finally {
-        setLoading(false); // Stop loading after fetch attempt
+        setLoading(false); 
       }
     };
 
