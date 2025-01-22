@@ -97,7 +97,7 @@ const DailyReportModal: React.FC<DailyReportModalProps> = ({
           borderRadius: '15px',
           padding: '0px',
           border: '3px solid #3A3AFF',
-          overflow: 'hidden',
+          overflowY: 'auto',
         },
       }}
     >

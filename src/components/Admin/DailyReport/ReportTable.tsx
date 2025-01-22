@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Paper, Menu, MenuItem, TablePagination } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import FilterListIcon from '@mui/icons-material/FilterList';
+// import FilterListIcon from '@mui/icons-material/FilterList';
 import ReportModalComponent from './ReportModalComponent';
 import axios from 'axios';
 
@@ -79,9 +79,9 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
     setCurrentPage(0);
   };
 
-  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const handleFilterClose = (status: string | null) => {
     setStatusFilter(status);
@@ -107,9 +107,9 @@ const ReportsTableComponent: React.FC<ReportsTableComponentProps> = ({ reports }
             <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold', whiteSpace: "nowrap" }}>Time Taken</TableCell>
             <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold', whiteSpace: "nowrap" }}>
               Status
-              <IconButton onClick={handleFilterClick} size="small">
+              {/* <IconButton onClick={handleFilterClick} size="small">
                 <FilterListIcon />
-              </IconButton>
+              </IconButton> */}
             </TableCell>
             <TableCell sx={{ padding: '4px 8px', fontWeight: 'bold' }}>Actions</TableCell>
           </TableRow>
