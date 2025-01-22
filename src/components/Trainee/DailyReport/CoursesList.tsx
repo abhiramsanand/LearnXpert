@@ -6,14 +6,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
 import ReportModalComponent from "./ReportModalComponent";
-import { Report } from "./DailyReportContainer"; // Importing the Report type
+import { Report } from "./DailyReportContainer"; 
 
 // Define Course type to avoid using 'any'
 interface Course {
   courseId: number;
   courseName: string;
-  timeTaken: number; // Assuming this is in minutes, as inferred from the formatTimeTaken function
-  id: number; // dailyReportId or unique identifier for the course report
+  timeTaken: number; 
+  id: number; 
 }
 
 interface CoursesListProps {
@@ -46,25 +46,24 @@ const CoursesList: React.FC<CoursesListProps> = ({ courses, handleOpenReportModa
       const response = await axios.get(
         `https://ilpex-backend.onrender.com/api/v1/dailyreport/editDetails?dailyReportId=${dailyReportId}`
       );
+      console.log("Fetched report data:", response.data);
+  
       const reportData = response.data;
-
-      // Debugging log
-      console.log("Fetched report data:", reportData);
-
+  
       setSelectedReport({
-        day: reportData.day || "", // Ensure fallback values
+        day: reportData.day || "", 
         course: reportData.courseName || "",
         timeTaken: formatTimeTaken(reportData.timeTaken),
-        status: reportData.status || "",
-        keyLearnings: reportData.keyLearnings || "",
-        planForTomorrow: reportData.planForTomorrow || "",
+        status: reportData.status || "", 
+        keyLearnings: reportData.keylearnings || "", 
+        planForTomorrow: reportData.planfortomorrow || "", 
       });
       setOpenModal(true);
     } catch (error) {
       console.error("Error fetching report details:", error);
     }
   };
-
+  
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedReport(null);

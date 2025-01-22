@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, TextField, Button, Badge } from "@mui/material";
+import { Box, Typography, Button, Badge } from "@mui/material";
 import DateSelector from "./DateSelector";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
@@ -12,8 +12,8 @@ interface HeaderSectionProps {
 }
 
 const HeaderSection: React.FC<HeaderSectionProps> = ({
-  searchTerm,
-  setSearchTerm,
+  // searchTerm,
+  // setSearchTerm,
   selectedDate,
   onDateChange,
   handleOpenPendingModal,
@@ -38,7 +38,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
         <Typography variant="h4" sx={{ mt: 1 }} gutterBottom>
           Daily Report
         </Typography>
-        <TextField
+        {/* <TextField
           variant="outlined"
           placeholder="Search"
           value={searchTerm}
@@ -52,7 +52,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
               height: "30px",
             },
           }}
-        />
+        /> */}
       </Box>
 
       <Box

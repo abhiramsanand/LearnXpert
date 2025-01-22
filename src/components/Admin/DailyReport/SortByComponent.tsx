@@ -23,7 +23,7 @@ const SortByComponent: React.FC<SortByProps> = ({ onSortChange }) => {
         <MenuItem value="day">Day</MenuItem>
         <MenuItem value="course">Course</MenuItem>
         <MenuItem value="timeTaken">Time Taken</MenuItem>
-        <MenuItem value="status">Status</MenuItem>
+        {/* <MenuItem value="status">Status</MenuItem> */}
       </Select>
     </FormControl>
   );
